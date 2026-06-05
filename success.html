@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Pack — The Brand Factory NOLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold: #c9a84c; --bg: #0d0d0d; --card: #111; --card2: #161616; --border: #222; --text: #f5f0e8; --muted: #888; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+    .logo span { color: var(--text); font-weight: 400; }
+
+    /* STATES */
+    .state { display: none; }
+    .state.active { display: block; }
+
+    /* LOADING / GENERATING */
+    .center-state { text-align: center; padding: 6rem 1.5rem; }
+    .spinner {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 3px solid #222; border-top-color: var(--gold);
+      animation: spin 0.9s linear infinite; margin: 0 auto 2rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .center-state h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .center-state p { color: #aaa; max-width: 400px; margin: 0 auto 2rem; }
+    .progress-steps { display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; margin: 0 auto; text-align: left; }
+    .progress-step { display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem; color: #aaa; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; flex-shrink: 0; }
+    .step-dot.done { background: var(--gold); }
+    .step-dot.active { background: var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* PACK */
+    .pack-page { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+    .pack-hero { text-align: center; margin-bottom: 3rem; }
+    .pack-hero .congrats { display: inline-block; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1rem; }
+    .pack-hero h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .pack-hero p { color: #aaa; }
+
+    .section-block { margin-bottom: 3rem; }
+    .section-block h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.6rem; }
+    .section-block h2 .icon { font-size: 1.2rem; }
+
+    /* Strategy */
+    .strategy-text { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; }
+    .strategy-text p { color: #ccc; font-size: 0.95rem; line-height: 1.75; margin-bottom: 1rem; }
+    .strategy-text p:last-child { margin-bottom: 0; }
+
+    /* Calendar */
+    .calendar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
+    .cal-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem; display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .cal-day { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .cal-platform { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(201,168,76,0.1); color: var(--gold); font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px; align-self: flex-start; }
+    .cal-theme { font-size: 0.88rem; font-weight: 600; }
+    .cal-type { font-size: 0.78rem; color: #777; }
+    .cal-hook { font-size: 0.85rem; color: #bbb; font-style: italic; }
+
+    /* Captions */
+    .captions-list { display: flex; flex-direction: column; gap: 1rem; }
+    .caption-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;
+    }
+    .caption-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .caption-meta .day-tag { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .caption-meta .plat-tag { font-size: 0.72rem; font-weight: 700; background: rgba(201,168,76,0.1); color: var(--gold); padding: 0.15rem 0.55rem; border-radius: 99px; }
+    .caption-text { font-size: 0.93rem; color: #ddd; line-height: 1.65; white-space: pre-wrap; margin-bottom: 0.75rem; }
+    .caption-img { font-size: 0.8rem; color: #777; display: flex; align-items: flex-start; gap: 0.4rem; }
+    .caption-img::before { content: "📸"; flex-shrink: 0; }
+    .btn-copy {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 4px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-copy:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-copy.copied { border-color: #22c55e; color: #22c55e; }
+
+    /* Hashtags */
+    .hashtag-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .htag-group { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .htag-theme { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 0.75rem; }
+    .htag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .htag { background: #1a1a1a; border: 1px solid #2a2a2a; color: #bbb; font-size: 0.78rem; padding: 0.25rem 0.6rem; border-radius: 4px; cursor: pointer; transition: border-color 0.15s; }
+    .htag:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* Schedule */
+    .schedule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .schedule-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .sched-platform { font-size: 0.95rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .sched-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.3rem 0; border-bottom: 1px solid #1a1a1a; }
+    .sched-row:last-child { border-bottom: none; }
+    .sched-row .sk { color: var(--muted); }
+    .sched-row .sv { color: #ccc; text-align: right; max-width: 55%; }
+
+    /* Website download */
+    .website-block { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.25); border-radius: 10px; padding: 2rem; text-align: center; }
+    .website-block h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .website-block p { color: #aaa; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .btn-download { background: var(--gold); color: #000; font-weight: 800; font-size: 0.9rem; padding: 0.75rem 1.75rem; border-radius: 6px; border: none; cursor: pointer; transition: background 0.2s; }
+    .btn-download:hover { background: #e0c070; }
+
+    /* Error state */
+    .error-state { text-align: center; padding: 6rem 1.5rem; }
+    .error-state h2 { font-size: 1.5rem; font-weight: 800; color: #ef4444; margin-bottom: 1rem; }
+    .error-state p { color: #aaa; margin-bottom: 2rem; }
+    .btn-retry { background: var(--gold); color: #000; font-weight: 700; padding: 0.75rem 1.75rem; border-radius: 6px; border: none; cursor: pointer; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+</header>
+
+<!-- GENERATING -->
+<div class="state active" id="state-generating">
+  <div class="center-state">
+    <div class="spinner"></div>
+    <h2>Building your pack...</h2>
+    <p>Our AI is crafting your strategy, content calendar, captions, and hashtags. Hang tight — this takes 2–4 minutes.</p>
+    <div class="progress-steps">
+      <div class="progress-step"><div class="step-dot active" id="dot-1"></div>Analyzing your business</div>
+      <div class="progress-step"><div class="step-dot" id="dot-2"></div>Writing brand strategy</div>
+      <div class="progress-step"><div class="step-dot" id="dot-3"></div>Building content calendar</div>
+      <div class="progress-step"><div class="step-dot" id="dot-4"></div>Writing captions</div>
+      <div class="progress-step"><div class="step-dot" id="dot-5"></div>Generating hashtag groups</div>
+      <div class="progress-step"><div class="step-dot" id="dot-6"></div>Finalizing your pack</div>
+    </div>
+  </div>
+</div>
+
+<!-- PACK READY -->
+<div class="state" id="state-pack">
+  <div class="pack-page">
+    <div class="pack-hero">
+      <div class="congrats">Pack Ready</div>
+      <h1>Your Brand Pack is Ready 🎉</h1>
+      <p id="pack-business-name" style="color:#aaa;"></p>
+    </div>
+
+    <!-- Strategy -->
+    <div class="section-block" id="block-strategy">
+      <h2><span class="icon">🎯</span> Brand Strategy</h2>
+      <div class="strategy-text" id="strategy-content"></div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="section-block" id="block-calendar">
+      <h2><span class="icon">📅</span> Content Calendar</h2>
+      <div class="calendar-grid" id="calendar-content"></div>
+    </div>
+
+    <!-- Captions -->
+    <div class="section-block" id="block-captions">
+      <h2><span class="icon">✍️</span> Captions</h2>
+      <div class="captions-list" id="captions-content"></div>
+    </div>
+
+    <!-- Hashtags -->
+    <div class="section-block" id="block-hashtags">
+      <h2><span class="icon">#️⃣</span> Hashtag Groups</h2>
+      <div class="hashtag-groups" id="hashtags-content"></div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="section-block" id="block-schedule">
+      <h2><span class="icon">📊</span> Posting Schedule</h2>
+      <div class="schedule-grid" id="schedule-content"></div>
+    </div>
+
+    <!-- Website (Agency) -->
+    <div class="section-block" id="block-website" style="display:none;">
+      <h2><span class="icon">🌐</span> Custom Website</h2>
+      <div class="website-block">
+        <h3>Your one-page website is ready</h3>
+        <p>A fully coded HTML website built for your business — ready to host anywhere.</p>
+        <button class="btn-download" id="download-website">Download Website HTML</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ERROR -->
+<div class="state" id="state-error">
+  <div class="error-state">
+    <h2>Something went wrong</h2>
+    <p id="error-detail">We couldn't generate your pack. Please contact support.</p>
+    <button class="btn-retry" onclick="location.reload()">Try Again</button>
+  </div>
+</div>
+
+<script src="api.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("order_id");
+
+  function showState(id) {
+    document.querySelectorAll(".state").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  function animateDots(elapsed) {
+    const stages = [0, 20, 40, 60, 80, 100];
+    const pct = Math.min((elapsed / 240) * 100, 95);
+    for (let i = 1; i <= 6; i++) {
+      const dot = document.getElementById(`dot-${i}`);
+      if (pct >= stages[i - 1]) {
+        dot.className = i < 6 && pct >= stages[i] ? "step-dot done" : "step-dot active";
+      }
+    }
+  }
+
+  function renderPack(order, pack) {
+    // Business name header
+    document.getElementById("pack-business-name").textContent =
+      `${order.business_name} · ${order.city}${order.neighborhood ? `, ${order.neighborhood}` : ""}`;
+
+    // Strategy
+    if (pack.strategy_overview) {
+      const el = document.getElementById("strategy-content");
+      el.innerHTML = pack.strategy_overview
+        .split(/\n{2,}/)
+        .map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`)
+        .join("");
+    }
+
+    // Calendar
+    if (pack.content_calendar?.length) {
+      const el = document.getElementById("calendar-content");
+      el.innerHTML = pack.content_calendar.map(item => `
+        <div class="cal-card">
+          <div class="cal-day">Day ${item.day}</div>
+          <div class="cal-platform">${item.platform || ""}</div>
+          <div class="cal-theme">${item.theme || ""}</div>
+          <div class="cal-type">${item.post_type || ""}</div>
+          <div class="cal-hook">${item.hook || ""}</div>
+        </div>
+      `).join("");
+    }
+
+    // Captions
+    if (pack.captions?.length) {
+      const el = document.getElementById("captions-content");
+      el.innerHTML = pack.captions.map((c, i) => `
+        <div class="caption-card">
+          <div class="caption-meta">
+            <span class="day-tag">Day ${c.day}</span>
+            <span class="plat-tag">${c.platform || ""}</span>
+            <button class="btn-copy" onclick="copyCaption(this, ${i})">Copy</button>
+          </div>
+          <div class="caption-text" id="cap-${i}">${escHtml(c.caption || "")}</div>
+          ${c.image_suggestion ? `<div class="caption-img">${escHtml(c.image_suggestion)}</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    // Hashtags
+    if (pack.hashtag_groups?.length) {
+      const el = document.getElementById("hashtags-content");
+      el.innerHTML = pack.hashtag_groups.map(g => `
+        <div class="htag-group">
+          <div class="htag-theme">${escHtml(g.theme || "")}</div>
+          <div class="htag-list">
+            ${(g.hashtags || []).map(h => `<span class="htag" onclick="copyText(this, '${escHtml(h)}')">${escHtml(h)}</span>`).join("")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Schedule
+    if (pack.posting_schedule?.platforms?.length) {
+      const el = document.getElementById("schedule-content");
+      el.innerHTML = pack.posting_schedule.platforms.map(p => `
+        <div class="schedule-card">
+          <div class="sched-platform">${escHtml(p.name || "")}</div>
+          <div class="sched-row"><span class="sk">Posts/week</span><span class="sv">${p.posts_per_week || ""}</span></div>
+          <div class="sched-row"><span class="sk">Best times</span><span class="sv">${Array.isArray(p.best_times) ? p.best_times.join(", ") : (p.best_times || "")}</span></div>
+          ${p.content_mix ? `<div class="sched-row"><span class="sk">Content mix</span><span class="sv">${escHtml(p.content_mix)}</span></div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    // Website (Agency)
+    if (pack.website_html) {
+      const block = document.getElementById("block-website");
+      block.style.display = "block";
+      document.getElementById("download-website").addEventListener("click", () => {
+        const blob = new Blob([pack.website_html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${order.business_name.toLowerCase().replace(/\s+/g, "-")}-website.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+  }
+
+  function escHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function copyCaption(btn, idx) {
+    const text = document.getElementById(`cap-${idx}`)?.textContent || "";
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = "Copied!";
+      btn.classList.add("copied");
+      setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
+    });
+  }
+
+  function copyText(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = el.style.borderColor;
+      el.style.borderColor = "#22c55e";
+      el.style.color = "#22c55e";
+      setTimeout(() => { el.style.borderColor = ""; el.style.color = ""; }, 1200);
+    });
+  }
+
+  // Poll for order status
+  let pollCount = 0;
+  let startTime = Date.now();
+
+  async function poll() {
+    if (!orderId) {
+      showState("state-error");
+      document.getElementById("error-detail").textContent = "No order ID found. Please check your link.";
+      return;
+    }
+
+    try {
+      const data = await BFN.getOrder(orderId);
+      const { order, pack } = data;
+      const elapsed = (Date.now() - startTime) / 1000;
+      animateDots(elapsed);
+
+      if (order.status === "complete" && pack) {
+        renderPack(order, pack);
+        showState("state-pack");
+      } else if (order.status === "failed") {
+        showState("state-error");
+        document.getElementById("error-detail").textContent =
+          "Pack generation failed. Please contact support with order ID: " + orderId;
+      } else {
+        // Still generating — poll again
+        pollCount++;
+        const delay = pollCount < 10 ? 5000 : 10000;
+        setTimeout(poll, delay);
+      }
+    } catch (err) {
+      if (pollCount < 3) {
+        pollCount++;
+        setTimeout(poll, 5000);
+      } else {
+        showState("state-error");
+        document.getElementById("error-detail").textContent = err.message;
+      }
+    }
+  }
+
+  poll();
+</script>
+
+</body>
+</html>

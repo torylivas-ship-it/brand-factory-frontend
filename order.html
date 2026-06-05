@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Your Pack — The Brand Factory NOLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold: #c9a84c; --bg: #0d0d0d; --card: #111; --border: #222; --text: #f5f0e8; --muted: #888; --error: #ef4444; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+    .logo span { color: var(--text); font-weight: 400; }
+
+    .page { max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+    .tier-banner {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 2.5rem;
+    }
+    .tier-banner .label { font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+    .tier-banner .value { font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+    .tier-banner .price { font-size: 1.5rem; font-weight: 800; }
+    .tier-banner a { font-size: 0.82rem; color: var(--muted); text-decoration: underline; }
+
+    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .subtitle { color: #aaa; margin-bottom: 2.5rem; font-size: 0.95rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
+    label .req { color: var(--gold); }
+    label .opt { color: var(--muted); font-weight: 400; }
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%; padding: 0.75rem 1rem; background: #161616; border: 1px solid var(--border);
+      color: var(--text); border-radius: 6px; font-size: 0.95rem; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); }
+    textarea { resize: vertical; min-height: 80px; }
+    select option { background: #161616; }
+    .hint { font-size: 0.78rem; color: var(--muted); margin-top: 0.35rem; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Platforms checkboxes */
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .checkbox-label {
+      display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+      background: #161616; border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.5rem 0.85rem; font-size: 0.88rem; transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .checkbox-label input { width: 14px; height: 14px; accent-color: var(--gold); cursor: pointer; }
+    .checkbox-label:has(input:checked) { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+    /* Submit */
+    .submit-section { margin-top: 2rem; }
+    .order-summary {
+      background: #161616; border: 1px solid var(--border); border-radius: 8px;
+      padding: 1.25rem; margin-bottom: 1.25rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .order-summary .s-label { font-size: 0.82rem; color: var(--muted); }
+    .order-summary .s-value { font-weight: 700; }
+    .order-summary .s-price { font-size: 1.4rem; font-weight: 800; color: var(--gold); }
+
+    .btn-submit {
+      width: 100%; padding: 1rem; background: var(--gold); color: #000;
+      font-weight: 800; font-size: 1rem; border: none; border-radius: 6px;
+      cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .btn-submit:hover:not(:disabled) { background: #e0c070; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .secure-note { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 0.75rem; }
+
+    .error-msg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.88rem; margin-top: 1rem; display: none; }
+    .error-msg.show { display: block; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+</header>
+
+<div class="page">
+
+  <div class="tier-banner" id="tier-banner">
+    <div>
+      <div class="label">Selected Plan</div>
+      <div class="value" id="tier-label">Growth Pack</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="price" id="tier-price">$99</div>
+      <div style="font-size:0.78rem;color:var(--muted);">one-time</div>
+    </div>
+  </div>
+
+  <h1>Tell us about your business</h1>
+  <p class="subtitle">We'll use this to build your full social media pack. Takes about 2 minutes.</p>
+
+  <form id="order-form" novalidate>
+
+    <div class="form-group">
+      <label>Email <span class="req">*</span></label>
+      <input type="email" name="email" placeholder="you@example.com" required />
+      <p class="hint">We'll email your pack link here.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>Business Name <span class="req">*</span></label>
+        <input type="text" name="business_name" placeholder="e.g. Magnolia Cuts" required />
+      </div>
+      <div class="form-group">
+        <label>Business Type <span class="req">*</span></label>
+        <input type="text" name="business_type" placeholder="e.g. hair salon, restaurant" required />
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>City <span class="req">*</span></label>
+        <input type="text" name="city" placeholder="New Orleans" value="New Orleans" required />
+      </div>
+      <div class="form-group">
+        <label>Neighborhood <span class="opt">(optional)</span></label>
+        <input type="text" name="neighborhood" placeholder="e.g. Tremé, Uptown" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Target Audience <span class="req">*</span></label>
+      <input type="text" name="target_audience" placeholder="e.g. local women 25-45 who care about self-care" required />
+    </div>
+
+    <div class="form-group">
+      <label>Platforms <span class="req">*</span></label>
+      <div class="checkbox-group" id="platforms">
+        <label class="checkbox-label"><input type="checkbox" name="platforms" value="Instagram" checked /> Instagram</label>
+        <label class="checkbox-label"><input type="checkbox" name="platforms" value="Facebook" checked /> Facebook</label>
+        <label class="checkbox-label"><input type="checkbox" name="platforms" value="TikTok" /> TikTok</label>
+        <label class="checkbox-label"><input type="checkbox" name="platforms" value="Twitter/X" /> Twitter/X</label>
+        <label class="checkbox-label"><input type="checkbox" name="platforms" value="LinkedIn" /> LinkedIn</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Brand Tone <span class="req">*</span></label>
+      <select name="tone" required>
+        <option value="">Select a tone...</option>
+        <option value="friendly and warm">Friendly &amp; Warm</option>
+        <option value="professional and polished">Professional &amp; Polished</option>
+        <option value="bold and confident">Bold &amp; Confident</option>
+        <option value="playful and fun">Playful &amp; Fun</option>
+        <option value="luxury and elevated">Luxury &amp; Elevated</option>
+        <option value="community-focused and authentic">Community-Focused &amp; Authentic</option>
+      </select>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="form-group">
+      <label>Special Offers or Promotions <span class="opt">(optional)</span></label>
+      <textarea name="special_offers" placeholder="e.g. 20% off first visit, happy hour 4-6pm, free consult..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Goals <span class="opt">(optional)</span></label>
+      <textarea name="goals" placeholder="e.g. grow followers, get more walk-ins, promote our new menu..."></textarea>
+    </div>
+
+    <div class="submit-section">
+      <div class="order-summary">
+        <div>
+          <div class="s-label">You're ordering</div>
+          <div class="s-value" id="summary-label">Growth Pack</div>
+        </div>
+        <div class="s-price" id="summary-price">$99</div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span id="btn-text">Continue to Checkout →</span>
+      </button>
+      <p class="secure-note">🔒 Secure checkout powered by Stripe · One-time payment, no subscription</p>
+      <div class="error-msg" id="error-msg"></div>
+    </div>
+
+  </form>
+</div>
+
+<script src="api.js"></script>
+<script>
+  const TIERS = {
+    starter: { label: "Starter Pack", price: "$49" },
+    growth:  { label: "Growth Pack",  price: "$99" },
+    agency:  { label: "Agency Pack",  price: "$149" },
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const tier = TIERS[params.get("tier")] ? params.get("tier") : "growth";
+  const { label, price } = TIERS[tier];
+
+  document.getElementById("tier-label").textContent = label;
+  document.getElementById("tier-price").textContent = price;
+  document.getElementById("summary-label").textContent = label;
+  document.getElementById("summary-price").textContent = price;
+  document.title = `Order ${label} — The Brand Factory NOLA`;
+
+  document.getElementById("order-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const errEl = document.getElementById("error-msg");
+    const btn = document.getElementById("submit-btn");
+    const btnText = document.getElementById("btn-text");
+    errEl.classList.remove("show");
+
+    // Validate platforms
+    const platforms = [...form.querySelectorAll('input[name="platforms"]:checked')].map(i => i.value);
+    if (platforms.length === 0) {
+      errEl.textContent = "Please select at least one platform.";
+      errEl.classList.add("show");
+      return;
+    }
+
+    // Basic required field check
+    const required = ["email", "business_name", "business_type", "city", "target_audience", "tone"];
+    for (const name of required) {
+      if (!form[name]?.value?.trim()) {
+        errEl.textContent = `Please fill in the ${name.replace("_", " ")} field.`;
+        errEl.classList.add("show");
+        form[name]?.focus();
+        return;
+      }
+    }
+
+    btn.disabled = true;
+    btnText.textContent = "Creating your order...";
+
+    try {
+      const result = await BFN.createOrder({
+        email: form.email.value.trim(),
+        business_name: form.business_name.value.trim(),
+        business_type: form.business_type.value.trim(),
+        city: form.city.value.trim(),
+        neighborhood: form.neighborhood.value.trim() || null,
+        target_audience: form.target_audience.value.trim(),
+        platforms,
+        tone: form.tone.value,
+        special_offers: form.special_offers.value.trim() || null,
+        goals: form.goals.value.trim() || null,
+        tier,
+      });
+
+      if (result.checkout_url) {
+        btnText.textContent = "Redirecting to Stripe...";
+        window.location.href = result.checkout_url;
+      } else {
+        throw new Error("No checkout URL returned.");
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btnText.textContent = "Continue to Checkout →";
+      errEl.textContent = err.message || "Something went wrong. Please try again.";
+      errEl.classList.add("show");
+    }
+  });
+</script>
+
+</body>
+</html>
