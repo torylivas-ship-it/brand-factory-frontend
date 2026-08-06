@@ -147,6 +147,9 @@
       <div class="congrats">Pack Ready</div>
       <h1>Your Brand Pack is Ready 🎉</h1>
       <p id="pack-business-name" style="color:#aaa;"></p>
+      <p id="ongoing-note" style="display:none; color:var(--gold); font-size:0.85rem; margin-top:0.75rem;">
+        ✦ You're on the Ongoing plan — a fresh pack like this will be delivered automatically every month. Revisit this link anytime to see your latest one.
+      </p>
     </div>
 
     <!-- Strategy -->
@@ -226,6 +229,10 @@
     // Business name header
     document.getElementById("pack-business-name").textContent =
       `${order.business_name} · ${order.city}${order.neighborhood ? `, ${order.neighborhood}` : ""}`;
+
+    if (order.tier === "agency_ongoing") {
+      document.getElementById("ongoing-note").style.display = "block";
+    }
 
     // Strategy
     if (pack.strategy_overview) {
