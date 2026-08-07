@@ -6,23 +6,24 @@
   <title>The Brand Factory NOLA — Social Media Packs for Local Businesses</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink: #0a0a0b;
-      --ink-2: #131215;
-      --card: #141316;
-      --card-2: #19171b;
-      --border: rgba(255,255,255,0.09);
-      --paper: #f6f1e6;
-      --muted: #938c7d;
-      --gold: #d3a955;
-      --gold-soft: rgba(211,169,85,0.14);
-      --plum: #8a5cc2;
+      --ink: #0c0a10;
+      --ink-2: #17121c;
+      --card: #1a151f;
+      --card-2: #201a26;
+      --border: rgba(255,255,255,0.1);
+      --parchment: #f3ead6;
+      --muted: #9c9184;
+      --brass: #c9a24a;
+      --brass-soft: rgba(201,162,74,0.14);
+      --brass-bright: #e2c37c;
+      --plum: #a077c9;
       --plum-soft: rgba(138,92,194,0.18);
-      --emerald: #3f9274;
+      --verdigris: #5cb392;
     }
 
     html { scroll-behavior: smooth; }
@@ -30,24 +31,21 @@
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--ink);
-      color: var(--paper);
+      color: var(--parchment);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
     .serif { font-family: 'Fraunces', serif; }
+    a { color: var(--brass); text-decoration: none; }
 
-    a { color: var(--gold); text-decoration: none; }
-
-    /* grain overlay */
     body::before {
       content: "";
       position: fixed; inset: 0; z-index: 999; pointer-events: none;
-      opacity: 0.045; mix-blend-mode: overlay;
+      opacity: 0.05; mix-blend-mode: overlay;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    /* reveal on scroll */
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.in { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) {
@@ -55,89 +53,119 @@
       html { scroll-behavior: auto; }
     }
 
+    /* STAMP — signature motif */
+    .stamp {
+      border-radius: 50%; border: 3px double var(--brass);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+      color: var(--brass); text-transform: uppercase; letter-spacing: 0.05em;
+      text-align: center; background: var(--ink-2); flex-shrink: 0;
+      box-shadow: 0 14px 30px -12px rgba(0,0,0,0.65);
+    }
+    .stamp .stamp-mark { display: block; }
+    .stamp-sm {
+      width: 66px; height: 66px; font-size: 0.46rem; line-height: 1.3;
+      position: absolute; top: -16px; right: -12px; transform: rotate(11deg); z-index: 3;
+    }
+    .stamp-sm .stamp-mark { font-size: 0.85rem; margin-bottom: 0.1rem; }
+
     /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 1.1rem 2rem;
-      background: rgba(10,10,11,0.78); backdrop-filter: blur(10px);
+      background: rgba(12,10,16,0.8); backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.01em; }
-    .nav-logo em { color: var(--gold); font-style: normal; }
+    .nav-logo em { color: var(--brass); font-style: normal; }
     nav a.btn-sm {
-      background: var(--gold); color: #0a0a0b; font-weight: 700; font-size: 0.82rem;
-      letter-spacing: 0.02em;
-      padding: 0.6rem 1.3rem; border-radius: 3px; transition: transform 0.2s, background 0.2s;
-      display: inline-block;
+      background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 0.82rem;
+      letter-spacing: 0.02em; padding: 0.6rem 1.3rem; border-radius: 2px;
+      transition: transform 0.2s, background 0.2s; display: inline-block;
     }
-    nav a.btn-sm:hover { background: #e2c37c; transform: translateY(-1px); }
+    nav a.btn-sm:hover { background: var(--brass-bright); transform: translateY(-1px); }
 
-    /* HERO */
-    .hero {
-      position: relative;
-      padding: 6.5rem 2rem 5rem;
-      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3rem; align-items: center;
-      max-width: 1200px; margin: 0 auto;
-    }
+    /* HERO — full-bleed poster, headline dominates, asymmetric split below */
+    .hero { position: relative; padding: 4.5rem 2.5rem 0; max-width: 1440px; margin: 0 auto; }
     .hero::before {
       content: ""; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
-      width: 140%; height: 130%; z-index: -1;
+      width: 140%; height: 120%; z-index: -1;
       background:
-        radial-gradient(circle at 20% 10%, rgba(211,169,85,0.16), transparent 45%),
-        radial-gradient(circle at 85% 25%, rgba(138,92,194,0.14), transparent 40%),
-        radial-gradient(circle at 50% 90%, rgba(63,146,116,0.08), transparent 45%);
+        radial-gradient(circle at 20% 10%, rgba(201,162,74,0.16), transparent 45%),
+        radial-gradient(circle at 85% 25%, rgba(160,119,201,0.13), transparent 40%);
       filter: blur(20px);
     }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 0.5rem;
       font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1.75rem;
+      color: var(--brass); margin-bottom: 1.5rem;
     }
-    .eyebrow::before { content: ""; width: 1.4rem; height: 1px; background: var(--gold); display: inline-block; }
-    .hero h1 {
-      font-family: 'Fraunces', serif; font-optical-sizing: auto;
-      font-size: clamp(2.6rem, 5.4vw, 4.6rem); font-weight: 600; line-height: 1.02;
-      letter-spacing: -0.02em; margin-bottom: 1.5rem;
+    .eyebrow::before { content: ""; width: 1.4rem; height: 1px; background: var(--brass); display: inline-block; }
+    .poster-h1 { line-height: 0.92; margin-bottom: 2.75rem; }
+    .poster-h1 span { display: block; }
+    .poster-h1 .l-caps {
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase;
+      font-size: clamp(3rem, 9vw, 7.2rem); color: var(--parchment);
     }
-    .hero h1 em { font-style: italic; color: var(--gold); font-weight: 500; }
-    .hero p.lede {
-      font-size: 1.15rem; color: #c9c2b4; max-width: 480px; margin-bottom: 2.5rem;
+    .poster-h1 .l-italic {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
+      font-size: clamp(3.4rem, 10.5vw, 8.6rem); color: var(--brass); letter-spacing: -0.01em; margin: 0.02em 0;
     }
-    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+    .poster-h1 .l-serif {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: clamp(3rem, 8.6vw, 7rem); color: var(--parchment); letter-spacing: -0.02em;
+    }
+    .hero-lower {
+      display: grid; grid-template-columns: 1fr 0.85fr; gap: 3rem; align-items: end;
+      padding: 2.5rem 0 4rem; position: relative;
+    }
+    .hero-lower .stamp.stamp-hero {
+      width: 108px; height: 108px; font-size: 0.62rem;
+      position: absolute; top: -0.75rem; left: 0; transform: rotate(-9deg);
+    }
+    .hero-lower .stamp.stamp-hero .stamp-mark { font-size: 1.2rem; }
+    .hero-copy { padding-left: 148px; }
+    .hero p.lede { font-size: 1.15rem; color: #c9c2b4; max-width: 460px; margin-bottom: 2.2rem; }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
     .btn-primary {
-      background: var(--gold); color: #0a0a0b; font-weight: 700; font-size: 0.98rem;
-      padding: 0.95rem 2.1rem; border-radius: 3px; border: none; cursor: pointer;
+      background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 0.98rem;
+      padding: 0.95rem 2.1rem; border-radius: 2px; border: none; cursor: pointer;
       transition: background 0.2s, transform 0.15s; display: inline-block;
     }
-    .btn-primary:hover { background: #e2c37c; transform: translateY(-2px); }
+    .btn-primary:hover { background: var(--brass-bright); transform: translateY(-2px); }
     .btn-secondary {
-      background: transparent; color: var(--paper); font-weight: 600; font-size: 0.98rem;
-      padding: 0.95rem 2.1rem; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;
+      background: transparent; color: var(--parchment); font-weight: 600; font-size: 0.98rem;
+      padding: 0.95rem 2.1rem; border-radius: 2px; border: 1px solid var(--border); cursor: pointer;
       transition: border-color 0.2s, color 0.2s; display: inline-block;
     }
-    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-secondary:hover { border-color: var(--brass); color: var(--brass); }
     .hero-note { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.02em; }
 
-    /* hero mockup stack */
-    .stack { position: relative; height: 380px; }
+    /* hero mockup stack — bleeds toward the edge, asymmetric */
+    .stack { position: relative; height: 340px; }
     .mock-card {
-      position: absolute; width: 230px; background: var(--card);
-      border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem;
+      position: absolute; width: 220px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 4px; padding: 1.15rem 1.15rem 1.05rem;
       box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
     }
-    .mock-card .tag {
-      display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 99px; margin-bottom: 0.7rem;
+    .mock-card::before {
+      content: ""; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+      width: 10px; height: 10px; border-radius: 50%; background: var(--brass);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.45);
     }
-    .mock-card .tag.ig { background: var(--plum-soft); color: #c6a4f0; }
-    .mock-card .tag.fb { background: var(--gold-soft); color: var(--gold); }
-    .mock-card .tag.tt { background: rgba(63,146,116,0.18); color: #7fd4b3; }
-    .mock-card p { font-size: 0.83rem; color: #d8d2c4; }
-    .mock-card .foot { margin-top: 0.9rem; font-size: 0.72rem; color: var(--muted); display: flex; justify-content: space-between; }
-    .mock-1 { top: 0; left: 20px; transform: rotate(-7deg); z-index: 3; }
-    .mock-2 { top: 90px; left: 130px; transform: rotate(4deg); z-index: 2; }
-    .mock-3 { top: 205px; left: 40px; transform: rotate(-2deg); z-index: 1; }
+    .mock-card .tag {
+      display: inline-block; font-size: 0.63rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 2px; margin-bottom: 0.65rem;
+    }
+    .mock-card .tag.ig { background: var(--plum-soft); color: #d0b3e8; }
+    .mock-card .tag.fb { background: var(--brass-soft); color: var(--brass); }
+    .mock-card .tag.tt { background: rgba(92,179,146,0.18); color: #8fdcbc; }
+    .mock-card p { font-size: 0.81rem; color: #d8d2c4; }
+    .mock-card .foot { margin-top: 0.85rem; font-size: 0.7rem; color: var(--muted); display: flex; justify-content: space-between; }
+    .mock-1 { top: 0; right: 110px; transform: rotate(-6deg); z-index: 3; }
+    .mock-2 { top: 70px; right: -10px; transform: rotate(4deg); z-index: 2; }
+    .mock-3 { top: 175px; right: 90px; transform: rotate(-2deg); z-index: 1; }
 
     /* MARQUEE */
     .marquee {
@@ -149,114 +177,118 @@
       font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem;
       color: var(--muted); padding: 0 2rem; display: inline-flex; align-items: center; gap: 2rem;
     }
-    .marquee-track span::after { content: "✺"; color: var(--gold); font-style: normal; }
+    .marquee-track span::after { content: "✦"; color: var(--brass); font-style: normal; }
     @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* SECTIONS */
-    .section { padding: 6rem 1.5rem; max-width: 1040px; margin: 0 auto; }
+    /* Shared section chrome */
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; }
+    .section-head { text-align: center; margin-bottom: 3.5rem; }
     .section-label {
-      display: block; text-align: center; font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+      display: block; width: max-content; margin: 0 auto 1.4rem;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px;
+      padding: 0.3rem 0.9rem; transform: rotate(-1.4deg);
     }
-    .section h2 {
-      font-family: 'Fraunces', serif; text-align: center; font-weight: 600;
+    .section-label.rotate-r { transform: rotate(1.4deg); }
+    .section-head h2 {
+      font-family: 'Fraunces', serif; font-weight: 600;
       font-size: clamp(1.8rem, 4.2vw, 2.8rem); margin-bottom: 1rem; letter-spacing: -0.01em;
     }
-    .section .sub { text-align: center; color: #aca397; max-width: 480px; margin: 0 auto 3.5rem; }
+    .section-head p { color: #aca397; max-width: 480px; margin: 0 auto; }
 
-    /* HOW IT WORKS */
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; }
-    .step { position: relative; padding: 1rem 0.5rem; }
-    .step-num {
-      font-family: 'Fraunces', serif; font-size: 5rem; font-weight: 700;
-      color: transparent; -webkit-text-stroke: 1px rgba(211,169,85,0.4);
-      line-height: 1; margin-bottom: 0.5rem; display: block;
+    /* PROCESS — editorial ledger, not a card grid */
+    .process { padding: 6rem 0; }
+    .process-ledger { border-top: 1px solid var(--border); }
+    .process-row {
+      display: flex; align-items: flex-start; gap: 2.5rem;
+      padding: 2.4rem 0; border-bottom: 1px solid var(--border);
     }
-    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .step p { font-size: 0.9rem; color: #aca397; }
+    .process-num {
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 4.4rem;
+      line-height: 0.85; color: transparent; -webkit-text-stroke: 1.5px rgba(201,162,74,0.55);
+      flex-shrink: 0; width: 110px;
+    }
+    .process-copy h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .process-copy p { font-size: 0.94rem; color: #aca397; max-width: 520px; }
 
-    /* WHAT'S IN THE PACK */
-    .pack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.1rem; }
-    .pack-item {
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-      padding: 1.5rem; transition: border-color 0.25s, transform 0.25s;
-    }
-    .pack-item:hover { border-color: rgba(211,169,85,0.4); transform: translateY(-3px); }
-    .pack-icon {
-      width: 2.4rem; height: 2.4rem; border-radius: 8px; background: var(--gold-soft);
-      display: flex; align-items: center; justify-content: center; font-size: 1.15rem; margin-bottom: 1rem;
-    }
-    .pack-item h4 { font-size: 0.98rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .pack-item p { font-size: 0.85rem; color: #aca397; }
+    /* WHAT'S INCLUDED — menu list, not icon cards */
+    .menu-section { background: var(--ink-2); padding: 6rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .menu-list { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px dashed var(--border); border-left: 1px dashed var(--border); }
+    .menu-item { padding: 1.6rem 1.9rem; border-right: 1px dashed var(--border); border-bottom: 1px dashed var(--border); }
+    .menu-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; display: flex; align-items: baseline; gap: 0.5rem; }
+    .menu-item h4 .tag-agency { color: var(--brass); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .menu-item p { font-size: 0.86rem; color: #aca397; }
 
-    /* PRICING */
-    #pricing { background: var(--ink-2); padding: 6rem 1.5rem; border-top: 1px solid var(--border); }
-    #pricing .inner { max-width: 1060px; margin: 0 auto; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.5rem; margin-top: 3.5rem; }
-    .pricing-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-      padding: 2.2rem; display: flex; flex-direction: column; position: relative;
-      transition: transform 0.25s, border-color 0.25s;
+    /* PRICING — a single plaque/menu-board, not floating cards */
+    #pricing { padding: 6rem 0; }
+    .pricing-plaque {
+      border: 1px solid var(--border); border-radius: 8px; background: var(--card);
+      overflow: hidden; display: grid; grid-template-columns: repeat(4, 1fr); position: relative;
     }
-    .pricing-card:hover { transform: translateY(-4px); }
-    .pricing-card.featured {
-      border: 1px solid transparent;
-      background:
-        linear-gradient(var(--card-2), var(--card-2)) padding-box,
-        linear-gradient(135deg, var(--gold), var(--plum)) border-box;
+    .pricing-col {
+      padding: 2.4rem 1.7rem; border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; position: relative;
     }
-    .featured-badge {
-      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-      background: var(--gold); color: #0a0a0b; font-size: 0.68rem; font-weight: 800;
-      letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 1.1rem;
-      border-radius: 0 0 8px 8px;
-    }
-    .tier-name { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
-    .tier-price { font-family: 'Fraunces', serif; font-size: 3.2rem; font-weight: 600; line-height: 1; margin-bottom: 0.35rem; }
-    .tier-price span { font-size: 1.3rem; font-weight: 400; vertical-align: top; margin-top: 0.5rem; display: inline-block; }
-    .tier-note { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
-    .tier-desc { font-size: 0.9rem; color: #c1bbae; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
-    .feature-list { list-style: none; flex: 1; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.65rem; }
-    .feature-list li { font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.6rem; }
-    .feature-list li::before { content: "✓"; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+    .pricing-col:last-child { border-right: none; }
+    .pricing-col.featured { background: linear-gradient(180deg, rgba(201,162,74,0.07), transparent 45%); }
+    .tier-name { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+    .tier-price { font-family: 'Fraunces', serif; font-size: 2.7rem; font-weight: 600; line-height: 1; margin-bottom: 0.3rem; }
+    .tier-price span { font-size: 1.15rem; font-weight: 400; vertical-align: top; margin-top: 0.4rem; display: inline-block; }
+    .tier-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 1.3rem; }
+    .tier-desc { font-size: 0.86rem; color: #c1bbae; margin-bottom: 1.3rem; border-bottom: 1px dashed var(--border); padding-bottom: 1.3rem; }
+    .feature-list { list-style: none; flex: 1; margin-bottom: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .feature-list li { font-size: 0.85rem; display: flex; align-items: flex-start; gap: 0.55rem; }
+    .feature-list li::before { content: "✓"; color: var(--brass); font-weight: 700; flex-shrink: 0; }
     .feature-list li.extra::before { content: "★"; color: var(--plum); }
     .btn-tier {
-      width: 100%; padding: 0.9rem; border-radius: 4px; border: none; cursor: pointer;
-      font-size: 0.95rem; font-weight: 700; transition: all 0.2s;
-      background: rgba(255,255,255,0.06); color: var(--paper);
+      width: 100%; padding: 0.85rem; border-radius: 3px; border: none; cursor: pointer;
+      font-size: 0.9rem; font-weight: 700; transition: all 0.2s;
+      background: rgba(255,255,255,0.06); color: var(--parchment); margin-top: auto;
     }
     .btn-tier:hover { background: rgba(255,255,255,0.12); }
-    .pricing-card.featured .btn-tier { background: var(--gold); color: #0a0a0b; }
-    .pricing-card.featured .btn-tier:hover { background: #e2c37c; }
-
-    /* SOCIAL PROOF */
-    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.5rem; }
-    .testimonial {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem;
-      position: relative;
+    .pricing-col.featured .btn-tier { background: var(--brass); color: #0c0a10; }
+    .pricing-col.featured .btn-tier:hover { background: var(--brass-bright); }
+    @media (max-width: 960px) {
+      .pricing-plaque { grid-template-columns: 1fr; }
+      .pricing-col { border-right: none !important; border-bottom: 1px solid var(--border); }
+      .pricing-col:last-child { border-bottom: none; }
     }
-    .testimonial .mark {
-      font-family: 'Fraunces', serif; font-size: 3rem; color: var(--gold); opacity: 0.4;
-      line-height: 1; margin-bottom: 0.25rem; display: block;
-    }
-    .testimonial p { font-size: 0.95rem; color: #d3ccbe; margin-bottom: 1.1rem; }
-    .testimonial-author { font-size: 0.85rem; font-weight: 700; color: var(--gold); }
-    .testimonial-biz { font-size: 0.8rem; color: var(--muted); }
 
-    /* FAQ */
-    .faq { display: flex; flex-direction: column; gap: 0.9rem; }
+    /* TESTIMONIALS — one featured pull-quote, not a card grid */
+    .testimonials-block { padding: 6rem 0; }
+    .quote-feature { max-width: 720px; margin: 0 auto 3.5rem; text-align: center; }
+    .quote-feature .mark {
+      font-family: 'Fraunces', serif; font-size: 3.5rem; color: var(--brass); opacity: 0.5; line-height: 1; display: block;
+    }
+    .quote-feature p {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
+      font-size: clamp(1.3rem, 3vw, 1.8rem); line-height: 1.4; color: var(--parchment); margin-bottom: 1.3rem;
+    }
+    .quote-feature .who { font-size: 0.88rem; color: var(--brass); font-weight: 700; }
+    .quote-feature .biz { font-size: 0.82rem; color: var(--muted); }
+    .quote-minor-row {
+      display: flex; justify-content: center; gap: 3.5rem; flex-wrap: wrap;
+      border-top: 1px solid var(--border); padding-top: 2.5rem; max-width: 780px; margin: 0 auto;
+    }
+    .quote-minor { max-width: 280px; text-align: left; }
+    .quote-minor p { font-size: 0.88rem; color: #c1bbae; margin-bottom: 0.6rem; }
+    .quote-minor .who { font-size: 0.8rem; font-weight: 700; color: var(--brass); }
+    .quote-minor .biz { font-size: 0.76rem; color: var(--muted); }
+
+    /* FAQ — ruled rows, not boxed cards */
+    .faq-section { background: var(--ink-2); padding: 6rem 0; border-top: 1px solid var(--border); }
+    .faq { border-top: 1px solid var(--border); max-width: 760px; margin: 0 auto; }
     details {
-      background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem;
-      transition: border-color 0.2s;
+      border-bottom: 1px solid var(--border); padding: 1.5rem 0.2rem; transition: opacity 0.2s;
     }
-    details[open] { border-color: rgba(211,169,85,0.35); }
     summary {
       font-weight: 600; cursor: pointer; list-style: none; display: flex;
-      justify-content: space-between; align-items: center;
+      justify-content: space-between; align-items: center; font-size: 1rem;
     }
-    summary::after { content: "+"; color: var(--gold); font-size: 1.2rem; }
+    summary::after { content: "+"; color: var(--brass); font-size: 1.2rem; }
     details[open] summary::after { content: "−"; }
-    details p { margin-top: 0.9rem; color: #aca397; font-size: 0.93rem; }
+    details p { margin-top: 0.9rem; color: #aca397; font-size: 0.93rem; max-width: 620px; }
 
     /* FOOTER CTA */
     .cta-band {
@@ -265,11 +297,11 @@
     }
     .cta-band::before {
       content: ""; position: absolute; inset: -20% -10%; z-index: -1;
-      background: radial-gradient(ellipse at 50% 100%, rgba(211,169,85,0.14) 0%, transparent 55%),
-                  radial-gradient(ellipse at 30% 20%, rgba(138,92,194,0.1) 0%, transparent 50%);
+      background: radial-gradient(ellipse at 50% 100%, rgba(201,162,74,0.14) 0%, transparent 55%),
+                  radial-gradient(ellipse at 30% 20%, rgba(160,119,201,0.1) 0%, transparent 50%);
     }
     .cta-band h2 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5.4vw, 3.4rem); font-weight: 600; margin-bottom: 1.1rem; letter-spacing: -0.01em; }
-    .cta-band h2 em { color: var(--gold); font-style: italic; }
+    .cta-band h2 em { color: var(--brass); font-style: italic; }
     .cta-band p { color: #aca397; margin-bottom: 2.2rem; }
 
     footer {
@@ -277,15 +309,21 @@
       border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem;
     }
     footer a { color: var(--muted); }
-    footer a:hover { color: var(--gold); }
+    footer a:hover { color: var(--brass); }
 
-    @media (max-width: 860px) {
-      .hero { grid-template-columns: 1fr; padding-top: 5rem; }
+    @media (max-width: 900px) {
+      .hero-lower { grid-template-columns: 1fr; }
+      .hero-copy { padding-left: 0; padding-top: 3rem; }
+      .hero-lower .stamp.stamp-hero { position: static; transform: rotate(-6deg); margin-bottom: 1.5rem; }
       .stack { display: none; }
+      .menu-list { grid-template-columns: 1fr; }
+      .menu-item { border-right: none !important; }
+      .process-num { width: 70px; font-size: 3rem; }
     }
     @media (max-width: 600px) {
       nav { padding: 1rem; }
-      .hero { padding: 4rem 1.25rem 3rem; }
+      .hero { padding: 4rem 1.25rem 0; }
+      .process-row { gap: 1.3rem; }
     }
   </style>
 </head>
@@ -298,31 +336,41 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div>
-    <div class="eyebrow">AI‑Powered Studio · Built for New Orleans</div>
-    <h1>Your brand,<br><em>art‑directed</em><br>by Friday.</h1>
-    <p class="lede">Tell us about your business. We build the strategy, the calendar, the captions, and the hashtags — like you hired a full creative agency, minus the retainer.</p>
-    <div class="hero-cta">
-      <a href="#pricing" class="btn-primary">See Pricing →</a>
-      <a href="#how-it-works" class="btn-secondary">How It Works</a>
+  <div class="eyebrow">AI‑Powered Studio · Built for New Orleans</div>
+  <h1 class="poster-h1">
+    <span class="l-caps">Your Brand,</span>
+    <span class="l-italic">art‑directed</span>
+    <span class="l-serif">by Friday.</span>
+  </h1>
+  <div class="hero-lower">
+    <div class="hero-copy">
+      <div class="stamp stamp-hero">
+        <span class="stamp-mark">✦</span>
+        <span>Est.<br>NOLA</span>
+      </div>
+      <p class="lede">Tell us about your business. We build the strategy, the calendar, the captions, and the hashtags — like you hired a full creative agency, minus the retainer.</p>
+      <div class="hero-cta">
+        <a href="#pricing" class="btn-primary">See Pricing →</a>
+        <a href="#how-it-works" class="btn-secondary">How It Works</a>
+      </div>
+      <p class="hero-note">One‑time payment · No subscription · Delivered in minutes</p>
     </div>
-    <p class="hero-note">One‑time payment · No subscription · Delivered in minutes</p>
-  </div>
-  <div class="stack">
-    <div class="mock-card mock-1">
-      <span class="tag ig">Instagram</span>
-      <p>"New po-boy special just dropped 🥖 — Fridays only, Uptown."</p>
-      <div class="foot"><span>Day 4</span><span>#NOLAeats</span></div>
-    </div>
-    <div class="mock-card mock-2">
-      <span class="tag fb">Strategy</span>
-      <p>Content pillar: Behind-the-scenes craft + neighborhood pride.</p>
-      <div class="foot"><span>Pillar 2</span><span>Brand voice</span></div>
-    </div>
-    <div class="mock-card mock-3">
-      <span class="tag tt">TikTok</span>
-      <p>Hook: "3 things every Tremé local orders first."</p>
-      <div class="foot"><span>Day 11</span><span>Peak: 6–8pm</span></div>
+    <div class="stack">
+      <div class="mock-card mock-1">
+        <span class="tag ig">Instagram</span>
+        <p>"New po-boy special just dropped 🥖 — Fridays only, Uptown."</p>
+        <div class="foot"><span>Day 4</span><span>#NOLAeats</span></div>
+      </div>
+      <div class="mock-card mock-2">
+        <span class="tag fb">Strategy</span>
+        <p>Content pillar: Behind-the-scenes craft + neighborhood pride.</p>
+        <div class="foot"><span>Pillar 2</span><span>Brand voice</span></div>
+      </div>
+      <div class="mock-card mock-3">
+        <span class="tag tt">TikTok</span>
+        <p>Hook: "3 things every Tremé local orders first."</p>
+        <div class="foot"><span>Day 11</span><span>Peak: 6–8pm</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -334,85 +382,93 @@
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<section class="section reveal" id="how-it-works">
-  <span class="section-label">The Process</span>
-  <h2>From zero to fully planned in 3 steps</h2>
-  <p class="sub">No agency fees. No back-and-forth. Just your business info — and we handle the rest.</p>
-  <div class="steps">
-    <div class="step">
-      <span class="step-num">01</span>
-      <h3>Tell Us About Your Business</h3>
-      <p>Fill out a short form: business type, city, target audience, tone, and platforms. Takes about 2 minutes.</p>
+<!-- HOW IT WORKS — editorial ledger -->
+<section class="process reveal" id="how-it-works">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">The Process</span>
+      <h2>From zero to fully planned in 3 steps</h2>
+      <p>No agency fees. No back-and-forth. Just your business info — and we handle the rest.</p>
     </div>
-    <div class="step">
-      <span class="step-num">02</span>
-      <h3>Pay Once, Securely</h3>
-      <p>Choose your tier and pay via Stripe. No recurring charges, no hidden fees.</p>
-    </div>
-    <div class="step">
-      <span class="step-num">03</span>
-      <h3>Get Your Full Pack</h3>
-      <p>Your AI-generated strategy, calendar, captions, and hashtags are ready in minutes. Download and start posting.</p>
+    <div class="process-ledger">
+      <div class="process-row">
+        <span class="process-num">01</span>
+        <div class="process-copy">
+          <h3>Tell Us About Your Business</h3>
+          <p>Fill out a short form: business type, city, target audience, tone, and platforms. Takes about 2 minutes.</p>
+        </div>
+      </div>
+      <div class="process-row">
+        <span class="process-num">02</span>
+        <div class="process-copy">
+          <h3>Pay Once, Securely</h3>
+          <p>Choose your tier and pay via Stripe. No recurring charges, no hidden fees.</p>
+        </div>
+      </div>
+      <div class="process-row">
+        <span class="process-num">03</span>
+        <div class="process-copy">
+          <h3>Get Your Full Pack</h3>
+          <p>Your AI-generated strategy, calendar, captions, and hashtags are ready in minutes. Download and start posting.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- WHAT'S INCLUDED -->
-<section class="reveal" style="background:var(--ink-2); padding: 6rem 1.5rem; border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
-  <div style="max-width:1040px; margin:0 auto;">
-    <span class="section-label">What You Get</span>
-    <h2 class="serif" style="text-align:center; font-weight:600; font-size:clamp(1.8rem,4.2vw,2.8rem); margin-bottom:1rem; letter-spacing:-0.01em;">Everything you need to show up consistently</h2>
-    <p class="sub" style="text-align:center; color:#aca397; max-width:480px; margin:0 auto 3.5rem;">Every pack includes a full suite of content assets tailored specifically to your business and local market.</p>
-    <div class="pack-grid">
-      <div class="pack-item">
-        <div class="pack-icon">📅</div>
+<!-- WHAT'S INCLUDED — menu list -->
+<section class="menu-section reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label rotate-r">What You Get</span>
+      <h2 class="serif">Everything you need to show up consistently</h2>
+      <p>Every pack includes a full suite of content assets tailored specifically to your business and local market.</p>
+    </div>
+    <div class="menu-list">
+      <div class="menu-item">
         <h4>Content Calendar</h4>
         <p>Day-by-day posting plan with themes, post types, and hooks.</p>
       </div>
-      <div class="pack-item">
-        <div class="pack-icon">✍️</div>
+      <div class="menu-item">
         <h4>Ready-to-Post Captions</h4>
         <p>Platform-specific captions written in your brand voice.</p>
       </div>
-      <div class="pack-item">
-        <div class="pack-icon">#️⃣</div>
+      <div class="menu-item">
         <h4>Hashtag Groups</h4>
         <p>Curated tag sets mixing high-volume and niche-specific tags.</p>
       </div>
-      <div class="pack-item">
-        <div class="pack-icon">📊</div>
+      <div class="menu-item">
         <h4>Posting Schedule</h4>
         <p>Best times and days to post on each platform for your audience.</p>
       </div>
-      <div class="pack-item">
-        <div class="pack-icon">🎯</div>
+      <div class="menu-item">
         <h4>Brand Strategy</h4>
         <p>Your positioning, content pillars, and growth plan in plain English.</p>
       </div>
-      <div class="pack-item" style="border-color: rgba(211,169,85,0.3);">
-        <div class="pack-icon">🌐</div>
-        <h4>Custom Website <span style="color:var(--gold);font-size:0.75rem;">Agency</span></h4>
+      <div class="menu-item">
+        <h4>Custom Website <span class="tag-agency">Agency</span></h4>
         <p>A fully coded one-page HTML website built for your business.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
+<!-- PRICING — unified plaque -->
 <section id="pricing" class="reveal">
-  <div class="inner">
-    <span class="section-label">Pricing</span>
-    <h2 class="serif" style="text-align:center; font-weight:600; font-size:clamp(1.8rem,4.2vw,2.8rem); margin-bottom:0.5rem; letter-spacing:-0.01em;">Simple, one-time pricing</h2>
-    <p class="sub" style="text-align:center; color:#aca397; margin:0 auto;">Pay once. Own it forever. No monthly fees, no upsells.</p>
-    <div class="pricing-grid">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">Pricing</span>
+      <h2 class="serif">Simple, one-time pricing</h2>
+      <p>Pay once. Own it forever. No monthly fees, no upsells.</p>
+    </div>
+    <div class="pricing-plaque">
 
       <!-- STARTER -->
-      <div class="pricing-card">
+      <div class="pricing-col">
         <div class="tier-name">Starter</div>
         <div class="tier-price"><span>$</span>49</div>
         <div class="tier-note">one-time payment</div>
-        <div class="tier-desc">Perfect for getting started with a solid 2-week content foundation.</div>
+        <div class="tier-desc">A solid 2-week content foundation.</div>
         <ul class="feature-list">
           <li>14-day content calendar</li>
           <li>14 ready-to-post captions</li>
@@ -420,16 +476,19 @@
           <li>Platform posting schedule</li>
           <li>Brand strategy overview</li>
         </ul>
-        <button class="btn-tier" onclick="order('starter')">Get Starter Pack →</button>
+        <button class="btn-tier" onclick="order('starter')">Get Starter →</button>
       </div>
 
       <!-- GROWTH -->
-      <div class="pricing-card featured">
-        <div class="featured-badge">Most Popular</div>
+      <div class="pricing-col featured">
+        <div class="stamp stamp-sm">
+          <span class="stamp-mark">★</span>
+          <span>Most<br>Popular</span>
+        </div>
         <div class="tier-name">Growth</div>
         <div class="tier-price"><span>$</span>99</div>
         <div class="tier-note">one-time payment</div>
-        <div class="tier-desc">A full month of content with deeper strategy and more captions.</div>
+        <div class="tier-desc">A full month of content, deeper strategy.</div>
         <ul class="feature-list">
           <li>30-day content calendar</li>
           <li>20 ready-to-post captions</li>
@@ -437,80 +496,81 @@
           <li>Detailed posting schedule</li>
           <li>Full brand strategy</li>
         </ul>
-        <button class="btn-tier" onclick="order('growth')">Get Growth Pack →</button>
+        <button class="btn-tier" onclick="order('growth')">Get Growth →</button>
       </div>
 
       <!-- AGENCY -->
-      <div class="pricing-card">
+      <div class="pricing-col">
         <div class="tier-name">Agency</div>
         <div class="tier-price"><span>$</span>149</div>
         <div class="tier-note">one-time payment</div>
-        <div class="tier-desc">Maximum content plus a complete custom website for your business.</div>
+        <div class="tier-desc">Max content plus a custom website.</div>
         <ul class="feature-list">
           <li>30-day content calendar</li>
           <li>30 ready-to-post captions</li>
           <li>8 hashtag groups (120 tags)</li>
           <li>Full posting schedule</li>
           <li>Complete brand strategy</li>
-          <li class="extra" style="color:var(--plum);">Custom one-page website (HTML)</li>
+          <li class="extra" style="color:var(--plum);">Custom one-page website</li>
         </ul>
-        <button class="btn-tier" onclick="order('agency')">Get Agency Pack →</button>
+        <button class="btn-tier" onclick="order('agency')">Get Agency →</button>
       </div>
 
       <!-- AGENCY ONGOING -->
-      <div class="pricing-card" style="border-color: rgba(63,146,116,0.35);">
+      <div class="pricing-col">
         <div class="tier-name">Agency + Ongoing</div>
         <div class="tier-price"><span>$</span>149</div>
-        <div class="tier-note">today, then $125/mo · cancel anytime</div>
-        <div class="tier-desc">Never run out of content. Everything in Agency, plus a brand-new pack delivered automatically every month.</div>
+        <div class="tier-note">today, then $125/mo</div>
+        <div class="tier-desc">Everything in Agency, refreshed monthly.</div>
         <ul class="feature-list">
-          <li>Everything in the Agency pack</li>
-          <li>Fresh 30-day calendar every month</li>
+          <li>Everything in Agency</li>
+          <li>Fresh calendar every month</li>
           <li>30 new captions every month</li>
-          <li>Updated hashtag groups every month</li>
-          <li class="extra" style="color:var(--emerald);">First $125/mo charge isn't until 30 days from today</li>
+          <li>Updated hashtags every month</li>
+          <li class="extra" style="color:var(--verdigris);">First $125/mo isn't until day 30</li>
         </ul>
-        <button class="btn-tier" onclick="order('agency_ongoing')">Start Ongoing Plan →</button>
+        <button class="btn-tier" onclick="order('agency_ongoing')">Start Ongoing →</button>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="section reveal">
-  <div style="max-width:1040px; margin:0 auto;">
-    <span class="section-label">What People Say</span>
-    <h2>Local businesses love it</h2>
-    <p class="sub">Real results from real New Orleans businesses.</p>
-  <div class="testimonials">
-    <div class="testimonial">
-      <span class="mark">"</span>
-      <p>Got a full month of Instagram content for my salon in like 10 minutes. The captions sound exactly like me — I was shocked.</p>
-      <div class="testimonial-author">Keisha T.</div>
-      <div class="testimonial-biz">Hair salon, Tremé</div>
+<!-- TESTIMONIALS — one featured quote -->
+<section class="testimonials-block reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label rotate-r">What People Say</span>
+      <h2>Local businesses love it</h2>
     </div>
-    <div class="testimonial">
-      <span class="mark">"</span>
-      <p>We'd been struggling with social for months. This gave us a real strategy and content we could actually use starting the same day.</p>
-      <div class="testimonial-author">Marcus D.</div>
-      <div class="testimonial-biz">Food truck, Uptown</div>
-    </div>
-    <div class="testimonial">
+    <div class="quote-feature">
       <span class="mark">"</span>
       <p>The Agency pack is insane value. Got our whole social strategy plus a clean website I could actually put live. Best $149 I've spent.</p>
-      <div class="testimonial-author">Danielle R.</div>
-      <div class="testimonial-biz">Boutique, Magazine Street</div>
+      <div class="who">Danielle R.</div>
+      <div class="biz">Boutique, Magazine Street</div>
     </div>
-  </div>
+    <div class="quote-minor-row">
+      <div class="quote-minor">
+        <p>"Got a full month of Instagram content for my salon in like 10 minutes. The captions sound exactly like me."</p>
+        <div class="who">Keisha T.</div>
+        <div class="biz">Hair salon, Tremé</div>
+      </div>
+      <div class="quote-minor">
+        <p>"We'd been struggling with social for months. This gave us a real strategy we could use the same day."</p>
+        <div class="who">Marcus D.</div>
+        <div class="biz">Food truck, Uptown</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section class="reveal" style="background:var(--ink-2); padding: 6rem 1.5rem; border-top:1px solid var(--border);">
-  <div style="max-width:700px; margin: 0 auto;">
-    <span class="section-label">FAQ</span>
-    <h2 class="serif" style="text-align:center; font-weight:600; font-size:clamp(1.6rem,4vw,2.4rem); margin-bottom:3rem; letter-spacing:-0.01em;">Common questions</h2>
+<section class="faq-section reveal">
+  <div class="wrap" style="max-width:760px;">
+    <div class="section-head">
+      <span class="section-label">FAQ</span>
+      <h2 class="serif">Common questions</h2>
+    </div>
     <div class="faq">
       <details>
         <summary>How long does it take to get my pack?</summary>
