@@ -96,12 +96,6 @@
         radial-gradient(circle at 85% 25%, rgba(160,119,201,0.13), transparent 40%);
       filter: blur(20px);
     }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--brass); margin-bottom: 1.5rem;
-    }
-    .eyebrow::before { content: ""; width: 1.4rem; height: 1px; background: var(--brass); display: inline-block; }
     .poster-h1 { line-height: 0.92; margin-bottom: 2.75rem; }
     .poster-h1 span { display: block; }
     .poster-h1 .l-caps {
@@ -142,30 +136,20 @@
     .btn-secondary:hover { border-color: var(--brass); color: var(--brass); }
     .hero-note { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.02em; }
 
-    /* hero mockup stack — bleeds toward the edge, asymmetric */
-    .stack { position: relative; height: 340px; }
-    .mock-card {
-      position: absolute; width: 220px; background: var(--card);
-      border: 1px solid var(--border); border-radius: 4px; padding: 1.15rem 1.15rem 1.05rem;
-      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+    /* hero poster — the real brand artwork, pinned like a flyer */
+    .hero-poster {
+      position: relative; max-width: 380px; margin-left: auto;
+      transform: rotate(-2deg);
     }
-    .mock-card::before {
-      content: ""; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-      width: 10px; height: 10px; border-radius: 50%; background: var(--brass);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.45);
+    .hero-poster img {
+      width: 100%; display: block; border-radius: 6px; border: 1px solid var(--border);
+      box-shadow: 0 30px 70px -18px rgba(0,0,0,0.7);
     }
-    .mock-card .tag {
-      display: inline-block; font-size: 0.63rem; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 2px; margin-bottom: 0.65rem;
+    .hero-poster::before {
+      content: ""; position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+      width: 12px; height: 12px; border-radius: 50%; background: var(--brass); z-index: 2;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
-    .mock-card .tag.ig { background: var(--plum-soft); color: #d0b3e8; }
-    .mock-card .tag.fb { background: var(--brass-soft); color: var(--brass); }
-    .mock-card .tag.tt { background: rgba(92,179,146,0.18); color: #8fdcbc; }
-    .mock-card p { font-size: 0.81rem; color: #d8d2c4; }
-    .mock-card .foot { margin-top: 0.85rem; font-size: 0.7rem; color: var(--muted); display: flex; justify-content: space-between; }
-    .mock-1 { top: 0; right: 110px; transform: rotate(-6deg); z-index: 3; }
-    .mock-2 { top: 70px; right: -10px; transform: rotate(4deg); z-index: 2; }
-    .mock-3 { top: 175px; right: 90px; transform: rotate(-2deg); z-index: 1; }
 
     /* MARQUEE */
     .marquee {
@@ -315,7 +299,7 @@
       .hero-lower { grid-template-columns: 1fr; }
       .hero-copy { padding-left: 0; padding-top: 3rem; }
       .hero-lower .stamp.stamp-hero { position: static; transform: rotate(-6deg); margin-bottom: 1.5rem; }
-      .stack { display: none; }
+      .hero-poster { max-width: 280px; margin: 2rem auto 0; }
       .menu-list { grid-template-columns: 1fr; }
       .menu-item { border-right: none !important; }
       .process-num { width: 70px; font-size: 3rem; }
@@ -339,7 +323,6 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="eyebrow">AI‑Powered Studio · Built for New Orleans</div>
   <h1 class="poster-h1">
     <span class="l-caps">Your Brand,</span>
     <span class="l-italic">art‑directed</span>
@@ -358,22 +341,8 @@
       </div>
       <p class="hero-note">One‑time payment · No subscription · Delivered in minutes</p>
     </div>
-    <div class="stack">
-      <div class="mock-card mock-1">
-        <span class="tag ig">Instagram</span>
-        <p>"New po-boy special just dropped 🥖 — Fridays only, Uptown."</p>
-        <div class="foot"><span>Day 4</span><span>#NOLAeats</span></div>
-      </div>
-      <div class="mock-card mock-2">
-        <span class="tag fb">Strategy</span>
-        <p>Content pillar: Behind-the-scenes craft + neighborhood pride.</p>
-        <div class="foot"><span>Pillar 2</span><span>Brand voice</span></div>
-      </div>
-      <div class="mock-card mock-3">
-        <span class="tag tt">TikTok</span>
-        <p>Hook: "3 things every Tremé local orders first."</p>
-        <div class="foot"><span>Day 11</span><span>Peak: 6–8pm</span></div>
-      </div>
+    <div class="hero-poster">
+      <img src="hero-poster.jpg" alt="The Brand Factory NOLA" />
     </div>
   </div>
 </section>
