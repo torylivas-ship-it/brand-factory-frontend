@@ -331,7 +331,10 @@
 
 <nav>
   <div class="nav-logo">Brand Factory <em>NOLA</em></div>
-  <a href="#pricing" class="btn-sm">Get Your Pack →</a>
+  <div style="display:flex; align-items:center; gap:1.4rem;">
+    <a href="/auth" id="nav-auth-link" style="font-size:0.85rem; color:var(--muted); font-weight:600;">Sign In</a>
+    <a href="#pricing" class="btn-sm">Get Your Pack →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -612,6 +615,8 @@
   <p>Built in New Orleans · Powered by AI</p>
 </footer>
 
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
 <script>
   function order(tier) {
     window.location.href = `/order?tier=${tier}`;
@@ -621,6 +626,15 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  (async () => {
+    const user = await BFN.getCurrentUser();
+    if (user) {
+      const link = document.getElementById('nav-auth-link');
+      link.textContent = 'My Packs';
+      link.href = '/dashboard';
+    }
+  })();
 </script>
 
 </body>

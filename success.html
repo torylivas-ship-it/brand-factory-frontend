@@ -131,6 +131,7 @@
 
 <header>
   <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+  <a href="/auth" id="nav-auth-link" style="font-size:0.85rem; color:var(--muted); font-weight:600; text-decoration:none;">Sign In</a>
 </header>
 
 <!-- GENERATING -->
@@ -214,8 +215,18 @@
   </div>
 </div>
 
+<script src="supabase.min.js"></script>
 <script src="api.js"></script>
 <script>
+  (async () => {
+    const user = await BFN.getCurrentUser();
+    if (user) {
+      const link = document.getElementById('nav-auth-link');
+      link.textContent = 'My Packs';
+      link.href = '/dashboard';
+    }
+  })();
+
   const params = new URLSearchParams(window.location.search);
   const orderId = params.get("order_id");
 

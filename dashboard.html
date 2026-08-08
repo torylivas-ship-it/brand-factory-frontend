@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Packs — The Brand Factory NOLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12);
+      --bg: #0c0a10; --card: #1a151f; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); }
+    .logo span { color: var(--brass); font-weight: 600; }
+    .header-actions { display: flex; align-items: center; gap: 1.25rem; }
+    .header-actions a, .header-actions button {
+      font-size: 0.85rem; color: var(--muted); text-decoration: none; background: none;
+      border: none; cursor: pointer; font-family: inherit;
+    }
+    .header-actions a:hover, .header-actions button:hover { color: var(--brass); }
+
+    main { max-width: 800px; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+
+    .section-label {
+      display: block; width: max-content; margin: 0 0 1rem;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px;
+      padding: 0.28rem 0.85rem; transform: rotate(-1.4deg);
+    }
+    h1 { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .subtitle { color: #b3ab9c; margin-bottom: 2.5rem; font-size: 0.95rem; }
+
+    .order-list { border-top: 1px solid var(--border); }
+    .order-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+      padding: 1.5rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit;
+    }
+    .order-row:hover .order-name { color: var(--brass); }
+    .order-main .order-name { font-weight: 700; font-size: 1.02rem; transition: color 0.15s; }
+    .order-main .order-meta { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+    .order-status {
+      font-family: 'Big Shoulders Display', sans-serif; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25rem 0.65rem;
+      border-radius: 2px; flex-shrink: 0;
+    }
+    .order-status.complete { background: rgba(92,179,146,0.15); color: #6fcfa8; }
+    .order-status.generating, .order-status.pending { background: var(--brass-soft); color: var(--brass); }
+    .order-status.failed { background: rgba(220,38,38,0.15); color: #f87171; }
+    .order-arrow { color: var(--muted); flex-shrink: 0; }
+
+    .empty-state { text-align: center; padding: 4rem 1.5rem; border: 1px dashed var(--border); border-radius: 6px; }
+    .empty-state p { color: var(--muted); margin-bottom: 1.5rem; }
+    .btn-primary {
+      display: inline-block; background: var(--brass); color: #0c0a10; font-weight: 700;
+      padding: 0.85rem 1.8rem; border-radius: 3px; text-decoration: none; font-size: 0.95rem;
+    }
+    .loading { text-align: center; padding: 4rem 1.5rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+  <div class="header-actions">
+    <span id="user-email"></span>
+    <button onclick="handleSignOut()">Sign Out</button>
+  </div>
+</header>
+
+<main>
+  <span class="section-label">Your Account</span>
+  <h1>My Packs</h1>
+  <p class="subtitle">Every brand pack you've ordered, in one place.</p>
+
+  <div id="content">
+    <div class="loading">Loading your packs…</div>
+  </div>
+</main>
+
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+  const TIER_LABELS = {
+    starter: "Starter Pack",
+    growth: "Growth Pack",
+    agency: "Agency Pack",
+    agency_ongoing: "Agency + Ongoing",
+  };
+
+  function escHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  async function handleSignOut() {
+    await BFN.signOut();
+    window.location.href = "/";
+  }
+
+  async function init() {
+    const user = await BFN.getCurrentUser();
+    if (!user) {
+      window.location.href = "/auth";
+      return;
+    }
+    document.getElementById("user-email").textContent = user.email;
+
+    try {
+      const { orders } = await BFN.getMyOrders();
+      const content = document.getElementById("content");
+
+      if (!orders.length) {
+        content.innerHTML = `
+          <div class="empty-state">
+            <p>No packs yet — nothing here until your first order comes through.</p>
+            <a href="/#pricing" class="btn-primary">See Pricing →</a>
+          </div>
+        `;
+        return;
+      }
+
+      content.innerHTML = `<div class="order-list">${orders.map(o => `
+        <a class="order-row" href="/success?order_id=${o.id}">
+          <div class="order-main">
+            <div class="order-name">${escHtml(o.business_name)}</div>
+            <div class="order-meta">${TIER_LABELS[o.tier] || o.tier} · ${formatDate(o.created_at)}</div>
+          </div>
+          <span class="order-status ${o.status}">${o.status}</span>
+          <span class="order-arrow">→</span>
+        </a>
+      `).join("")}</div>`;
+    } catch (err) {
+      document.getElementById("content").innerHTML =
+        `<div class="empty-state"><p>Couldn't load your packs: ${escHtml(err.message)}</p></div>`;
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
