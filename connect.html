@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect Accounts — The Brand Factory NOLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12);
+      --bg: #0c0a10; --card: #1a151f; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184;
+      --ok: #6fcfa8; --ok-soft: rgba(92,179,146,0.15);
+      --err: #f87171; --err-soft: rgba(220,38,38,0.15);
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); }
+    .logo span { color: var(--brass); font-weight: 600; }
+    .header-actions { display: flex; align-items: center; gap: 1.25rem; }
+    .header-actions a, .header-actions button {
+      font-size: 0.85rem; color: var(--muted); text-decoration: none; background: none;
+      border: none; cursor: pointer; font-family: inherit;
+    }
+    .header-actions a:hover, .header-actions button:hover { color: var(--brass); }
+
+    main { max-width: 720px; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+
+    .section-label {
+      display: block; width: max-content; margin: 0 0 1rem;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px;
+      padding: 0.28rem 0.85rem; transform: rotate(-1.4deg);
+    }
+    h1 { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .subtitle { color: #b3ab9c; margin-bottom: 2.5rem; font-size: 0.95rem; }
+
+    #banner {
+      display: none; padding: 0.85rem 1.1rem; border-radius: 4px; margin-bottom: 1.75rem;
+      font-size: 0.9rem;
+    }
+    #banner.ok { display: block; background: var(--ok-soft); color: var(--ok); }
+    #banner.err { display: block; background: var(--err-soft); color: var(--err); }
+
+    .platform-list { display: flex; flex-direction: column; gap: 1rem; }
+    .platform-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+      padding: 1.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .platform-main { display: flex; align-items: center; gap: 0.9rem; }
+    .platform-icon {
+      width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 1.1rem;
+      background: var(--brass-soft); color: var(--brass);
+    }
+    .platform-name { font-weight: 700; font-size: 1rem; }
+    .platform-handle { font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
+    .platform-status {
+      font-family: 'Big Shoulders Display', sans-serif; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; padding: 0.22rem 0.6rem;
+      border-radius: 2px; margin-right: 0.75rem;
+    }
+    .platform-status.connected { background: var(--ok-soft); color: var(--ok); }
+    .platform-status.disconnected { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .platform-status.error { background: var(--err-soft); color: var(--err); }
+    .platform-status.checking { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+    .platform-actions { display: flex; align-items: center; }
+    .btn-connect, .btn-disconnect {
+      font-family: inherit; font-size: 0.85rem; font-weight: 700; border-radius: 3px;
+      padding: 0.55rem 1.1rem; cursor: pointer; border: none;
+    }
+    .btn-connect { background: var(--brass); color: #0c0a10; }
+    .btn-connect:disabled { opacity: 0.5; cursor: default; }
+    .btn-disconnect { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-disconnect:hover { color: var(--err); border-color: var(--err); }
+
+    .loading { text-align: center; padding: 4rem 1.5rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+  <div class="header-actions">
+    <a href="/dashboard.html">My Packs</a>
+    <span id="user-email"></span>
+    <button onclick="handleSignOut()">Sign Out</button>
+  </div>
+</header>
+
+<main>
+  <span class="section-label">AutoPost</span>
+  <h1>Connect Accounts</h1>
+  <p class="subtitle">Connect your Instagram, TikTok, and Google Business Profile so AutoPost can publish on your behalf.</p>
+
+  <div id="banner"></div>
+  <div id="content" class="loading">Loading account status…</div>
+</main>
+
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+  const PLATFORMS = [
+    { key: "instagram", name: "Instagram", initials: "IG" },
+    { key: "tiktok", name: "TikTok", initials: "TT" },
+    { key: "google_business", name: "Google Business", initials: "GB" },
+  ];
+
+  function escHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  async function handleSignOut() {
+    await BFN.signOut();
+    window.location.href = "/";
+  }
+
+  function renderBanner() {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get("status");
+    const platform = params.get("platform");
+    const reason = params.get("reason");
+    const banner = document.getElementById("banner");
+    if (!status) return;
+
+    const label = PLATFORMS.find(p => p.key === platform)?.name || platform || "Account";
+    if (status === "success") {
+      banner.className = "ok";
+      banner.textContent = `${label} connected successfully.`;
+    } else if (status === "error") {
+      banner.className = "err";
+      banner.textContent = `Couldn't connect ${label}${reason ? `: ${escHtml(reason)}` : "."}`;
+    }
+    // Clean the query string so a refresh doesn't re-show the banner
+    window.history.replaceState({}, "", window.location.pathname);
+  }
+
+  function cardHtml(platform, state) {
+    const { status, handle } = state;
+    const badgeClass = status === "active" ? "connected" : status === "error" ? "error" : "disconnected";
+    const badgeLabel = status === "active" ? "Connected" : status === "error" ? "Error" : "Not connected";
+    const actionHtml = status === "active"
+      ? `<button class="btn-disconnect" onclick="disconnect('${platform.key}')">Disconnect</button>`
+      : `<button class="btn-connect" onclick="connect('${platform.key}')">Connect</button>`;
+
+    return `
+      <div class="platform-card" data-platform="${platform.key}">
+        <div class="platform-main">
+          <div class="platform-icon">${platform.initials}</div>
+          <div>
+            <div class="platform-name">${platform.name}</div>
+            <div class="platform-handle">${handle ? escHtml(handle) : "&nbsp;"}</div>
+          </div>
+        </div>
+        <div class="platform-actions">
+          <span class="platform-status ${badgeClass}">${badgeLabel}</span>
+          ${actionHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  async function connect(platformKey) {
+    const btn = document.querySelector(`[data-platform="${platformKey}"] .btn-connect`);
+    if (btn) { btn.disabled = true; btn.textContent = "Redirecting…"; }
+    try {
+      const authUrl = await BFN.getOAuthLoginUrl(platformKey);
+      window.location.href = authUrl;
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = "Connect"; }
+      alert(`Couldn't start connection: ${err.message}`);
+    }
+  }
+
+  async function disconnect(platformKey) {
+    if (!confirm("Disconnect this account? AutoPost will stop posting to it until you reconnect.")) return;
+    try {
+      await BFN.revokeOAuthToken(platformKey);
+      await loadStatuses();
+    } catch (err) {
+      alert(`Couldn't disconnect: ${err.message}`);
+    }
+  }
+
+  async function loadStatuses() {
+    const content = document.getElementById("content");
+    const results = await Promise.all(PLATFORMS.map(async (p) => {
+      try {
+        const s = await BFN.getOAuthStatus(p.key);
+        return { platform: p, state: { status: s.status === "active" ? "active" : "disconnected", handle: s.business_id } };
+      } catch (err) {
+        return { platform: p, state: { status: "error", handle: null } };
+      }
+    }));
+    content.className = "platform-list";
+    content.innerHTML = results.map(r => cardHtml(r.platform, r.state)).join("");
+  }
+
+  async function init() {
+    const user = await BFN.getCurrentUser();
+    if (!user) {
+      window.location.href = "/auth.html";
+      return;
+    }
+    document.getElementById("user-email").textContent = user.email;
+    renderBanner();
+    await loadStatuses();
+  }
+
+  init();
+</script>
+</body>
+</html>

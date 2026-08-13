@@ -52,4 +52,21 @@ async function getCurrentUser() {
   return user;
 }
 
-window.BFN = { createOrder, getOrder, getMyOrders, signUp, signIn, signOut, getCurrentUser, supabase: sb };
+async function getOAuthLoginUrl(platform) {
+  const { auth_url } = await apiFetch(`/auth/${platform}/login`);
+  return auth_url;
+}
+
+async function getOAuthStatus(platform) {
+  return apiFetch(`/auth/${platform}/status`);
+}
+
+async function revokeOAuthToken(platform) {
+  return apiFetch(`/auth/${platform}/revoke`, { method: "DELETE" });
+}
+
+window.BFN = {
+  createOrder, getOrder, getMyOrders, signUp, signIn, signOut, getCurrentUser,
+  getOAuthLoginUrl, getOAuthStatus, revokeOAuthToken,
+  supabase: sb,
+};
