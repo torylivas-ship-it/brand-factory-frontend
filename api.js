@@ -19,8 +19,27 @@ async function apiFetch(path, options = {}) {
   return res.json();
 }
 
+function getStoredReferralCode() {
+  try {
+    return localStorage.getItem("bfn_ref") || null;
+  } catch {
+    return null;
+  }
+}
+
+function captureReferralCodeFromUrl() {
+  try {
+    const ref = new URLSearchParams(window.location.search).get("ref");
+    if (ref) localStorage.setItem("bfn_ref", ref);
+  } catch {}
+}
+
 async function createOrder(data) {
-  return apiFetch("/orders/create", { method: "POST", body: JSON.stringify(data) });
+  const referral_code = getStoredReferralCode();
+  return apiFetch("/orders/create", {
+    method: "POST",
+    body: JSON.stringify(referral_code ? { ...data, referral_code } : data),
+  });
 }
 
 async function getOrder(orderId) {
@@ -65,8 +84,34 @@ async function revokeOAuthToken(platform) {
   return apiFetch(`/auth/${platform}/revoke`, { method: "DELETE" });
 }
 
+async function getMe() {
+  return apiFetch("/auth/me");
+}
+
+async function getAdminStats() {
+  return apiFetch("/admin/stats");
+}
+
+async function getAdminUsers() {
+  return apiFetch("/admin/users");
+}
+
+async function getAdminReferrals() {
+  return apiFetch("/admin/referrals");
+}
+
+async function createEmployee(email, referral_code) {
+  return apiFetch("/admin/employees", {
+    method: "POST",
+    body: JSON.stringify(referral_code ? { email, referral_code } : { email }),
+  });
+}
+
+captureReferralCodeFromUrl();
+
 window.BFN = {
-  createOrder, getOrder, getMyOrders, signUp, signIn, signOut, getCurrentUser,
+  createOrder, getOrder, getMyOrders, signUp, signIn, signOut, getCurrentUser, getMe,
   getOAuthLoginUrl, getOAuthStatus, revokeOAuthToken,
+  getAdminStats, getAdminUsers, getAdminReferrals, createEmployee,
   supabase: sb,
 };

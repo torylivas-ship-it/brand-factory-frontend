@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — The Brand Factory NOLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12); --brass-bright: #e2c37c;
+      --bg: #0c0a10; --card: #1a151f; --card-2: #17131b; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184; --good: #6fcfa8; --error: #f87171;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .num { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); }
+    .logo span { color: var(--brass); font-weight: 600; }
+    .header-actions { display: flex; align-items: center; gap: 1.25rem; }
+    .header-actions a, .header-actions button {
+      font-size: 0.85rem; color: var(--muted); text-decoration: none; background: none;
+      border: none; cursor: pointer; font-family: inherit;
+    }
+    .header-actions a:hover, .header-actions button:hover { color: var(--brass); }
+
+    main { max-width: 980px; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+
+    .section-label {
+      display: block; width: max-content; margin: 0 0 1rem;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px;
+      padding: 0.28rem 0.85rem; transform: rotate(-1.4deg);
+    }
+    h1 { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .subtitle { color: #b3ab9c; margin-bottom: 2.5rem; font-size: 0.95rem; }
+    h2 { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 0.25rem; }
+    .section-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.25rem; }
+
+    section.block { margin-bottom: 3rem; }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+    }
+    .stat-tile { background: var(--card); padding: 1.25rem 1.4rem; }
+    .stat-tile .stat-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .stat-tile .stat-value { font-family: 'Fraunces', serif; font-size: 1.7rem; font-weight: 600; color: var(--brass); }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem;
+    }
+
+    .emp-form { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .emp-form input {
+      flex: 1 1 200px; padding: 0.7rem 0.9rem; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); border-radius: 4px; font-size: 0.9rem; font-family: inherit;
+    }
+    .emp-form input:focus { outline: none; border-color: var(--brass); }
+    .emp-form button {
+      padding: 0.7rem 1.4rem; background: var(--brass); color: #0c0a10; font-weight: 700;
+      border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; white-space: nowrap;
+    }
+    .emp-form button:hover:not(:disabled) { background: var(--brass-bright); }
+    .emp-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .form-hint { font-size: 0.78rem; color: var(--muted); }
+    .form-msg { font-size: 0.85rem; margin-top: 0.6rem; display: none; }
+    .form-msg.show { display: block; }
+    .form-msg.ok { color: var(--good); }
+    .form-msg.err { color: var(--error); }
+
+    .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 640px; }
+    thead th {
+      text-align: left; font-family: 'Big Shoulders Display', sans-serif; font-size: 0.72rem;
+      font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+      padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border); background: var(--card-2);
+    }
+    tbody td { padding: 0.95rem 1.1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .emp-name { font-weight: 700; }
+    .emp-email { font-size: 0.8rem; color: var(--muted); }
+    .ref-link-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.35rem; }
+    .ref-link {
+      font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.76rem; color: var(--muted);
+      background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.2rem 0.5rem; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .copy-btn {
+      font-size: 0.76rem; color: var(--brass); background: none; border: 1px solid rgba(201,162,74,0.4);
+      border-radius: 3px; padding: 0.2rem 0.55rem; cursor: pointer; font-family: inherit; flex-shrink: 0;
+    }
+    .copy-btn:hover { background: var(--brass-soft); }
+    .commission { color: var(--good); font-weight: 700; }
+    .empty-cell { color: var(--muted); font-style: italic; }
+
+    .sale-list { list-style: none; font-size: 0.82rem; color: var(--muted); }
+    .sale-list li { margin-bottom: 0.2rem; }
+    .sale-list .sale-biz { color: var(--text); }
+
+    .empty-state { text-align: center; padding: 3.5rem 1.5rem; border: 1px dashed var(--border); border-radius: 6px; color: var(--muted); }
+    .loading { text-align: center; padding: 4rem 1.5rem; color: var(--muted); }
+    .gate-state { text-align: center; padding: 6rem 1.5rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+  <div class="header-actions">
+    <span id="user-email"></span>
+    <button onclick="handleSignOut()">Sign Out</button>
+  </div>
+</header>
+
+<main>
+  <div id="gate" class="gate-state">Checking access…</div>
+
+  <div id="admin-content" style="display:none;">
+    <span class="section-label">Admin</span>
+    <h1>Business Overview</h1>
+    <p class="subtitle">Everything that isn't in the customer-facing product.</p>
+
+    <section class="block">
+      <div id="stats-content"><div class="loading">Loading stats…</div></div>
+    </section>
+
+    <section class="block">
+      <h2>Employees &amp; Referrals</h2>
+      <p class="section-sub">
+        Flat 25% commission on the upfront sale of any order that comes in through an
+        employee's referral link. Recurring Agency Ongoing renewals aren't commissioned —
+        only the initial charge. This page is the source of truth; payout itself is manual.
+      </p>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h2 style="font-size:1.05rem;margin-bottom:0.75rem;">Add an employee</h2>
+        <form id="emp-form" class="emp-form">
+          <input type="email" id="emp-email" placeholder="employee@email.com — must already have an account" required />
+          <input type="text" id="emp-code" placeholder="referral code (optional — auto-generated)" />
+          <button type="submit" id="emp-submit">Add employee</button>
+        </form>
+        <p class="form-hint">They need to have already signed up at <code>/auth</code> — this just flips a flag on their existing profile.</p>
+        <p class="form-msg" id="emp-msg"></p>
+      </div>
+
+      <div id="referrals-content"><div class="loading">Loading referrals…</div></div>
+    </section>
+  </div>
+</main>
+
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+  function escHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function formatUsd(n) {
+    return `$${Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  function referralUrl(code) {
+    return `${window.location.origin}/?ref=${encodeURIComponent(code)}`;
+  }
+
+  async function handleSignOut() {
+    await BFN.signOut();
+    window.location.href = "/";
+  }
+
+  async function copyLink(code, btn) {
+    const url = referralUrl(code);
+    try {
+      await navigator.clipboard.writeText(url);
+      const original = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    } catch {
+      window.prompt("Copy this link:", url);
+    }
+  }
+  window.copyLink = copyLink;
+
+  async function loadStats() {
+    const el = document.getElementById("stats-content");
+    try {
+      const stats = await BFN.getAdminStats();
+      el.innerHTML = `
+        <div class="stat-grid">
+          <div class="stat-tile"><div class="stat-label">Total users</div><div class="stat-value num">${stats.total_users}</div></div>
+          <div class="stat-tile"><div class="stat-label">Total revenue</div><div class="stat-value num">${formatUsd(stats.total_revenue_usd)}</div></div>
+          <div class="stat-tile"><div class="stat-label">Projects</div><div class="stat-value num">${stats.total_projects}</div></div>
+          <div class="stat-tile"><div class="stat-label">Exports</div><div class="stat-value num">${stats.total_exports}</div></div>
+        </div>
+      `;
+    } catch (err) {
+      el.innerHTML = `<div class="empty-state">Couldn't load stats: ${escHtml(err.message)}</div>`;
+    }
+  }
+
+  async function loadReferrals() {
+    const el = document.getElementById("referrals-content");
+    try {
+      const { employees } = await BFN.getAdminReferrals();
+      if (!employees.length) {
+        el.innerHTML = `<div class="empty-state">No employees yet — add one above to get started.</div>`;
+        return;
+      }
+      el.innerHTML = `
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Referred sales</th>
+                <th>Referred revenue</th>
+                <th>Commission owed</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${employees.map(e => `
+                <tr>
+                  <td>
+                    <div class="emp-name">${escHtml(e.name)}</div>
+                    <div class="emp-email">${escHtml(e.email)}</div>
+                    <div class="ref-link-row">
+                      <span class="ref-link">${escHtml(referralUrl(e.referral_code))}</span>
+                      <button class="copy-btn" onclick="copyLink('${escHtml(e.referral_code)}', this)">Copy</button>
+                    </div>
+                  </td>
+                  <td>
+                    ${e.referred_count === 0
+                      ? `<span class="empty-cell">None yet</span>`
+                      : `<ul class="sale-list">${e.referred_sales.slice(0, 5).map(s => `
+                          <li><span class="sale-biz">${escHtml(s.business_name)}</span> · ${escHtml(s.tier)} · ${formatDate(s.paid_at)}</li>
+                        `).join("")}${e.referred_sales.length > 5 ? `<li>+ ${e.referred_sales.length - 5} more</li>` : ""}</ul>`
+                    }
+                  </td>
+                  <td class="num">${formatUsd(e.total_referred_revenue_usd)}</td>
+                  <td class="num commission">${formatUsd(e.total_commission_owed_usd)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    } catch (err) {
+      el.innerHTML = `<div class="empty-state">Couldn't load referrals: ${escHtml(err.message)}</div>`;
+    }
+  }
+
+  document.getElementById("emp-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const emailEl = document.getElementById("emp-email");
+    const codeEl = document.getElementById("emp-code");
+    const btn = document.getElementById("emp-submit");
+    const msg = document.getElementById("emp-msg");
+    msg.classList.remove("show", "ok", "err");
+
+    btn.disabled = true;
+    btn.textContent = "Adding…";
+    try {
+      const result = await BFN.createEmployee(emailEl.value.trim(), codeEl.value.trim() || undefined);
+      msg.textContent = result.already_existed
+        ? `Already an employee — referral code is "${result.referral_code}".`
+        : `Added. Referral link: ${referralUrl(result.referral_code)}`;
+      msg.classList.add("show", "ok");
+      emailEl.value = "";
+      codeEl.value = "";
+      loadReferrals();
+    } catch (err) {
+      msg.textContent = err.message || "Something went wrong.";
+      msg.classList.add("show", "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Add employee";
+    }
+  });
+
+  async function init() {
+    const user = await BFN.getCurrentUser();
+    if (!user) {
+      window.location.href = "/auth";
+      return;
+    }
+
+    let me;
+    try {
+      me = await BFN.getMe();
+    } catch {
+      document.getElementById("gate").textContent = "Couldn't verify access — try refreshing.";
+      return;
+    }
+
+    if (!me.is_admin) {
+      document.getElementById("gate").textContent = "This page is admin-only.";
+      return;
+    }
+
+    document.getElementById("user-email").textContent = user.email;
+    document.getElementById("gate").style.display = "none";
+    document.getElementById("admin-content").style.display = "block";
+
+    loadStats();
+    loadReferrals();
+  }
+
+  init();
+</script>
+</body>
+</html>

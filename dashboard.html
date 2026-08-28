@@ -120,6 +120,16 @@
     document.getElementById("user-email").textContent = user.email;
 
     try {
+      const me = await BFN.getMe();
+      if (me.is_admin) {
+        const adminLink = document.createElement("a");
+        adminLink.href = "/admin";
+        adminLink.textContent = "Admin";
+        document.querySelector(".header-actions").prepend(adminLink);
+      }
+    } catch {}
+
+    try {
       const { orders } = await BFN.getMyOrders();
       const content = document.getElementById("content");
 

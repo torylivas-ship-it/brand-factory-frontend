@@ -109,7 +109,7 @@
       <div class="value" id="tier-label">Growth Pack</div>
     </div>
     <div style="text-align:right;">
-      <div class="price" id="tier-price">$99</div>
+      <div class="price" id="tier-price">$149</div>
       <div style="font-size:0.78rem;color:var(--muted);" id="tier-price-note">one-time</div>
     </div>
   </div>
@@ -194,7 +194,7 @@
           <div class="s-label">You're ordering</div>
           <div class="s-value" id="summary-label">Growth Pack</div>
         </div>
-        <div class="s-price" id="summary-price">$99</div>
+        <div class="s-price" id="summary-price">$149</div>
       </div>
 
       <button type="submit" class="btn-submit" id="submit-btn">
@@ -211,10 +211,10 @@
 <script src="api.js"></script>
 <script>
   const TIERS = {
-    starter:        { label: "Starter Pack",        price: "$49" },
-    growth:         { label: "Growth Pack",         price: "$99" },
-    agency:         { label: "Agency Pack",         price: "$149" },
-    agency_ongoing: { label: "Agency + Ongoing",     price: "$149 +$125/mo" },
+    starter:        { label: "Starter Pack",        price: "$99" },
+    growth:         { label: "Growth Pack",         price: "$149" },
+    agency:         { label: "Agency Pack",         price: "$199" },
+    agency_ongoing: { label: "Agency + Ongoing",     price: "$199 +$125/mo" },
   };
 
   (async () => {
@@ -238,7 +238,7 @@
 
   if (tier === "agency_ongoing") {
     document.getElementById("secure-note").textContent =
-      "🔒 Secure checkout powered by Stripe · $149 charged today, $125/mo starts after 30 days · Cancel anytime";
+      "🔒 Secure checkout powered by Stripe · $199 charged today, $125/mo starts after 30 days · Cancel anytime";
     document.getElementById("tier-price-note").textContent = "today, then monthly";
   }
 
