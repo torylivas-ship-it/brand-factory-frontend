@@ -46,6 +46,18 @@ async function getOrder(orderId) {
   return apiFetch(`/orders/${orderId}`);
 }
 
+async function createOpsOrder(data) {
+  const referral_code = getStoredReferralCode();
+  return apiFetch("/ops/create", {
+    method: "POST",
+    body: JSON.stringify(referral_code ? { ...data, referral_code } : data),
+  });
+}
+
+async function getOpsOrder(opsOrderId) {
+  return apiFetch(`/ops/${opsOrderId}`);
+}
+
 async function getMyOrders() {
   return apiFetch("/account/orders");
 }
@@ -113,5 +125,6 @@ window.BFN = {
   createOrder, getOrder, getMyOrders, signUp, signIn, signOut, getCurrentUser, getMe,
   getOAuthLoginUrl, getOAuthStatus, revokeOAuthToken,
   getAdminStats, getAdminUsers, getAdminReferrals, createEmployee,
+  createOpsOrder, getOpsOrder,
   supabase: sb,
 };

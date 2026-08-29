@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BFN Ops — The Brand Factory NOLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12); --brass-bright: #e2c37c;
+      --bg: #0c0a10; --card: #1a151f; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184; --error: #ef4444; --good: #6fcfa8;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); white-space: nowrap; }
+    .logo span { color: var(--brass); font-weight: 600; }
+
+    .page { max-width: 720px; margin: 0 auto; padding: 3.5rem 1.5rem 5rem; }
+
+    .eyebrow {
+      display: block; width: max-content; margin: 0 auto 1.25rem;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px;
+      padding: 0.28rem 0.85rem;
+    }
+    .hero { text-align: center; margin-bottom: 3rem; }
+    h1 { font-family: 'Fraunces', serif; font-size: 2.1rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.85rem; letter-spacing: -0.01em; }
+    .hero .sub { color: #b3ab9c; font-size: 1.02rem; max-width: 48ch; margin: 0 auto; }
+
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 2.5rem; }
+    @media (max-width: 560px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feature { background: var(--card); padding: 1.4rem 1.5rem; }
+    .feature .f-title { font-weight: 700; font-size: 0.98rem; margin-bottom: 0.4rem; }
+    .feature .f-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.5; }
+
+    .price-banner {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--brass-soft); border: 1px solid rgba(201,162,74,0.3);
+      border-radius: 6px; padding: 1.1rem 1.4rem; margin-bottom: 2.5rem;
+    }
+    .price-banner .label { font-family: 'Big Shoulders Display', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .price-banner .value { font-family: 'Fraunces', serif; font-size: 1.55rem; font-weight: 700; color: var(--brass); }
+    .price-banner .note { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+    h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .form-subtitle { color: #b3ab9c; margin-bottom: 2rem; font-size: 0.95rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
+    label .req { color: var(--brass); }
+    label .opt { color: var(--muted); font-weight: 400; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea {
+      width: 100%; padding: 0.75rem 1rem; background: var(--card); border: 1px solid var(--border);
+      color: var(--text); border-radius: 4px; font-size: 0.95rem; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus { outline: none; border-color: var(--brass); }
+    textarea { resize: vertical; min-height: 70px; }
+    .hint { font-size: 0.78rem; color: var(--muted); margin-top: 0.35rem; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 0.6rem; }
+    .checkbox-label {
+      display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer;
+      background: var(--card); border: 1px solid var(--border); border-radius: 4px;
+      padding: 0.85rem 1rem; transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .checkbox-label input { width: 16px; height: 16px; margin-top: 0.15rem; accent-color: var(--brass); cursor: pointer; flex-shrink: 0; }
+    .checkbox-label:has(input:checked) { border-color: var(--brass); background: var(--brass-soft); }
+    .checkbox-label .cb-title { font-weight: 700; font-size: 0.92rem; }
+    .checkbox-label .cb-desc { font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
+
+    .divider { border: none; border-top: 1px dashed var(--border); margin: 2rem 0; }
+
+    .submit-section { margin-top: 2rem; }
+    .btn-submit {
+      width: 100%; padding: 1rem; background: var(--brass); color: #0c0a10;
+      font-weight: 700; font-size: 1rem; border: none; border-radius: 3px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-submit:hover:not(:disabled) { background: var(--brass-bright); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .secure-note { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 0.75rem; }
+    .error-msg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; border-radius: 4px; padding: 0.75rem 1rem; font-size: 0.88rem; margin-top: 1rem; display: none; }
+    .error-msg.show { display: block; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+  <a href="/#pricing" style="font-size:0.85rem; color:var(--muted); font-weight:600; text-decoration:none;">Content Packs</a>
+</header>
+
+<div class="page">
+
+  <div class="hero">
+    <span class="eyebrow">BFN Ops</span>
+    <h1>The busywork side of running a business — automated.</h1>
+    <p class="sub">Brand Factory handles your marketing. BFN Ops handles what happens after someone books,
+      buys, or asks a question — so nothing falls through the cracks.</p>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature">
+      <div class="f-title">Booking reminders</div>
+      <div class="f-desc">Automatic confirmation and reminder texts or emails — fewer no-shows, no manual follow-up.</div>
+    </div>
+    <div class="feature">
+      <div class="f-title">Review requests</div>
+      <div class="f-desc">A review request goes out automatically after every appointment or visit.</div>
+    </div>
+    <div class="feature">
+      <div class="f-title">Lead follow-up</div>
+      <div class="f-desc">A DM or contact-form inquiry gets an instant first response and gets logged — never just sits there.</div>
+    </div>
+    <div class="feature">
+      <div class="f-title">Restock nudges</div>
+      <div class="f-desc">For retail — a simple heads-up when something's running low, before it's actually out.</div>
+    </div>
+  </div>
+
+  <div class="price-banner">
+    <div>
+      <div class="label">BFN Ops</div>
+      <div class="note">Set up once, runs every month</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="value">$49 + $29/mo</div>
+      <div class="note">first month's fee starts in 30 days</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <h2>Tell us about your business</h2>
+  <p class="form-subtitle">We'll reach out within a business day to finish setting up your automations.</p>
+
+  <form id="ops-form" novalidate>
+
+    <div class="form-group">
+      <label>Email <span class="req">*</span></label>
+      <input type="email" name="email" placeholder="you@example.com" required />
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>Business Name <span class="req">*</span></label>
+        <input type="text" name="business_name" placeholder="e.g. Magnolia Cuts" required />
+      </div>
+      <div class="form-group">
+        <label>Business Type <span class="req">*</span></label>
+        <input type="text" name="business_type" placeholder="e.g. hair salon, boutique" required />
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>City <span class="req">*</span></label>
+        <input type="text" name="city" placeholder="New Orleans" value="New Orleans" required />
+      </div>
+      <div class="form-group">
+        <label>Phone <span class="opt">(optional, for text reminders)</span></label>
+        <input type="tel" name="phone" placeholder="(504) 555-0100" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Current booking/POS system <span class="opt">(optional)</span></label>
+      <input type="text" name="booking_system" placeholder="e.g. Square, GlossGenius, Calendly, none yet" />
+    </div>
+
+    <div class="form-group">
+      <label>What do you want automated? <span class="req">*</span></label>
+      <div class="checkbox-group" id="automations">
+        <label class="checkbox-label">
+          <input type="checkbox" name="automations" value="booking_reminders" checked />
+          <span><span class="cb-title">Booking reminders</span><br /><span class="cb-desc">Confirmation + reminder texts/emails</span></span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="automations" value="review_requests" checked />
+          <span><span class="cb-title">Review requests</span><br /><span class="cb-desc">Automatic ask after each visit</span></span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="automations" value="lead_followup" />
+          <span><span class="cb-title">Lead follow-up</span><br /><span class="cb-desc">Instant response + a log of every inquiry</span></span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="automations" value="restock_nudges" />
+          <span><span class="cb-title">Restock nudges</span><br /><span class="cb-desc">Low-stock heads-up (retail only)</span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Anything else we should know? <span class="opt">(optional)</span></label>
+      <textarea name="notes" placeholder="e.g. we already use Square for booking, want texts not emails..."></textarea>
+    </div>
+
+    <div class="submit-section">
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span id="btn-text">Continue to Checkout →</span>
+      </button>
+      <p class="secure-note">🔒 Secure checkout powered by Stripe · $49 charged today, $29/mo starts after 30 days · Cancel anytime</p>
+      <div class="error-msg" id="error-msg"></div>
+    </div>
+
+  </form>
+</div>
+
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+  document.getElementById("ops-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const errEl = document.getElementById("error-msg");
+    const btn = document.getElementById("submit-btn");
+    const btnText = document.getElementById("btn-text");
+    errEl.classList.remove("show");
+
+    const automations = [...form.querySelectorAll('input[name="automations"]:checked')].map(i => i.value);
+    if (automations.length === 0) {
+      errEl.textContent = "Select at least one automation.";
+      errEl.classList.add("show");
+      return;
+    }
+
+    const required = ["email", "business_name", "business_type", "city"];
+    for (const name of required) {
+      if (!form[name]?.value?.trim()) {
+        errEl.textContent = `Please fill in the ${name.replace("_", " ")} field.`;
+        errEl.classList.add("show");
+        form[name]?.focus();
+        return;
+      }
+    }
+
+    btn.disabled = true;
+    btnText.textContent = "Creating your order...";
+
+    try {
+      const result = await BFN.createOpsOrder({
+        email: form.email.value.trim(),
+        business_name: form.business_name.value.trim(),
+        business_type: form.business_type.value.trim(),
+        city: form.city.value.trim(),
+        phone: form.phone.value.trim() || null,
+        booking_system: form.booking_system.value.trim() || null,
+        automations,
+        notes: form.notes.value.trim() || null,
+      });
+
+      if (result.checkout_url) {
+        btnText.textContent = "Redirecting to Stripe...";
+        window.location.href = result.checkout_url;
+      } else {
+        throw new Error("No checkout URL returned.");
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btnText.textContent = "Continue to Checkout →";
+      errEl.textContent = err.message || "Something went wrong. Please try again.";
+      errEl.classList.add("show");
+    }
+  });
+</script>
+
+</body>
+</html>

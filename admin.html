@@ -204,6 +204,8 @@
           <div class="stat-tile"><div class="stat-label">Total revenue</div><div class="stat-value num">${formatUsd(stats.total_revenue_usd)}</div></div>
           <div class="stat-tile"><div class="stat-label">Projects</div><div class="stat-value num">${stats.total_projects}</div></div>
           <div class="stat-tile"><div class="stat-label">Exports</div><div class="stat-value num">${stats.total_exports}</div></div>
+          <div class="stat-tile"><div class="stat-label">BFN Ops active</div><div class="stat-value num">${stats.ops_active_count}</div></div>
+          <div class="stat-tile"><div class="stat-label">BFN Ops MRR</div><div class="stat-value num">${formatUsd(stats.ops_mrr_usd)}</div></div>
         </div>
       `;
     } catch (err) {
@@ -245,7 +247,7 @@
                     ${e.referred_count === 0
                       ? `<span class="empty-cell">None yet</span>`
                       : `<ul class="sale-list">${e.referred_sales.slice(0, 5).map(s => `
-                          <li><span class="sale-biz">${escHtml(s.business_name)}</span> · ${escHtml(s.tier)} · ${formatDate(s.paid_at)}</li>
+                          <li><span class="sale-biz">${escHtml(s.business_name)}</span> · ${s.product === s.tier ? escHtml(s.product) : `${escHtml(s.product)} (${escHtml(s.tier)})`} · ${formatDate(s.paid_at)}</li>
                         `).join("")}${e.referred_sales.length > 5 ? `<li>+ ${e.referred_sales.length - 5} more</li>` : ""}</ul>`
                     }
                   </td>

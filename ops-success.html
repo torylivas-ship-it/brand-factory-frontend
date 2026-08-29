@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're set — BFN Ops</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12);
+      --bg: #0c0a10; --card: #1a151f; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184; --good: #6fcfa8;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .card {
+      max-width: 460px; text-align: center; background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 3rem 2.25rem;
+    }
+    .check {
+      width: 3rem; height: 3rem; border-radius: 50%; background: var(--brass-soft); color: var(--good);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 1.5rem;
+    }
+    h1 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; margin-bottom: 0.85rem; }
+    p { color: #b3ab9c; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.5rem; }
+    a.home { display: inline-block; margin-top: 1.5rem; color: var(--brass); font-size: 0.9rem; font-weight: 600; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">✓</div>
+    <h1>You're all set.</h1>
+    <p>Payment's confirmed — we'll reach out within a business day to finish setting up your automations.</p>
+    <p style="color:var(--muted); font-size:0.85rem;">Questions in the meantime? thebrandfactorynola@gmail.com</p>
+    <a class="home" href="/">← Back to Brand Factory NOLA</a>
+  </div>
+</body>
+</html>
