@@ -217,12 +217,26 @@
     agency_ongoing: { label: "Agency + Ongoing",     price: "$199 +$125/mo" },
   };
 
+  let isAdminFree = false;
+
   (async () => {
     const user = await BFN.getCurrentUser();
     if (user) {
       const link = document.getElementById('nav-auth-link');
       link.textContent = 'My Packs';
       link.href = '/dashboard';
+
+      try {
+        const me = await BFN.getMe();
+        if (me.is_admin) {
+          isAdminFree = true;
+          document.getElementById("tier-price").textContent = "Free";
+          document.getElementById("tier-price-note").textContent = "admin account only";
+          document.getElementById("summary-price").textContent = "Free";
+          document.getElementById("secure-note").textContent =
+            "You're signed in as admin — this order is free for your account only.";
+        }
+      } catch {}
     }
   })();
 
@@ -287,7 +301,10 @@
         tier,
       });
 
-      if (result.checkout_url) {
+      if (result.free) {
+        btnText.textContent = "Building your pack...";
+        window.location.href = `/success?order_id=${result.order_id}`;
+      } else if (result.checkout_url) {
         btnText.textContent = "Redirecting to Stripe...";
         window.location.href = result.checkout_url;
       } else {
