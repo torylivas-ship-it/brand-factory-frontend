@@ -60,6 +60,19 @@
     .section-block h2 { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px dashed var(--border); display: flex; align-items: center; gap: 0.6rem; }
     .section-block h2 .icon { font-size: 1.2rem; }
 
+    .connect-callout {
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+      background: var(--card); border: 1px solid rgba(201,162,74,0.3); border-radius: 8px;
+      padding: 1.5rem 1.75rem; margin-bottom: 3rem; flex-wrap: wrap;
+    }
+    .connect-callout h3 { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .connect-callout p { color: var(--muted); font-size: 0.9rem; max-width: 46ch; }
+    .connect-callout a {
+      flex-shrink: 0; background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 0.9rem;
+      padding: 0.75rem 1.5rem; border-radius: 3px; text-decoration: none; white-space: nowrap;
+    }
+    .connect-callout a:hover { background: #e2c37c; }
+
     /* Strategy */
     .strategy-text { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1.75rem; }
     .strategy-text p { color: #ccc; font-size: 0.95rem; line-height: 1.75; margin-bottom: 1rem; }
@@ -161,6 +174,14 @@
       <p id="ongoing-note" style="display:none; color:var(--brass); font-size:0.85rem; margin-top:0.75rem;">
         ✦ You're on the Ongoing plan — a fresh pack like this will be delivered automatically every month. Revisit this link anytime to see your latest one.
       </p>
+    </div>
+
+    <div class="connect-callout">
+      <div>
+        <h3>Ready to auto-post this?</h3>
+        <p>Connect your Instagram, Google Business, or TikTok and we can publish straight from this calendar — no manual copy-pasting.</p>
+      </div>
+      <a href="/connect">Connect Accounts →</a>
     </div>
 
     <!-- Strategy -->
