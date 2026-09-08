@@ -4,326 +4,371 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Brand Factory NOLA — Social Media Packs for Local Businesses</title>
+  <meta name="description" content="Feed us your business. The line outputs a month of strategy, content calendar, captions, and hashtags — agency-grade, one-time payment, delivered in minutes." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink: #0c0a10;
-      --ink-2: #17121c;
-      --card: #1a151f;
-      --card-2: #201a26;
-      --border: rgba(255,255,255,0.1);
-      --parchment: #f3ead6;
-      --muted: #9c9184;
-      --brass: #c9a24a;
-      --brass-soft: rgba(201,162,74,0.14);
-      --brass-bright: #e2c37c;
-      --plum: #a077c9;
-      --plum-soft: rgba(138,92,194,0.18);
-      --verdigris: #5cb392;
+      --steel-950: #0c1012;
+      --steel-900: #12171a;
+      --steel-800: #1a2124;
+      --steel-700: #232b2f;
+      --steel-600: #303a3f;
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(255,255,255,0.16);
+      --chalk: #edf0ec;
+      --chalk-dim: #93a09d;
+      --caution: #f5b93f;
+      --caution-bright: #ffd166;
+      --caution-ink: #1c1404;
+      --blueprint: #5cc7d6;
+      --blueprint-dim: rgba(92,199,214,0.14);
+      --qc-red: #e2604a;
+      --persp: 1500px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--ink);
-      color: var(--parchment);
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      background: var(--steel-950);
+      color: var(--chalk);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    .serif { font-family: 'Fraunces', serif; }
-    a { color: var(--brass); text-decoration: none; }
+    .display { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    a { color: var(--caution); text-decoration: none; }
 
+    /* faint blueprint grid wash, fixed */
     body::before {
       content: "";
-      position: fixed; inset: 0; z-index: 999; pointer-events: none;
-      opacity: 0.05; mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
+      background-image:
+        linear-gradient(rgba(92,199,214,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(92,199,214,0.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 0%, transparent 70%);
     }
 
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal { opacity: 0; transform: perspective(900px) rotateX(6deg) translateY(26px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.3,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-l { transform: perspective(900px) rotateY(-16deg) translateX(-30px); }
+    .reveal-r { transform: perspective(900px) rotateY(16deg) translateX(30px); }
+    .reveal-l.in, .reveal-r.in { transform: none; }
+
     @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
+      .reveal, .reveal-l, .reveal-r { opacity: 1; transform: none; transition: none; }
       html { scroll-behavior: auto; }
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
     }
-
-    /* STAMP — signature motif */
-    .stamp {
-      border-radius: 50%; border: 3px double var(--brass);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
-      color: var(--brass); text-transform: uppercase; letter-spacing: 0.05em;
-      text-align: center; background: var(--ink-2); flex-shrink: 0;
-      box-shadow: 0 14px 30px -12px rgba(0,0,0,0.65);
-    }
-    .stamp .stamp-mark { display: block; }
-    .stamp-sm {
-      width: 66px; height: 66px; font-size: 0.46rem; line-height: 1.3;
-      position: absolute; top: -16px; right: -12px; transform: rotate(11deg); z-index: 3;
-    }
-    .stamp-sm .stamp-mark { font-size: 0.85rem; margin-bottom: 0.1rem; }
 
     /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.1rem 2rem;
-      background: rgba(12,10,16,0.8); backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      background: rgba(12,16,18,0.82); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
     }
-    .nav-logo { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; }
-    .nav-logo em { color: var(--brass); font-style: normal; }
+    .nav-logo { display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; }
+    .nav-badge {
+      width: 34px; height: 34px; border-radius: 4px; flex-shrink: 0;
+      background: linear-gradient(155deg, var(--steel-600), var(--steel-800));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 0.95rem; color: var(--caution);
+      transform: perspective(200px) rotateY(-8deg);
+      box-shadow: 3px 4px 0 rgba(0,0,0,0.35);
+    }
+    .nav-word { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; text-transform: uppercase; }
+    .nav-word span { color: var(--caution); }
     .nav-actions { display: flex; align-items: center; gap: 1.4rem; flex-shrink: 0; }
-    .nav-auth-link { font-size: 0.85rem; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .nav-auth-link { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--chalk-dim); font-weight: 500; white-space: nowrap; }
     nav a.btn-sm {
-      background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 0.82rem;
-      letter-spacing: 0.02em; padding: 0.6rem 1.3rem; border-radius: 2px; white-space: nowrap;
+      background: var(--caution); color: var(--caution-ink); font-weight: 700; font-size: 0.8rem;
+      font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; padding: 0.6rem 1.2rem; border-radius: 3px; white-space: nowrap;
       transition: transform 0.2s, background 0.2s; display: inline-block;
+      box-shadow: 0 4px 0 #a97e1e;
     }
-    nav a.btn-sm:hover { background: var(--brass-bright); transform: translateY(-1px); }
+    nav a.btn-sm:hover { background: var(--caution-bright); transform: translateY(-2px); }
+    nav a.btn-sm:active { transform: translateY(1px); box-shadow: 0 1px 0 #a97e1e; }
 
-    /* HERO — full-bleed poster, headline dominates, asymmetric split below */
-    .hero { position: relative; padding: 4.5rem 2.5rem 0; max-width: 1440px; margin: 0 auto; }
-    .hero::before {
-      content: ""; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
-      width: 140%; height: 120%; z-index: -1;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(201,162,74,0.16), transparent 45%),
-        radial-gradient(circle at 85% 25%, rgba(160,119,201,0.13), transparent 40%);
-      filter: blur(20px);
+    /* HERO */
+    .hero { position: relative; padding: 3.5rem 2.5rem 2rem; max-width: 1320px; margin: 0 auto; z-index: 1; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2rem; align-items: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blueprint); margin-bottom: 1.6rem; border: 1px solid rgba(92,199,214,0.35); background: var(--blueprint-dim);
+      padding: 0.4rem 0.8rem; border-radius: 2px;
     }
-    .poster-h1 { line-height: 0.92; margin-bottom: 2.75rem; }
-    .poster-h1 span { display: block; }
-    .poster-h1 .l-caps {
-      font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase;
-      font-size: clamp(3rem, 9vw, 7.2rem); color: var(--parchment);
+    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blueprint); box-shadow: 0 0 8px var(--blueprint); animation: pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    .hero h1 {
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; text-transform: uppercase;
+      line-height: 0.94; font-size: clamp(2.6rem, 5.6vw, 4.6rem); letter-spacing: -0.01em;
+      margin-bottom: 1.6rem;
     }
-    .poster-h1 .l-italic {
-      font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
-      font-size: clamp(3.4rem, 10.5vw, 8.6rem); color: var(--brass); letter-spacing: -0.01em; margin: 0.02em 0;
-    }
-    .poster-h1 .l-serif {
-      font-family: 'Fraunces', serif; font-weight: 600;
-      font-size: clamp(3rem, 8.6vw, 7rem); color: var(--parchment); letter-spacing: -0.02em;
-    }
-    .hero-lower {
-      display: grid; grid-template-columns: 1fr 0.85fr; gap: 3rem; align-items: end;
-      padding: 2.5rem 0 4rem; position: relative;
-    }
-    .hero-lower .stamp.stamp-hero {
-      width: 108px; height: 108px; font-size: 0.62rem;
-      position: absolute; top: -0.75rem; left: 0; transform: rotate(-9deg);
-    }
-    .hero-lower .stamp.stamp-hero .stamp-mark { font-size: 1.2rem; }
-    .hero-copy { padding-left: 148px; }
-    .hero p.lede { font-size: 1.15rem; color: #c9c2b4; max-width: 460px; margin-bottom: 2.2rem; }
-    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
+    .hero h1 em { font-style: normal; color: var(--caution); }
+    .hero p.lede { font-size: 1.08rem; color: #c4cbc7; max-width: 460px; margin-bottom: 2rem; }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
     .btn-primary {
-      background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 0.98rem;
-      padding: 0.95rem 2.1rem; border-radius: 2px; border: none; cursor: pointer;
-      transition: background 0.2s, transform 0.15s; display: inline-block;
+      background: var(--caution); color: var(--caution-ink); font-weight: 700; font-size: 0.95rem;
+      padding: 0.95rem 1.9rem; border-radius: 3px; border: none; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s; display: inline-block;
+      box-shadow: 0 5px 0 #a97e1e;
     }
-    .btn-primary:hover { background: var(--brass-bright); transform: translateY(-2px); }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #a97e1e; }
     .btn-secondary {
-      background: transparent; color: var(--parchment); font-weight: 600; font-size: 0.98rem;
-      padding: 0.95rem 2.1rem; border-radius: 2px; border: 1px solid var(--border); cursor: pointer;
+      background: transparent; color: var(--chalk); font-weight: 600; font-size: 0.95rem;
+      padding: 0.95rem 1.9rem; border-radius: 3px; border: 1px solid var(--line-strong); cursor: pointer;
       transition: border-color 0.2s, color 0.2s; display: inline-block;
     }
-    .btn-secondary:hover { border-color: var(--brass); color: var(--brass); }
-    .hero-note { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.02em; }
+    .btn-secondary:hover { border-color: var(--blueprint); color: var(--blueprint); }
+    .hero-note { font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; color: var(--chalk-dim); letter-spacing: 0.02em; }
 
-    /* hero poster — the real brand artwork, pinned like a flyer */
-    .hero-poster {
-      position: relative; max-width: 380px; margin-left: auto;
-      transform: rotate(-2deg);
+    /* HERO 3D RIG — the signature element */
+    .rig-wrap { perspective: var(--persp); height: 420px; position: relative; }
+    .rig {
+      position: absolute; inset: 0; transform-style: preserve-3d;
+      transform: rotateX(8deg) rotateY(-14deg);
+      transition: transform 0.25s ease-out;
     }
-    .hero-poster img {
-      width: 100%; display: block; border-radius: 6px; border: 1px solid var(--border);
-      box-shadow: 0 30px 70px -18px rgba(0,0,0,0.7);
+    .rig-track {
+      position: absolute; top: 50%; left: 8%; width: 84%; height: 2px;
+      background: repeating-linear-gradient(90deg, var(--line-strong) 0 10px, transparent 10px 20px);
+      transform: translateZ(-40px) translateY(-1px);
     }
-    .hero-poster::before {
-      content: ""; position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
-      width: 12px; height: 12px; border-radius: 50%; background: var(--brass); z-index: 2;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    .rig-card {
+      position: absolute; top: 50%; left: 50%; width: 132px; height: 88px; border-radius: 6px;
+      transform: translate3d(calc(-50% + var(--x) * var(--rig-scale, 1)), calc(-50% + var(--y) * var(--rig-scale, 1)), calc(var(--z) * var(--rig-scale, 1)));
+      background: linear-gradient(160deg, var(--steel-700), var(--steel-800));
+      border: 1px solid var(--line-strong);
+      box-shadow: 0 22px 40px -20px rgba(0,0,0,0.7);
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+      padding: 0 1rem; gap: 0.15rem;
+    }
+    .rig-card .k { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--chalk-dim); text-transform: uppercase; }
+    .rig-card .v { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 0.92rem; text-transform: uppercase; color: var(--chalk); }
+    .rig-card.output { background: linear-gradient(160deg, var(--caution), #c99a2a); border-color: var(--caution-bright); box-shadow: 0 26px 55px -14px rgba(245,185,63,0.5); }
+    .rig-card.output .k { color: rgba(28,20,4,0.65); }
+    .rig-card.output .v { color: var(--caution-ink); }
+    @media (max-width: 900px) {
+      .rig-wrap { height: 280px; }
+      .rig { --rig-scale: 0.62; }
+      .rig-card { width: 108px; height: 74px; padding: 0 0.7rem; }
+      .rig-card .v { font-size: 0.78rem; }
+    }
+    @media (max-width: 480px) {
+      .rig-wrap { height: 240px; }
+      .rig { --rig-scale: 0.42; }
+      .rig-card { width: 92px; height: 64px; padding: 0 0.6rem; }
+      .rig-card .k { font-size: 0.52rem; }
+      .rig-card .v { font-size: 0.68rem; }
     }
 
-    /* MARQUEE */
-    .marquee {
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      background: var(--ink-2); padding: 1rem 0; overflow: hidden; white-space: nowrap;
+    /* STATUS TICKER */
+    .ticker {
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      background: var(--steel-900); padding: 0.85rem 0; overflow: hidden; white-space: nowrap;
+      position: relative; z-index: 1;
     }
-    .marquee-track { display: inline-flex; animation: scroll 28s linear infinite; }
-    .marquee-track span {
-      font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem;
-      color: var(--muted); padding: 0 2rem; display: inline-flex; align-items: center; gap: 2rem;
+    .ticker-track { display: inline-flex; animation: scroll 26s linear infinite; }
+    .ticker-track span {
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--chalk-dim); padding: 0 1.8rem; display: inline-flex; align-items: center; gap: 1.8rem;
     }
-    .marquee-track span::after { content: "✦"; color: var(--brass); font-style: normal; }
+    .ticker-track span::after { content: "◆"; color: var(--blueprint); font-size: 0.6rem; }
     @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* Shared section chrome */
-    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; }
+    /* shared chrome */
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
     .section-head { text-align: center; margin-bottom: 3.5rem; }
     .section-label {
-      display: block; width: max-content; margin: 0 auto 1.4rem;
-      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
-      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px;
-      padding: 0.3rem 0.9rem; transform: rotate(-1.4deg);
+      display: inline-flex; align-items: center; gap: 0.5rem; margin: 0 auto 1.3rem;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 500;
+      font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blueprint); border: 1px solid rgba(92,199,214,0.35); background: var(--blueprint-dim);
+      padding: 0.35rem 0.85rem; border-radius: 2px;
     }
-    .section-label.rotate-r { transform: rotate(1.4deg); }
     .section-head h2 {
-      font-family: 'Fraunces', serif; font-weight: 600;
-      font-size: clamp(1.8rem, 4.2vw, 2.8rem); margin-bottom: 1rem; letter-spacing: -0.01em;
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase;
+      font-size: clamp(1.7rem, 4vw, 2.5rem); margin-bottom: 0.9rem; letter-spacing: 0;
     }
-    .section-head p { color: #aca397; max-width: 480px; margin: 0 auto; }
+    .section-head p { color: var(--chalk-dim); max-width: 480px; margin: 0 auto; }
 
-    /* PROCESS — editorial ledger, not a card grid */
-    .process { padding: 6rem 0; }
-    .process-ledger { border-top: 1px solid var(--border); }
-    .process-row {
-      display: flex; align-items: flex-start; gap: 2.5rem;
-      padding: 2.4rem 0; border-bottom: 1px solid var(--border);
+    /* PROCESS — belt with tilted stations */
+    .process { padding: 6.5rem 0; }
+    .belt { position: relative; max-width: 720px; margin: 0 auto; }
+    .belt::before {
+      content: ""; position: absolute; left: 27px; top: 0; bottom: 0; width: 2px;
+      background: repeating-linear-gradient(180deg, var(--line-strong) 0 8px, transparent 8px 16px);
     }
-    .process-num {
-      font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 4.4rem;
-      line-height: 0.85; color: transparent; -webkit-text-stroke: 1.5px rgba(201,162,74,0.55);
-      flex-shrink: 0; width: 110px;
+    .station { position: relative; display: flex; gap: 1.8rem; padding: 0 0 3.2rem 0; perspective: 900px; }
+    .station:last-child { padding-bottom: 0; }
+    .station-num {
+      flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%;
+      background: var(--steel-800); border: 2px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; z-index: 1;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--caution); font-size: 0.95rem;
     }
-    .process-copy h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .process-copy p { font-size: 0.94rem; color: #aca397; max-width: 520px; }
+    .station-panel {
+      background: var(--steel-800); border: 1px solid var(--line); border-radius: 8px;
+      padding: 1.6rem 1.8rem; flex: 1;
+      box-shadow: 0 18px 34px -22px rgba(0,0,0,0.65);
+    }
+    .station-panel h3 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.15rem; margin-bottom: 0.5rem; letter-spacing: 0.01em; }
+    .station-panel p { font-size: 0.92rem; color: var(--chalk-dim); }
+    .station:nth-child(odd) .station-panel { transform-origin: left center; }
+    .station:nth-child(even) .station-panel { transform-origin: right center; }
 
-    /* WHAT'S INCLUDED — menu list, not icon cards */
-    .menu-section { background: var(--ink-2); padding: 6rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .menu-list { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px dashed var(--border); border-left: 1px dashed var(--border); }
-    .menu-item { padding: 1.6rem 1.9rem; border-right: 1px dashed var(--border); border-bottom: 1px dashed var(--border); }
-    .menu-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; display: flex; align-items: baseline; gap: 0.5rem; }
-    .menu-item h4 .tag-agency { color: var(--brass); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-    .menu-item p { font-size: 0.86rem; color: #aca397; }
+    /* WHAT'S INCLUDED — parts shelf */
+    .shelf-section { background: var(--steel-900); padding: 6.5rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+    .part {
+      background: var(--steel-800); border: 1px solid var(--line); border-radius: 8px; padding: 1.5rem 1.5rem 1.7rem;
+      transform-style: preserve-3d; will-change: transform; transition: box-shadow 0.2s;
+      cursor: default; position: relative;
+    }
+    .part:hover { box-shadow: 0 24px 48px -20px rgba(0,0,0,0.7); }
+    .part .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--blueprint); text-transform: uppercase; display: block; margin-bottom: 0.7rem; }
+    .part .tag.agency { color: var(--caution); }
+    .part h4 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .part p { font-size: 0.88rem; color: var(--chalk-dim); }
+    @media (max-width: 860px) { .shelf { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .shelf { grid-template-columns: 1fr; } }
 
-    /* PRICING — a single plaque/menu-board, not floating cards */
-    #pricing { padding: 6rem 0; }
-    .pricing-plaque {
-      border: 1px solid var(--border); border-radius: 8px; background: var(--card);
-      overflow: hidden; display: grid; grid-template-columns: repeat(4, 1fr); position: relative;
+    /* PRICING — spec sheet, fanned depth */
+    #pricing { padding: 6.5rem 0; }
+    .spec-stage { perspective: 2200px; }
+    .spec-plaque {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem;
+      transform-style: preserve-3d;
     }
-    .pricing-col {
-      padding: 2.4rem 1.7rem; border-right: 1px solid var(--border);
-      display: flex; flex-direction: column; position: relative;
+    .spec-col {
+      background: var(--steel-800); border: 1px solid var(--line); border-radius: 8px;
+      padding: 2rem 1.5rem; display: flex; flex-direction: column; position: relative;
+      transform: translateZ(0) rotateY(0deg); transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+      box-shadow: 0 20px 40px -24px rgba(0,0,0,0.7);
     }
-    .pricing-col:last-child { border-right: none; }
-    .pricing-col.featured { background: linear-gradient(180deg, rgba(201,162,74,0.07), transparent 45%); }
-    .tier-name { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
-    .tier-price { font-family: 'Fraunces', serif; font-size: 2.7rem; font-weight: 600; line-height: 1; margin-bottom: 0.3rem; }
-    .tier-price span { font-size: 1.15rem; font-weight: 400; vertical-align: top; margin-top: 0.4rem; display: inline-block; }
-    .tier-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 1.3rem; }
-    .tier-desc { font-size: 0.86rem; color: #c1bbae; margin-bottom: 1.3rem; border-bottom: 1px dashed var(--border); padding-bottom: 1.3rem; }
-    .feature-list { list-style: none; flex: 1; margin-bottom: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .feature-list li { font-size: 0.85rem; display: flex; align-items: flex-start; gap: 0.55rem; }
-    .feature-list li::before { content: "✓"; color: var(--brass); font-weight: 700; flex-shrink: 0; }
-    .feature-list li.extra::before { content: "★"; color: var(--plum); }
+    .spec-col:hover { transform: translateZ(26px); box-shadow: 0 30px 60px -20px rgba(0,0,0,0.75); }
+    .spec-col.featured {
+      background: linear-gradient(180deg, rgba(245,185,63,0.08), var(--steel-800) 55%);
+      border-color: rgba(245,185,63,0.4);
+      transform: translateZ(18px);
+    }
+    .spec-col.featured:hover { transform: translateZ(38px); }
+    .spec-tag {
+      position: absolute; top: -0.9rem; left: 1.5rem;
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--caution-ink); background: var(--caution); padding: 0.25rem 0.55rem; border-radius: 2px;
+    }
+    .tier-name { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk-dim); margin-bottom: 0.7rem; }
+    .tier-price { font-family: 'Big Shoulders Display', sans-serif; font-size: 2.5rem; font-weight: 900; line-height: 1; margin-bottom: 0.3rem; }
+    .tier-price span { font-size: 1.05rem; font-weight: 700; vertical-align: top; margin-top: 0.3rem; display: inline-block; }
+    .tier-note { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--chalk-dim); margin-bottom: 1.2rem; }
+    .tier-desc { font-size: 0.86rem; color: #b7c0bc; margin-bottom: 1.2rem; border-bottom: 1px dashed var(--line); padding-bottom: 1.2rem; }
+    .feature-list { list-style: none; flex: 1; margin-bottom: 1.6rem; display: flex; flex-direction: column; gap: 0.55rem; }
+    .feature-list li { font-size: 0.84rem; display: flex; align-items: flex-start; gap: 0.5rem; }
+    .feature-list li::before { content: "▪"; color: var(--blueprint); flex-shrink: 0; }
+    .feature-list li.extra::before { content: "★"; color: var(--caution); }
     .btn-tier {
-      width: 100%; padding: 0.85rem; border-radius: 3px; border: none; cursor: pointer;
-      font-size: 0.9rem; font-weight: 700; transition: all 0.2s;
-      background: rgba(255,255,255,0.06); color: var(--parchment); margin-top: auto;
+      width: 100%; padding: 0.8rem; border-radius: 4px; border: none; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em; transition: all 0.2s;
+      background: var(--steel-700); color: var(--chalk); margin-top: auto;
     }
-    .btn-tier:hover { background: rgba(255,255,255,0.12); }
-    .pricing-col.featured .btn-tier { background: var(--brass); color: #0c0a10; }
-    .pricing-col.featured .btn-tier:hover { background: var(--brass-bright); }
+    .btn-tier:hover { background: var(--steel-600); }
+    .spec-col.featured .btn-tier { background: var(--caution); color: var(--caution-ink); }
+    .spec-col.featured .btn-tier:hover { background: var(--caution-bright); }
     @media (max-width: 960px) {
-      .pricing-plaque { grid-template-columns: 1fr; }
-      .pricing-col { border-right: none !important; border-bottom: 1px solid var(--border); }
-      .pricing-col:last-child { border-bottom: none; }
+      .spec-plaque { grid-template-columns: 1fr; }
+      .spec-col, .spec-col.featured, .spec-col:hover, .spec-col.featured:hover { transform: none; }
     }
 
-    /* TESTIMONIALS — one featured pull-quote, not a card grid */
-    .testimonials-block { padding: 6rem 0; }
-    .quote-feature { max-width: 720px; margin: 0 auto 3.5rem; text-align: center; }
-    .quote-feature .mark {
-      font-family: 'Fraunces', serif; font-size: 3.5rem; color: var(--brass); opacity: 0.5; line-height: 1; display: block;
+    /* TESTIMONIALS — QC stamps */
+    .qc-section { padding: 6.5rem 0; }
+    .qc-feature {
+      max-width: 640px; margin: 0 auto 3.2rem; text-align: center; position: relative;
+      border: 2px solid var(--blueprint); border-radius: 10px; padding: 2.4rem 2rem;
+      transform: rotate(-1.2deg);
     }
-    .quote-feature p {
-      font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
-      font-size: clamp(1.3rem, 3vw, 1.8rem); line-height: 1.4; color: var(--parchment); margin-bottom: 1.3rem;
+    .qc-feature::before {
+      content: "QC — PASSED"; position: absolute; top: -13px; left: 50%; transform: translateX(-50%) rotate(1deg);
+      background: var(--steel-950); color: var(--blueprint); font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.12em; padding: 0 0.8rem;
     }
-    .quote-feature .who { font-size: 0.88rem; color: var(--brass); font-weight: 700; }
-    .quote-feature .biz { font-size: 0.82rem; color: var(--muted); }
-    .quote-minor-row {
-      display: flex; justify-content: center; gap: 3.5rem; flex-wrap: wrap;
-      border-top: 1px solid var(--border); padding-top: 2.5rem; max-width: 780px; margin: 0 auto;
+    .qc-feature p {
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; text-transform: none;
+      font-size: clamp(1.15rem, 2.6vw, 1.55rem); line-height: 1.35; color: var(--chalk); margin-bottom: 1rem;
     }
-    .quote-minor { max-width: 280px; text-align: left; }
-    .quote-minor p { font-size: 0.88rem; color: #c1bbae; margin-bottom: 0.6rem; }
-    .quote-minor .who { font-size: 0.8rem; font-weight: 700; color: var(--brass); }
-    .quote-minor .biz { font-size: 0.76rem; color: var(--muted); }
+    .qc-feature .who { font-family: 'IBM Plex Mono', monospace; font-size: 0.84rem; color: var(--caution); font-weight: 600; }
+    .qc-feature .biz { font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; color: var(--chalk-dim); }
+    .qc-minor-row { display: flex; justify-content: center; gap: 2.2rem; flex-wrap: wrap; max-width: 780px; margin: 0 auto; }
+    .qc-minor {
+      max-width: 300px; text-align: left; background: var(--steel-800); border: 1px solid var(--line);
+      border-radius: 6px; padding: 1.2rem 1.3rem; transform: rotate(0.6deg);
+    }
+    .qc-minor:nth-child(2) { transform: rotate(-0.6deg); }
+    .qc-minor p { font-size: 0.86rem; color: #c1c8c4; margin-bottom: 0.55rem; }
+    .qc-minor .who { font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; font-weight: 600; color: var(--caution); }
+    .qc-minor .biz { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--chalk-dim); }
 
-    /* FAQ — ruled rows, not boxed cards */
-    .faq-section { background: var(--ink-2); padding: 6rem 0; border-top: 1px solid var(--border); }
-    .faq { border-top: 1px solid var(--border); max-width: 760px; margin: 0 auto; }
-    details {
-      border-bottom: 1px solid var(--border); padding: 1.5rem 0.2rem; transition: opacity 0.2s;
-    }
+    /* FAQ — spec Q&A */
+    .faq-section { background: var(--steel-900); padding: 6.5rem 0; border-top: 1px solid var(--line); }
+    .faq { border-top: 1px solid var(--line); max-width: 740px; margin: 0 auto; }
+    details { border-bottom: 1px solid var(--line); padding: 1.4rem 0.2rem; }
     summary {
-      font-weight: 600; cursor: pointer; list-style: none; display: flex;
-      justify-content: space-between; align-items: center; font-size: 1rem;
+      font-weight: 600; cursor: pointer; list-style: none; display: flex; gap: 0.9rem;
+      justify-content: space-between; align-items: center; font-size: 0.98rem;
     }
-    summary::after { content: "+"; color: var(--brass); font-size: 1.2rem; }
+    summary .q-num { font-family: 'IBM Plex Mono', monospace; color: var(--blueprint); font-size: 0.82rem; flex-shrink: 0; }
+    summary .q-text { flex: 1; }
+    summary::after { content: "+"; color: var(--caution); font-size: 1.2rem; flex-shrink: 0; }
     details[open] summary::after { content: "−"; }
-    details p { margin-top: 0.9rem; color: #aca397; font-size: 0.93rem; max-width: 620px; }
+    details p { margin-top: 0.8rem; margin-left: 2.6rem; color: var(--chalk-dim); font-size: 0.92rem; max-width: 600px; }
 
-    /* FOOTER CTA */
-    .cta-band {
-      position: relative; text-align: center; padding: 6.5rem 1.5rem; overflow: hidden;
-      border-top: 1px solid var(--border);
-    }
-    .cta-band::before {
-      content: ""; position: absolute; inset: -20% -10%; z-index: -1;
-      background: radial-gradient(ellipse at 50% 100%, rgba(201,162,74,0.14) 0%, transparent 55%),
-                  radial-gradient(ellipse at 30% 20%, rgba(160,119,201,0.1) 0%, transparent 50%);
-    }
-    .cta-band h2 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5.4vw, 3.4rem); font-weight: 600; margin-bottom: 1.1rem; letter-spacing: -0.01em; }
-    .cta-band h2 em { color: var(--brass); font-style: italic; }
-    .cta-band p { color: #aca397; margin-bottom: 2.2rem; }
+    /* FOOTER CTA — final station */
+    .cta-band { position: relative; text-align: center; padding: 6.5rem 1.5rem; border-top: 1px solid var(--line); z-index: 1; }
+    .cta-band .section-label { margin-bottom: 1.4rem; }
+    .cta-band h2 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; text-transform: uppercase; font-size: clamp(1.9rem, 5vw, 3.1rem); margin-bottom: 1rem; letter-spacing: -0.01em; }
+    .cta-band h2 em { color: var(--caution); font-style: normal; }
+    .cta-band p { color: var(--chalk-dim); margin-bottom: 2rem; }
 
-    footer {
-      text-align: center; padding: 2.5rem 1.5rem;
-      border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem;
-    }
-    footer a { color: var(--muted); }
-    footer a:hover { color: var(--brass); }
+    footer { text-align: center; padding: 2.2rem 1.5rem; border-top: 1px solid var(--line); color: var(--chalk-dim); font-size: 0.82rem; font-family: 'IBM Plex Mono', monospace; }
+    footer a { color: var(--chalk-dim); }
+    footer a:hover { color: var(--caution); }
 
     @media (max-width: 900px) {
-      .hero-lower { grid-template-columns: 1fr; }
-      .hero-copy { padding-left: 0; padding-top: 3rem; }
-      .hero-lower .stamp.stamp-hero { position: static; transform: rotate(-6deg); margin-bottom: 1.5rem; }
-      .hero-poster { max-width: 280px; margin: 2rem auto 0; }
-      .menu-list { grid-template-columns: 1fr; }
-      .menu-item { border-right: none !important; }
-      .process-num { width: 70px; font-size: 3rem; }
+      .hero-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
-      nav { padding: 0.85rem 0.9rem; }
-      .nav-logo { font-size: 0.95rem; }
+      nav { padding: 0.8rem 1rem; }
+      .nav-word { font-size: 0.92rem; }
       .nav-actions { gap: 0.5rem; }
-      .nav-auth-link { font-size: 0.72rem; }
-      nav a.btn-sm { padding: 0.45rem 0.7rem; font-size: 0.7rem; }
-      .hero { padding: 4rem 1.25rem 0; }
-      .process-row { gap: 1.3rem; }
+      .nav-auth-link { font-size: 0.68rem; }
+      nav a.btn-sm { padding: 0.45rem 0.7rem; font-size: 0.68rem; }
+      .hero { padding: 3rem 1.1rem 1.5rem; }
+      .station { gap: 1rem; }
+      .belt::before { left: 21px; }
+      .station-num { width: 44px; height: 44px; font-size: 0.8rem; }
     }
-    @media (max-width: 340px) {
-      .nav-auth-link { display: none; }
-    }
+    @media (max-width: 340px) { .nav-auth-link { display: none; } }
   </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">Brand Factory <em>NOLA</em></div>
+  <div class="nav-logo">
+    <div class="nav-badge">BF</div>
+    <div class="nav-word">Brand Factory <span>NOLA</span></div>
+  </div>
   <div class="nav-actions">
     <a href="/auth" id="nav-auth-link" class="nav-auth-link">Sign In</a>
     <a href="#pricing" class="btn-sm">Get Your Pack →</a>
@@ -332,63 +377,64 @@
 
 <!-- HERO -->
 <section class="hero">
-  <h1 class="poster-h1">
-    <span class="l-caps">Your Vision,</span>
-    <span class="l-italic">Your Vibe,</span>
-    <span class="l-serif">Our Spotlight.</span>
-  </h1>
-  <div class="hero-lower">
+  <div class="hero-grid">
     <div class="hero-copy">
-      <div class="stamp stamp-hero">
-        <span class="stamp-mark">✦</span>
-        <span>Est.<br>NOLA</span>
-      </div>
-      <p class="lede">Tell us about your business. We build the strategy, the calendar, the captions, and the hashtags — like you hired a full creative agency, minus the retainer.</p>
+      <div class="eyebrow"><span class="dot"></span> Line Status: Running</div>
+      <h1>We manufacture <em>momentum.</em></h1>
+      <p class="lede">Feed us your business. The line outputs a full month of strategy, content calendar, captions, and hashtags — built like an agency retainer, priced like a single part.</p>
       <div class="hero-cta">
-        <a href="#pricing" class="btn-primary">See Pricing →</a>
+        <a href="#pricing" class="btn-primary">See The Spec Sheet →</a>
         <a href="#how-it-works" class="btn-secondary">How It Works</a>
       </div>
-      <p class="hero-note">One‑time payment · No subscription · Delivered in minutes</p>
+      <p class="hero-note">// ONE-TIME PAYMENT · NO SUBSCRIPTION · DELIVERED IN MINUTES</p>
     </div>
-    <div class="hero-poster">
-      <img src="hero-poster.jpg" alt="The Brand Factory NOLA" />
+    <div class="rig-wrap">
+      <div class="rig" id="heroRig">
+        <div class="rig-track"></div>
+        <div class="rig-card" style="--x:-230px; --y:-70px; --z:-160px;"><span class="k">Input</span><span class="v">Your Biz</span></div>
+        <div class="rig-card" style="--x:-135px; --y:-25px; --z:-90px;"><span class="k">Station 01</span><span class="v">Strategy</span></div>
+        <div class="rig-card" style="--x:-40px; --y:15px; --z:-20px;"><span class="k">Station 02</span><span class="v">Calendar</span></div>
+        <div class="rig-card" style="--x:55px; --y:-15px; --z:50px;"><span class="k">Station 03</span><span class="v">Captions</span></div>
+        <div class="rig-card" style="--x:150px; --y:25px; --z:120px;"><span class="k">Station 04</span><span class="v">Hashtags</span></div>
+        <div class="rig-card output" style="--x:255px; --y:-15px; --z:190px;"><span class="k">Output</span><span class="v">Brand Pack</span></div>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="marquee">
-  <div class="marquee-track">
+<div class="ticker">
+  <div class="ticker-track">
     <span>Strategy</span><span>Content Calendar</span><span>Captions</span><span>Hashtags</span><span>Posting Schedule</span><span>Custom Websites</span>
     <span>Strategy</span><span>Content Calendar</span><span>Captions</span><span>Hashtags</span><span>Posting Schedule</span><span>Custom Websites</span>
   </div>
 </div>
 
-<!-- HOW IT WORKS — editorial ledger -->
+<!-- HOW IT WORKS -->
 <section class="process reveal" id="how-it-works">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label">The Process</span>
-      <h2>From zero to fully planned in 3 steps</h2>
-      <p>No agency fees. No back-and-forth. Just your business info — and we handle the rest.</p>
+      <span class="section-label">◆ The Line</span>
+      <h2>From zero to fully planned in 3 stations</h2>
+      <p>No agency fees. No back-and-forth. Just your business info — the line handles the rest.</p>
     </div>
-    <div class="process-ledger">
-      <div class="process-row">
-        <span class="process-num">01</span>
-        <div class="process-copy">
+    <div class="belt">
+      <div class="station reveal reveal-l">
+        <div class="station-num">01</div>
+        <div class="station-panel">
           <h3>Tell Us About Your Business</h3>
           <p>Fill out a short form: business type, city, target audience, tone, and platforms. Takes about 2 minutes.</p>
         </div>
       </div>
-      <div class="process-row">
-        <span class="process-num">02</span>
-        <div class="process-copy">
+      <div class="station reveal reveal-r">
+        <div class="station-num">02</div>
+        <div class="station-panel">
           <h3>Pay Once, Securely</h3>
           <p>Choose your tier and pay via Stripe. No recurring charges, no hidden fees.</p>
         </div>
       </div>
-      <div class="process-row">
-        <span class="process-num">03</span>
-        <div class="process-copy">
+      <div class="station reveal reveal-l">
+        <div class="station-num">03</div>
+        <div class="station-panel">
           <h3>Get Your Full Pack</h3>
           <p>Your strategy, calendar, captions, and hashtags are ready in minutes. Download and start posting.</p>
         </div>
@@ -397,146 +443,150 @@
   </div>
 </section>
 
-<!-- WHAT'S INCLUDED — menu list -->
-<section class="menu-section reveal">
+<!-- WHAT'S INCLUDED — parts shelf -->
+<section class="shelf-section reveal">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label rotate-r">What You Get</span>
-      <h2 class="serif">Everything you need to show up consistently</h2>
+      <span class="section-label">◆ Bill Of Materials</span>
+      <h2>Everything you need to show up consistently</h2>
       <p>Every pack includes a full suite of content assets tailored specifically to your business and local market.</p>
     </div>
-    <div class="menu-list">
-      <div class="menu-item">
+    <div class="shelf">
+      <div class="part tilt">
+        <span class="tag">Part 01</span>
         <h4>Content Calendar</h4>
         <p>Day-by-day posting plan with themes, post types, and hooks.</p>
       </div>
-      <div class="menu-item">
+      <div class="part tilt">
+        <span class="tag">Part 02</span>
         <h4>Ready-to-Post Captions</h4>
         <p>Platform-specific captions written in your brand voice.</p>
       </div>
-      <div class="menu-item">
+      <div class="part tilt">
+        <span class="tag">Part 03</span>
         <h4>Hashtag Groups</h4>
         <p>Curated tag sets mixing high-volume and niche-specific tags.</p>
       </div>
-      <div class="menu-item">
+      <div class="part tilt">
+        <span class="tag">Part 04</span>
         <h4>Posting Schedule</h4>
         <p>Best times and days to post on each platform for your audience.</p>
       </div>
-      <div class="menu-item">
+      <div class="part tilt">
+        <span class="tag">Part 05</span>
         <h4>Brand Strategy</h4>
         <p>Your positioning, content pillars, and growth plan in plain English.</p>
       </div>
-      <div class="menu-item">
-        <h4>Custom Website <span class="tag-agency">Agency</span></h4>
+      <div class="part tilt">
+        <span class="tag agency">Part 06 — Agency</span>
+        <h4>Custom Website</h4>
         <p>A fully coded one-page HTML website built for your business.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING — unified plaque -->
+<!-- PRICING — spec sheet -->
 <section id="pricing" class="reveal">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label">Pricing</span>
-      <h2 class="serif">Simple, one-time pricing</h2>
+      <span class="section-label">◆ Spec Sheet</span>
+      <h2>Simple, one-time pricing</h2>
       <p>Pay once. Own it forever. No monthly fees, no upsells.</p>
     </div>
-    <div class="pricing-plaque">
+    <div class="spec-stage">
+      <div class="spec-plaque">
 
-      <!-- STARTER -->
-      <div class="pricing-col">
-        <div class="tier-name">Starter</div>
-        <div class="tier-price"><span>$</span>99</div>
-        <div class="tier-note">one-time payment</div>
-        <div class="tier-desc">A solid 2-week content foundation.</div>
-        <ul class="feature-list">
-          <li>14-day content calendar</li>
-          <li>14 ready-to-post captions</li>
-          <li>3 hashtag groups (45 tags)</li>
-          <li>Platform posting schedule</li>
-          <li>Brand strategy overview</li>
-        </ul>
-        <button class="btn-tier" onclick="order('starter')">Get Starter →</button>
-      </div>
-
-      <!-- GROWTH -->
-      <div class="pricing-col featured">
-        <div class="stamp stamp-sm">
-          <span class="stamp-mark">★</span>
-          <span>Most<br>Popular</span>
+        <!-- STARTER -->
+        <div class="spec-col">
+          <div class="tier-name">Starter</div>
+          <div class="tier-price"><span>$</span>99</div>
+          <div class="tier-note">// ONE-TIME PAYMENT</div>
+          <div class="tier-desc">A solid 2-week content foundation.</div>
+          <ul class="feature-list">
+            <li>14-day content calendar</li>
+            <li>14 ready-to-post captions</li>
+            <li>3 hashtag groups (45 tags)</li>
+            <li>Platform posting schedule</li>
+            <li>Brand strategy overview</li>
+          </ul>
+          <button class="btn-tier" onclick="order('starter')">Get Starter →</button>
         </div>
-        <div class="tier-name">Growth</div>
-        <div class="tier-price"><span>$</span>149</div>
-        <div class="tier-note">one-time payment</div>
-        <div class="tier-desc">A full month of content, deeper strategy.</div>
-        <ul class="feature-list">
-          <li>30-day content calendar</li>
-          <li>20 ready-to-post captions</li>
-          <li>5 hashtag groups (75 tags)</li>
-          <li>Detailed posting schedule</li>
-          <li>Full brand strategy</li>
-        </ul>
-        <button class="btn-tier" onclick="order('growth')">Get Growth →</button>
-      </div>
 
-      <!-- AGENCY -->
-      <div class="pricing-col">
-        <div class="tier-name">Agency</div>
-        <div class="tier-price"><span>$</span>199</div>
-        <div class="tier-note">one-time payment</div>
-        <div class="tier-desc">Max content plus a custom website.</div>
-        <ul class="feature-list">
-          <li>30-day content calendar</li>
-          <li>30 ready-to-post captions</li>
-          <li>8 hashtag groups (120 tags)</li>
-          <li>Full posting schedule</li>
-          <li>Complete brand strategy</li>
-          <li class="extra" style="color:var(--plum);">Custom one-page website</li>
-        </ul>
-        <button class="btn-tier" onclick="order('agency')">Get Agency →</button>
-      </div>
+        <!-- GROWTH -->
+        <div class="spec-col featured">
+          <div class="spec-tag">★ Most Popular</div>
+          <div class="tier-name">Growth</div>
+          <div class="tier-price"><span>$</span>149</div>
+          <div class="tier-note">// ONE-TIME PAYMENT</div>
+          <div class="tier-desc">A full month of content, deeper strategy.</div>
+          <ul class="feature-list">
+            <li>30-day content calendar</li>
+            <li>20 ready-to-post captions</li>
+            <li>5 hashtag groups (75 tags)</li>
+            <li>Detailed posting schedule</li>
+            <li>Full brand strategy</li>
+          </ul>
+          <button class="btn-tier" onclick="order('growth')">Get Growth →</button>
+        </div>
 
-      <!-- AGENCY ONGOING -->
-      <div class="pricing-col">
-        <div class="tier-name">Agency + Ongoing</div>
-        <div class="tier-price"><span>$</span>199</div>
-        <div class="tier-note">today, then $125/mo</div>
-        <div class="tier-desc">Everything in Agency, refreshed monthly.</div>
-        <ul class="feature-list">
-          <li>Everything in Agency</li>
-          <li>Fresh calendar every month</li>
-          <li>30 new captions every month</li>
-          <li>Updated hashtags every month</li>
-          <li class="extra" style="color:var(--verdigris);">First $125/mo isn't until day 30</li>
-        </ul>
-        <button class="btn-tier" onclick="order('agency_ongoing')">Start Ongoing →</button>
-      </div>
+        <!-- AGENCY -->
+        <div class="spec-col">
+          <div class="tier-name">Agency</div>
+          <div class="tier-price"><span>$</span>199</div>
+          <div class="tier-note">// ONE-TIME PAYMENT</div>
+          <div class="tier-desc">Max content plus a custom website.</div>
+          <ul class="feature-list">
+            <li>30-day content calendar</li>
+            <li>30 ready-to-post captions</li>
+            <li>8 hashtag groups (120 tags)</li>
+            <li>Full posting schedule</li>
+            <li>Complete brand strategy</li>
+            <li class="extra">Custom one-page website</li>
+          </ul>
+          <button class="btn-tier" onclick="order('agency')">Get Agency →</button>
+        </div>
 
+        <!-- AGENCY ONGOING -->
+        <div class="spec-col">
+          <div class="tier-name">Agency + Ongoing</div>
+          <div class="tier-price"><span>$</span>199</div>
+          <div class="tier-note">// TODAY, THEN $125/MO</div>
+          <div class="tier-desc">Everything in Agency, refreshed monthly.</div>
+          <ul class="feature-list">
+            <li>Everything in Agency</li>
+            <li>Fresh calendar every month</li>
+            <li>30 new captions every month</li>
+            <li>Updated hashtags every month</li>
+            <li class="extra">First $125/mo isn't until day 30</li>
+          </ul>
+          <button class="btn-tier" onclick="order('agency_ongoing')">Start Ongoing →</button>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS — one featured quote -->
-<section class="testimonials-block reveal">
+<!-- TESTIMONIALS — QC stamps -->
+<section class="qc-section reveal">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label rotate-r">What People Say</span>
+      <span class="section-label">◆ Quality Control</span>
       <h2>Local businesses love it</h2>
     </div>
-    <div class="quote-feature">
-      <span class="mark">"</span>
-      <p>The Agency pack is insane value. Got our whole social strategy plus a clean website I could actually put live. Best $149 I've spent.</p>
+    <div class="qc-feature">
+      <p>"The Agency pack is insane value. Got our whole social strategy plus a clean website I could actually put live. Best $149 I've spent."</p>
       <div class="who">Danielle R.</div>
       <div class="biz">Boutique, Magazine Street</div>
     </div>
-    <div class="quote-minor-row">
-      <div class="quote-minor">
+    <div class="qc-minor-row">
+      <div class="qc-minor">
         <p>"Got a full month of Instagram content for my salon in like 10 minutes. The captions sound exactly like me."</p>
         <div class="who">Keisha T.</div>
         <div class="biz">Hair salon, Tremé</div>
       </div>
-      <div class="quote-minor">
+      <div class="qc-minor">
         <p>"We'd been struggling with social for months. This gave us a real strategy we could use the same day."</p>
         <div class="who">Marcus D.</div>
         <div class="biz">Food truck, Uptown</div>
@@ -547,34 +597,34 @@
 
 <!-- FAQ -->
 <section class="faq-section reveal">
-  <div class="wrap" style="max-width:760px;">
+  <div class="wrap" style="max-width:740px;">
     <div class="section-head">
-      <span class="section-label">FAQ</span>
-      <h2 class="serif">Common questions</h2>
+      <span class="section-label">◆ Spec Q&amp;A</span>
+      <h2>Common questions</h2>
     </div>
     <div class="faq">
       <details>
-        <summary>How long does it take to get my pack?</summary>
+        <summary><span class="q-num">Q01</span><span class="q-text">How long does it take to get my pack?</span></summary>
         <p>Usually 2–4 minutes after payment. You'll see a live progress indicator on the confirmation page.</p>
       </details>
       <details>
-        <summary>Do I need any technical skills?</summary>
+        <summary><span class="q-num">Q02</span><span class="q-text">Do I need any technical skills?</span></summary>
         <p>None at all. Fill out the form, pay, and your pack is ready to download. The captions are written and ready to copy-paste.</p>
       </details>
       <details>
-        <summary>What platforms does it cover?</summary>
+        <summary><span class="q-num">Q03</span><span class="q-text">What platforms does it cover?</span></summary>
         <p>Instagram, Facebook, TikTok, Twitter/X, and LinkedIn. You choose which ones matter for your business during checkout.</p>
       </details>
       <details>
-        <summary>Can I request revisions?</summary>
+        <summary><span class="q-num">Q04</span><span class="q-text">Can I request revisions?</span></summary>
         <p>Each pack is a one-time generation. If you're not happy, email us and we'll work something out. We stand behind the quality.</p>
       </details>
       <details>
-        <summary>Is this only for New Orleans businesses?</summary>
+        <summary><span class="q-num">Q05</span><span class="q-text">Is this only for New Orleans businesses?</span></summary>
         <p>We specialize in NOLA and the Gulf Coast, but any local business can use it. Just enter your city and your pack is tailored to your market.</p>
       </details>
       <details>
-        <summary>What's the website in the Agency pack?</summary>
+        <summary><span class="q-num">Q06</span><span class="q-text">What's the website in the Agency pack?</span></summary>
         <p>A fully coded single-page HTML website — header, hero, services, contact form, and footer — styled with your business colors and info. Download it and host it anywhere.</p>
       </details>
     </div>
@@ -583,9 +633,10 @@
 
 <!-- FOOTER CTA -->
 <section class="cta-band reveal">
+  <span class="section-label">◆ Final Station</span>
   <h2>Ready to fill your content <em>calendar</em>?</h2>
   <p>Pick your tier and get your pack in minutes.</p>
-  <a href="#pricing" class="btn-primary" style="font-size:1.1rem; padding:1.05rem 2.6rem;">Get Started →</a>
+  <a href="#pricing" class="btn-primary" style="font-size:1.05rem; padding:1rem 2.4rem;">Get Started →</a>
 </section>
 
 <footer>
@@ -600,10 +651,55 @@
     window.location.href = `/order?tier=${tier}`;
   }
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Hero 3D rig — pointer tilt (desktop) + gentle idle drift (fallback / mobile)
+  const rig = document.getElementById('heroRig');
+  if (rig && !prefersReducedMotion) {
+    const wrap = rig.parentElement;
+    let idle = true;
+    let raf;
+
+    function setTilt(rx, ry) {
+      rig.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    }
+
+    wrap.addEventListener('pointermove', (e) => {
+      idle = false;
+      cancelAnimationFrame(raf);
+      const r = wrap.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      setTilt(8 - py * 14, -14 + px * 22);
+    });
+    wrap.addEventListener('pointerleave', () => { idle = true; drift(); });
+
+    function drift(t) {
+      if (!idle) return;
+      const s = (t || 0) / 2400;
+      setTilt(8 + Math.sin(s) * 2.5, -14 + Math.cos(s * 0.8) * 5);
+      raf = requestAnimationFrame(drift);
+    }
+    drift();
+  }
+
+  // Tilt-on-hover for "parts shelf" cards
+  if (!prefersReducedMotion) {
+    document.querySelectorAll('.tilt').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(700px) rotateX(${-py * 10}deg) rotateY(${px * 10}deg) translateZ(6px)`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+    });
+  }
 
   (async () => {
     const user = await BFN.getCurrentUser();
