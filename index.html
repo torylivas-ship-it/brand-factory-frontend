@@ -24,8 +24,8 @@
       --caution: #f5b93f;
       --caution-bright: #ffd166;
       --caution-ink: #1c1404;
-      --blueprint: #5cc7d6;
-      --blueprint-dim: rgba(92,199,214,0.14);
+      --blueprint: #c6cdca;
+      --blueprint-dim: rgba(255,255,255,0.06);
       --qc-red: #e2604a;
       --persp: 1500px;
       --glass: rgba(30,38,42,0.32);
@@ -52,8 +52,8 @@
       content: "";
       position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
       background-image:
-        linear-gradient(rgba(92,199,214,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(92,199,214,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
       background-size: 44px 44px;
       mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 0%, transparent 70%);
     }
@@ -94,12 +94,11 @@
     .nav-auth-link { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--chalk-dim); font-weight: 500; white-space: nowrap; }
     nav a.btn-sm {
       background: var(--caution); color: var(--caution-ink); font-weight: 700; font-size: 0.8rem;
-      font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; padding: 0.6rem 1.2rem; border-radius: 3px; white-space: nowrap;
+      font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; padding: 0.65rem 1.3rem; border-radius: 999px; white-space: nowrap;
       transition: transform 0.2s, background 0.2s; display: inline-block;
-      box-shadow: 0 4px 0 #a97e1e;
     }
-    nav a.btn-sm:hover { background: var(--caution-bright); transform: translateY(-2px); }
-    nav a.btn-sm:active { transform: translateY(1px); box-shadow: 0 1px 0 #a97e1e; }
+    nav a.btn-sm:hover { background: var(--caution-bright); transform: translateY(-1px); }
+    nav a.btn-sm:active { transform: translateY(0); }
 
     /* HERO */
     .hero { position: relative; padding: 3.5rem 2.5rem 2rem; max-width: 1320px; margin: 0 auto; z-index: 1; }
@@ -107,10 +106,9 @@
     .eyebrow {
       display: inline-flex; align-items: center; gap: 0.55rem;
       font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--blueprint); margin-bottom: 1.6rem; border: 1px solid rgba(92,199,214,0.35); background: var(--blueprint-dim);
-      padding: 0.4rem 0.8rem; border-radius: 2px;
+      color: var(--chalk-dim); margin-bottom: 1.6rem;
     }
-    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blueprint); box-shadow: 0 0 8px var(--blueprint); animation: pulse 1.8s ease-in-out infinite; }
+    .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--caution); box-shadow: 0 0 8px var(--caution); animation: pulse 1.8s ease-in-out infinite; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
 
     .hero h1 {
@@ -123,18 +121,16 @@
     .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
     .btn-primary {
       background: var(--caution); color: var(--caution-ink); font-weight: 700; font-size: 0.95rem;
-      padding: 0.95rem 1.9rem; border-radius: 3px; border: none; cursor: pointer;
+      padding: 0.95rem 2.1rem; border-radius: 999px; border: none; cursor: pointer;
       transition: transform 0.15s, box-shadow 0.15s; display: inline-block;
-      box-shadow: 0 5px 0 #a97e1e;
     }
-    .btn-primary:hover { transform: translateY(-2px); }
-    .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #a97e1e; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -10px rgba(245,185,63,0.45); }
     .btn-secondary {
       background: transparent; color: var(--chalk); font-weight: 600; font-size: 0.95rem;
-      padding: 0.95rem 1.9rem; border-radius: 3px; border: 1px solid var(--line-strong); cursor: pointer;
+      padding: 0.95rem 2.1rem; border-radius: 999px; border: 1px solid var(--line-strong); cursor: pointer;
       transition: border-color 0.2s, color 0.2s; display: inline-block;
     }
-    .btn-secondary:hover { border-color: var(--blueprint); color: var(--blueprint); }
+    .btn-secondary:hover { border-color: var(--caution); color: var(--caution); }
     .hero-note { font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; color: var(--chalk-dim); letter-spacing: 0.02em; }
 
     /* HERO 3D RIG — the signature element */
@@ -192,7 +188,7 @@
       font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase;
       color: var(--chalk-dim); padding: 0 1.8rem; display: inline-flex; align-items: center; gap: 1.8rem;
     }
-    .ticker-track span::after { content: "◆"; color: var(--blueprint); font-size: 0.6rem; }
+    .ticker-track span::after { content: "◆"; color: var(--chalk-dim); font-size: 0.5rem; opacity: 0.5; }
     @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     /* shared chrome */
@@ -201,10 +197,10 @@
     .section-label {
       display: inline-flex; align-items: center; gap: 0.5rem; margin: 0 auto 1.3rem;
       font-family: 'IBM Plex Mono', monospace; font-weight: 500;
-      font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--blueprint); border: 1px solid rgba(92,199,214,0.35); background: var(--blueprint-dim);
-      padding: 0.35rem 0.85rem; border-radius: 2px;
+      font-size: 0.76rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--chalk-dim);
     }
+    .section-label::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--caution); }
     .section-head h2 {
       font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase;
       font-size: clamp(1.7rem, 4vw, 2.5rem); margin-bottom: 0.9rem; letter-spacing: 0;
@@ -231,7 +227,7 @@
       padding: 0.3rem 0 0.3rem 1.8rem; flex: 1;
       transition: border-color 0.3s;
     }
-    .station:hover .station-panel { border-left-color: var(--blueprint); }
+    .station:hover .station-panel { border-left-color: var(--caution); }
     .station-panel h3 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.15rem; margin-bottom: 0.5rem; letter-spacing: 0.01em; }
     .station-panel p { font-size: 0.92rem; color: var(--chalk-dim); }
     .station:nth-child(odd) .station-panel { transform-origin: left center; }
@@ -243,15 +239,11 @@
     .part {
       background: transparent;
       border: none; border-top: 2px solid var(--line-strong); padding: 1.5rem 1.2rem 1.7rem;
-      transform-style: preserve-3d; will-change: transform; transition: background 0.25s, border-color 0.25s;
+      transform-style: preserve-3d; will-change: transform; transition: border-color 0.25s;
       cursor: default; position: relative;
     }
-    .part:hover {
-      border-top-color: var(--blueprint);
-      background: var(--glass-2);
-      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    }
-    .part .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--blueprint); text-transform: uppercase; display: block; margin-bottom: 0.7rem; }
+    .part:hover { border-top-color: var(--caution); }
+    .part .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--chalk-dim); text-transform: uppercase; display: block; margin-bottom: 0.7rem; }
     .part .tag.agency { color: var(--caution); }
     .part h4 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.05rem; margin-bottom: 0.5rem; }
     .part p { font-size: 0.88rem; color: var(--chalk-dim); }
@@ -295,7 +287,7 @@
     .tier-desc { font-size: 0.86rem; color: #b7c0bc; margin-bottom: 1.2rem; border-bottom: 1px dashed var(--line); padding-bottom: 1.2rem; }
     .feature-list { list-style: none; flex: 1; margin-bottom: 1.6rem; display: flex; flex-direction: column; gap: 0.55rem; }
     .feature-list li { font-size: 0.84rem; display: flex; align-items: flex-start; gap: 0.5rem; }
-    .feature-list li::before { content: "▪"; color: var(--blueprint); flex-shrink: 0; }
+    .feature-list li::before { content: "–"; color: var(--chalk-dim); flex-shrink: 0; }
     .feature-list li.extra::before { content: "★"; color: var(--caution); }
     .btn-tier {
       width: 100%; padding: 0.8rem; border-radius: 4px; border: none; cursor: pointer;
@@ -316,7 +308,7 @@
     .qc-section { padding: 6.5rem 0; }
     .qc-feature {
       max-width: 640px; margin: 0 auto 3.2rem; text-align: center; position: relative;
-      border: 2px solid var(--blueprint); border-radius: 10px; padding: 2.4rem 2rem;
+      border: 1px solid var(--line-strong); border-radius: 3px; padding: 2.4rem 2rem;
       transform: rotate(-1.2deg);
     }
     .qc-feature::before {
@@ -438,7 +430,7 @@
 <section class="process reveal" id="how-it-works">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label">◆ The Line</span>
+      <span class="section-label">The Line</span>
       <h2>From zero to fully planned in 3 stations</h2>
       <p>No agency fees. No back-and-forth. Just your business info — the line handles the rest.</p>
     </div>
@@ -472,7 +464,7 @@
 <section class="shelf-section reveal">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label">◆ Bill Of Materials</span>
+      <span class="section-label">Bill Of Materials</span>
       <h2>Everything you need to show up consistently</h2>
       <p>Every pack includes a full suite of content assets tailored specifically to your business and local market.</p>
     </div>
@@ -515,7 +507,7 @@
 <section id="pricing" class="reveal">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label">◆ Spec Sheet</span>
+      <span class="section-label">Spec Sheet</span>
       <h2>Simple, one-time pricing</h2>
       <p>Pay once. Own it forever. No monthly fees, no upsells.</p>
     </div>
@@ -597,7 +589,7 @@
 <section class="qc-section reveal">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-label">◆ Quality Control</span>
+      <span class="section-label">Quality Control</span>
       <h2>Local businesses love it</h2>
     </div>
     <div class="qc-feature">
@@ -624,7 +616,7 @@
 <section class="faq-section reveal">
   <div class="wrap" style="max-width:740px;">
     <div class="section-head">
-      <span class="section-label">◆ Spec Q&amp;A</span>
+      <span class="section-label">Spec Q&amp;A</span>
       <h2>Common questions</h2>
     </div>
     <div class="faq">
@@ -658,7 +650,7 @@
 
 <!-- FOOTER CTA -->
 <section class="cta-band reveal">
-  <span class="section-label">◆ Final Station</span>
+  <span class="section-label">Final Station</span>
   <h2>Ready to fill your content <em>calendar</em>?</h2>
   <p>Pick your tier and get your pack in minutes.</p>
   <a href="#pricing" class="btn-primary" style="font-size:1.05rem; padding:1rem 2.4rem;">Get Started →</a>
