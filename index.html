@@ -101,23 +101,28 @@
     nav a.btn-sm:active { transform: translateY(0); }
 
     /* HERO */
-    .hero { position: relative; padding: 3.5rem 2.5rem 2rem; max-width: 1320px; margin: 0 auto; z-index: 1; }
-    .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2rem; align-items: center; }
+    .hero { position: relative; padding: 0 2.5rem 2rem; max-width: 1320px; margin: 0 auto; z-index: 1; }
+    .hero-top {
+      display: grid; grid-template-columns: 200px 1fr; gap: 1.5rem; align-items: start;
+      border-top: 1px solid var(--line); padding: 2.4rem 0 3rem;
+    }
+    .hero-tag-col { padding-top: 0.5rem; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 0.55rem;
       font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--chalk-dim); margin-bottom: 1.6rem;
+      color: var(--chalk-dim);
     }
     .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--caution); box-shadow: 0 0 8px var(--caution); animation: pulse 1.8s ease-in-out infinite; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
 
     .hero h1 {
       font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; text-transform: uppercase;
-      line-height: 0.94; font-size: clamp(2.6rem, 5.6vw, 4.6rem); letter-spacing: -0.01em;
-      margin-bottom: 1.6rem;
+      line-height: 0.9; font-size: clamp(2.8rem, 7vw, 6rem); letter-spacing: -0.01em;
+      margin-bottom: 2rem;
     }
     .hero h1 em { font-style: normal; color: var(--caution); }
-    .hero p.lede { font-size: 1.08rem; color: #c4cbc7; max-width: 460px; margin-bottom: 2rem; }
+    .hero-sub { max-width: 540px; }
+    .hero p.lede { font-size: 1.08rem; color: #c4cbc7; margin-bottom: 2rem; }
     .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
     .btn-primary {
       background: var(--caution); color: var(--caution-ink); font-weight: 700; font-size: 0.95rem;
@@ -233,21 +238,23 @@
     .station:nth-child(odd) .station-panel { transform-origin: left center; }
     .station:nth-child(even) .station-panel { transform-origin: right center; }
 
-    /* WHAT'S INCLUDED — parts shelf */
+    /* WHAT'S INCLUDED — parts ledger */
     .shelf-section { background: var(--steel-900); padding: 6.5rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+    .shelf { border-bottom: 1px solid var(--line-strong); }
     .part {
-      background: transparent;
-      border: none; border-top: 2px solid var(--line-strong); padding: 1.5rem 1.2rem 1.7rem;
-      transform-style: preserve-3d; will-change: transform; transition: border-color 0.25s;
-      cursor: default; position: relative;
+      display: grid; grid-template-columns: 84px 260px 1fr; gap: 1.8rem; align-items: baseline;
+      border-top: 1px solid var(--line-strong); padding: 2.1rem 0;
+      transition: border-color 0.25s; cursor: default; position: relative;
     }
     .part:hover { border-top-color: var(--caution); }
-    .part .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--chalk-dim); text-transform: uppercase; display: block; margin-bottom: 0.7rem; }
+    .part .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--chalk-dim); text-transform: uppercase; align-self: start; padding-top: 0.5rem; }
     .part .tag.agency { color: var(--caution); }
-    .part h4 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .part p { font-size: 0.88rem; color: var(--chalk-dim); }
-    @media (max-width: 860px) { .shelf { grid-template-columns: 1fr 1fr; } }
+    .part h4 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.01em; }
+    .part p { font-size: 0.92rem; color: var(--chalk-dim); max-width: 420px; }
+    @media (max-width: 700px) {
+      .part { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.6rem 0; }
+      .part .tag { padding-top: 0; }
+    }
     @media (max-width: 560px) { .shelf { grid-template-columns: 1fr; } }
 
     /* PRICING — spec sheet, fanned depth */
@@ -363,7 +370,8 @@
     footer a:hover { color: var(--caution); }
 
     @media (max-width: 900px) {
-      .hero-grid { grid-template-columns: 1fr; }
+      .hero-top { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.8rem 0 2rem; }
+      .hero-tag-col { padding-top: 0; }
     }
     @media (max-width: 600px) {
       nav { padding: 0.8rem 1rem; }
@@ -377,9 +385,29 @@
       .station-num { width: 44px; height: 44px; font-size: 0.8rem; }
     }
     @media (max-width: 340px) { .nav-auth-link { display: none; } }
+
+    /* INTRO LOADER */
+    .loader {
+      position: fixed; inset: 0; z-index: 999; background: var(--steel-950);
+      display: flex; align-items: center; justify-content: center; gap: 1.6rem; flex-wrap: wrap;
+      padding: 0 1.5rem; transition: opacity 0.5s ease;
+    }
+    .loader.hide { opacity: 0; pointer-events: none; }
+    .loader-word { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; text-transform: uppercase; font-size: clamp(1.3rem, 4vw, 2.1rem); color: var(--chalk); white-space: nowrap; }
+    .loader-word em { font-style: normal; color: var(--caution); }
+    .loader-tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--chalk-dim); white-space: nowrap; }
+    .loader-bar { position: absolute; left: 1.5rem; bottom: 1.5rem; width: 110px; height: 2px; background: var(--line); overflow: hidden; }
+    .loader-bar span { display: block; height: 100%; width: 0%; background: var(--caution); }
+    @media (prefers-reduced-motion: reduce) { .loader { display: none; } }
   </style>
 </head>
 <body>
+
+<div class="loader" id="loader">
+  <span class="loader-word">Brand Factory <em>NOLA</em></span>
+  <span class="loader-tag">// Social Content, Built Fresh</span>
+  <div class="loader-bar"><span id="loaderProgress"></span></div>
+</div>
 
 <nav>
   <div class="nav-logo">
@@ -394,27 +422,31 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-grid">
-    <div class="hero-copy">
+  <div class="hero-top">
+    <div class="hero-tag-col">
       <div class="eyebrow"><span class="dot"></span> Line Status: Running</div>
-      <h1>We manufacture <em>momentum.</em></h1>
-      <p class="lede">Feed us your business. The line outputs a full month of strategy, content calendar, captions, and hashtags — built like an agency retainer, priced like a single part.</p>
-      <div class="hero-cta">
-        <a href="#pricing" class="btn-primary">See The Spec Sheet →</a>
-        <a href="#how-it-works" class="btn-secondary">How It Works</a>
-      </div>
-      <p class="hero-note">// ONE-TIME PAYMENT · NO SUBSCRIPTION · DELIVERED IN MINUTES</p>
     </div>
-    <div class="rig-wrap">
-      <div class="rig" id="heroRig">
-        <div class="rig-track"></div>
-        <div class="rig-card" style="--x:-230px; --y:-70px; --z:-160px;"><span class="k">Input</span><span class="v">Your Biz</span></div>
-        <div class="rig-card" style="--x:-135px; --y:-25px; --z:-90px;"><span class="k">Station 01</span><span class="v">Strategy</span></div>
-        <div class="rig-card" style="--x:-40px; --y:15px; --z:-20px;"><span class="k">Station 02</span><span class="v">Calendar</span></div>
-        <div class="rig-card" style="--x:55px; --y:-15px; --z:50px;"><span class="k">Station 03</span><span class="v">Captions</span></div>
-        <div class="rig-card" style="--x:150px; --y:25px; --z:120px;"><span class="k">Station 04</span><span class="v">Hashtags</span></div>
-        <div class="rig-card output" style="--x:255px; --y:-15px; --z:190px;"><span class="k">Output</span><span class="v">Brand Pack</span></div>
+    <div class="hero-head-col">
+      <h1>We manufacture <em>momentum.</em></h1>
+      <div class="hero-sub">
+        <p class="lede">Feed us your business. The line outputs a full month of strategy, content calendar, captions, and hashtags — built like an agency retainer, priced like a single part.</p>
+        <div class="hero-cta">
+          <a href="#pricing" class="btn-primary">See The Spec Sheet →</a>
+          <a href="#how-it-works" class="btn-secondary">How It Works</a>
+        </div>
+        <p class="hero-note">// ONE-TIME PAYMENT · NO SUBSCRIPTION · DELIVERED IN MINUTES</p>
       </div>
+    </div>
+  </div>
+  <div class="rig-wrap">
+    <div class="rig" id="heroRig">
+      <div class="rig-track"></div>
+      <div class="rig-card" style="--x:-230px; --y:-70px; --z:-160px;"><span class="k">Input</span><span class="v">Your Biz</span></div>
+      <div class="rig-card" style="--x:-135px; --y:-25px; --z:-90px;"><span class="k">Station 01</span><span class="v">Strategy</span></div>
+      <div class="rig-card" style="--x:-40px; --y:15px; --z:-20px;"><span class="k">Station 02</span><span class="v">Calendar</span></div>
+      <div class="rig-card" style="--x:55px; --y:-15px; --z:50px;"><span class="k">Station 03</span><span class="v">Captions</span></div>
+      <div class="rig-card" style="--x:150px; --y:25px; --z:120px;"><span class="k">Station 04</span><span class="v">Hashtags</span></div>
+      <div class="rig-card output" style="--x:255px; --y:-15px; --z:190px;"><span class="k">Output</span><span class="v">Brand Pack</span></div>
     </div>
   </div>
 </section>
@@ -469,32 +501,32 @@
       <p>Every pack includes a full suite of content assets tailored specifically to your business and local market.</p>
     </div>
     <div class="shelf">
-      <div class="part tilt">
+      <div class="part">
         <span class="tag">Part 01</span>
         <h4>Content Calendar</h4>
         <p>Day-by-day posting plan with themes, post types, and hooks.</p>
       </div>
-      <div class="part tilt">
+      <div class="part">
         <span class="tag">Part 02</span>
         <h4>Ready-to-Post Captions</h4>
         <p>Platform-specific captions written in your brand voice.</p>
       </div>
-      <div class="part tilt">
+      <div class="part">
         <span class="tag">Part 03</span>
         <h4>Hashtag Groups</h4>
         <p>Curated tag sets mixing high-volume and niche-specific tags.</p>
       </div>
-      <div class="part tilt">
+      <div class="part">
         <span class="tag">Part 04</span>
         <h4>Posting Schedule</h4>
         <p>Best times and days to post on each platform for your audience.</p>
       </div>
-      <div class="part tilt">
+      <div class="part">
         <span class="tag">Part 05</span>
         <h4>Brand Strategy</h4>
         <p>Your positioning, content pillars, and growth plan in plain English.</p>
       </div>
-      <div class="part tilt">
+      <div class="part">
         <span class="tag agency">Part 06 — Agency</span>
         <h4>Custom Website</h4>
         <p>A fully coded one-page HTML website built for your business.</p>
@@ -669,6 +701,31 @@
   }
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Intro loader
+  const loader = document.getElementById('loader');
+  if (loader) {
+    if (prefersReducedMotion) {
+      loader.remove();
+    } else {
+      const bar = document.getElementById('loaderProgress');
+      let pct = 0;
+      const tick = setInterval(() => {
+        pct = Math.min(pct + Math.random() * 18, 90);
+        if (bar) bar.style.width = pct + '%';
+      }, 140);
+      const finish = () => {
+        clearInterval(tick);
+        if (bar) bar.style.width = '100%';
+        setTimeout(() => {
+          loader.classList.add('hide');
+          setTimeout(() => loader.remove(), 550);
+        }, 250);
+      };
+      window.addEventListener('load', finish, { once: true });
+      setTimeout(finish, 2200); // fallback so a slow load never traps the visitor
+    }
+  }
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
