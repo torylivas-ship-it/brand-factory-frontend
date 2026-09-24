@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>BFN Ops Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12); --brass-bright: #e2c37c;
+      --bg: #0c0a10; --card: #1a151f; --card2: #221c28; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184; --error: #ef4444; --good: #6fcfa8; --warn: #e8a15a;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+    @media (max-width: 560px) { header { padding: 0.9rem 1rem; } }
+    .logo { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 600; text-decoration: none; color: var(--text); white-space: nowrap; }
+    .logo span { color: var(--brass); }
+    .biz { font-size: 0.85rem; color: var(--muted); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
+    .tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; overflow-x: auto; }
+    .tab { background: none; border: none; color: var(--muted); font: 600 0.9rem 'Inter', sans-serif; padding: 0.75rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+    .tab.active { color: var(--text); border-bottom-color: var(--brass); }
+    .tab .dot { display: inline-block; min-width: 1.2rem; padding: 0 0.3rem; border-radius: 1rem; background: var(--error); color: #fff; font-size: 0.7rem; margin-left: 0.3rem; }
+    .view { display: none; } .view.active { display: block; }
+    h2 { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 600; margin-bottom: 0.3rem; }
+    h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; margin: 1.75rem 0 0.75rem; }
+    .muted { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .banner { border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .banner.warn { background: rgba(232,161,90,0.1); border: 1px solid rgba(232,161,90,0.35); }
+    .banner.ok { background: rgba(111,207,168,0.08); border: 1px solid rgba(111,207,168,0.3); }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+    .stat { background: var(--card); padding: 1rem; }
+    .stat b { display: block; font-family: 'Fraunces', serif; font-size: 1.7rem; font-weight: 700; }
+    .stat span { font-size: 0.78rem; color: var(--muted); }
+    .checklist { display: flex; flex-direction: column; gap: 0.5rem; }
+    .check { display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; }
+    .check i { font-style: normal; width: 1.3rem; height: 1.3rem; border-radius: 50%; display: grid; place-items: center; font-size: 0.75rem; flex-shrink: 0; background: rgba(255,255,255,0.07); color: var(--muted); }
+    .check.done i { background: rgba(111,207,168,0.18); color: var(--good); }
+    .check a { color: var(--brass); cursor: pointer; font-size: 0.82rem; margin-left: auto; text-decoration: none; }
+    .btn { display: inline-block; padding: 0.65rem 1.1rem; background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 0.9rem; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-family: inherit; }
+    .btn:hover:not(:disabled) { background: var(--brass-bright); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn.ghost:hover:not(:disabled) { background: var(--card2); }
+    .btn.small { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+    .row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem; }
+    label .opt { color: var(--muted); font-weight: 400; }
+    input, textarea, select { width: 100%; padding: 0.65rem 0.8rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px; font-size: 0.92rem; font-family: inherit; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--brass); }
+    textarea { resize: vertical; min-height: 64px; }
+    .fg { margin-bottom: 1rem; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+    @media (max-width: 620px) { .grid2 { grid-template-columns: 1fr; } }
+    .hint { font-size: 0.76rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.45; }
+    .rows .r { display: grid; gap: 0.5rem; margin-bottom: 0.5rem; align-items: start; }
+    .rows.services .r { grid-template-columns: 2fr 1fr 1fr auto; }
+    .rows.faqs .r { grid-template-columns: 1fr 1.6fr auto; }
+    @media (max-width: 620px) { .rows.services .r, .rows.faqs .r { grid-template-columns: 1fr; } }
+    .x { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; padding: 0.55rem 0.7rem; }
+    .auto { display: flex; gap: 0.6rem; align-items: flex-start; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 0.9rem; margin-bottom: 0.5rem; cursor: pointer; font-weight: 400; }
+    .auto input { width: 16px; height: 16px; margin-top: 0.15rem; accent-color: var(--brass); flex-shrink: 0; }
+    .auto b { font-size: 0.9rem; } .auto span { font-size: 0.8rem; color: var(--muted); display: block; margin-top: 0.1rem; }
+    .savebar { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--bg) 30%); padding: 1.25rem 0 0.5rem; display: flex; gap: 0.75rem; align-items: center; }
+    .inbox { display: grid; grid-template-columns: 320px 1fr; gap: 1rem; min-height: 480px; }
+    @media (max-width: 800px) { .inbox { grid-template-columns: 1fr; } }
+    .list { display: flex; flex-direction: column; gap: 0.4rem; max-height: 640px; overflow-y: auto; }
+    .ci { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.85rem; cursor: pointer; text-align: left; color: var(--text); font-family: inherit; width: 100%; }
+    .ci.sel { border-color: var(--brass); }
+    .ci .n { font-weight: 700; font-size: 0.92rem; display: flex; justify-content: space-between; gap: 0.5rem; }
+    .ci .s { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+    .pill { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.15rem 0.45rem; border-radius: 3px; background: rgba(255,255,255,0.07); color: var(--muted); white-space: nowrap; }
+    .pill.needs { background: rgba(239,68,68,0.16); color: #fca5a5; }
+    .pill.booked, .pill.customer { background: rgba(111,207,168,0.15); color: var(--good); }
+    .thread { display: flex; flex-direction: column; gap: 0.45rem; max-height: 380px; overflow-y: auto; padding: 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; margin: 0.75rem 0; }
+    .msg { max-width: 80%; padding: 0.55rem 0.8rem; border-radius: 12px; font-size: 0.88rem; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; }
+    .msg.in { align-self: flex-start; background: var(--card2); }
+    .msg.out { align-self: flex-end; background: var(--brass-soft); border: 1px solid rgba(201,162,74,0.25); }
+    .msg small { display: block; font-size: 0.68rem; color: var(--muted); margin-top: 0.25rem; }
+    .jobs { font-size: 0.82rem; }
+    .jobs div { padding: 0.4rem 0; border-bottom: 1px dashed var(--border); display: flex; justify-content: space-between; gap: 1rem; }
+    pre.code { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.9rem; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all; color: var(--brass-bright); }
+    .toast { position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%); background: var(--card2); border: 1px solid var(--border); padding: 0.7rem 1.1rem; border-radius: 6px; font-size: 0.88rem; display: none; z-index: 10; max-width: calc(100vw - 2rem); }
+    .toast.show { display: block; } .toast.err { border-color: rgba(239,68,68,0.5); color: #fca5a5; }
+    .center { text-align: center; padding: 4rem 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    td, th { text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    td a { color: var(--brass); }
+  </style>
+</head>
+<body>
+<header>
+  <a href="/" class="logo">BFN <span>Ops</span></a>
+  <div class="biz" id="biz"></div>
+</header>
+
+<div class="wrap" id="app"><div class="center muted">Loading…</div></div>
+<div class="toast" id="toast"></div>
+
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const app = $("app");
+  const params = new URLSearchParams(location.search);
+  const brainId = params.get("brain");
+  let token = null;
+  let brain = null, role = null, channels = {}, contacts = [], selected = null, isAdmin = false;
+
+  // The private link carries the token in the #hash (never sent to servers
+  // or logged). Keep it on this device, then scrub it from the address bar.
+  if (brainId) {
+    const fromHash = new URLSearchParams(location.hash.slice(1)).get("t");
+    try {
+      if (fromHash) localStorage.setItem("bfn_wf_" + brainId, fromHash);
+      token = fromHash || localStorage.getItem("bfn_wf_" + brainId);
+    } catch { token = fromHash; }
+    if (fromHash) history.replaceState(null, "", location.pathname + location.search);
+  }
+
+  const call = (path, opts = {}) => BFN.wf(path, { manageToken: token, ...opts });
+
+  function toast(text, isErr) {
+    const t = $("toast");
+    t.textContent = text;
+    t.className = "toast show" + (isErr ? " err" : "");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => (t.className = "toast"), 3500);
+  }
+
+  const fmt = (iso) => iso ? new Date(iso).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
+  const AUTOMATIONS = [
+    ["booking_reminders", "Booking reminders", "Text 24 hours and 2 hours before each appointment"],
+    ["review_requests", "Review requests", "Ask for a Google review a few hours after each visit"],
+    ["lead_followup", "Lead follow-up", "If someone asks but doesn't book, follow up after 1 day and 3 days"],
+    ["restock_nudges", "Restock nudges", "Retail only — set up with you by BFN"],
+  ];
+  const JOB_LABEL = { booking_reminder: "Reminder", review_request: "Review request", lead_followup: "Follow-up" };
+
+  // ---------- entry ----------
+  async function start() {
+    const user = await BFN.getCurrentUser().catch(() => null);
+    if (user) { try { isAdmin = !!(await BFN.getMe()).is_admin; } catch {} }
+    if (brainId) return loadBrain();
+    if (user) return renderPicker();
+    app.innerHTML = `<div class="center"><h2>Open your private link</h2>
+      <p class="muted" style="margin:0.75rem auto 1.5rem; max-width:44ch">Your BFN Ops dashboard opens from the private link we sent when you signed up — or sign in if you have an account.</p>
+      <a class="btn" href="/auth">Sign in</a></div>`;
+  }
+
+  async function renderPicker() {
+    let brains = [];
+    try { brains = (await BFN.wf("/brains")).brains; } catch (e) { toast(e.message, true); }
+    if (brains.length === 1 && !isAdmin) { location.href = `/workframe?brain=${brains[0].id}`; return; }
+    app.innerHTML = `<h2>${isAdmin ? "All client workframes" : "Your businesses"}</h2>
+      <p class="muted" style="margin-bottom:1rem">${brains.length} total</p>
+      <div class="card" style="overflow-x:auto"><table><thead><tr><th>Business</th><th>Type</th><th>Status</th><th>Created</th></tr></thead><tbody>
+      ${brains.map((b) => `<tr><td><a href="/workframe?brain=${esc(b.id)}">${esc(b.business_name)}</a></td><td>${esc(b.business_type)}</td><td><span class="pill">${esc(b.status)}</span></td><td>${fmt(b.created_at)}</td></tr>`).join("") || `<tr><td colspan="4" class="muted">None yet.</td></tr>`}
+      </tbody></table></div>
+      ${isAdmin ? `<h3>Set up a client manually (in-person sale or demo)</h3>
+      <form class="card" id="new-brain"><div class="grid2">
+        <div class="fg"><label>Business name</label><input name="business_name" required></div>
+        <div class="fg"><label>Business type</label><input name="business_type" placeholder="barbershop" required></div>
+        <div class="fg"><label>City</label><input name="city" value="New Orleans" required></div>
+        <div class="fg"><label>Owner cell <span class="opt">(gets "needs you" texts)</span></label><input name="owner_phone" type="tel"></div>
+        <div class="fg"><label>Owner email</label><input name="owner_email" type="email"></div>
+      </div><button class="btn">Create workframe</button></form>` : ""}`;
+    const form = $("new-brain");
+    if (form) form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(form));
+      Object.keys(d).forEach((k) => { if (!d[k]) delete d[k]; });
+      try {
+        const { brain: b } = await BFN.wf("/brains", { method: "POST", body: d });
+        location.href = `/workframe?brain=${b.id}#t=${b.manage_token}`;
+      } catch (ex) { toast(ex.message, true); }
+    });
+  }
+
+  async function loadBrain() {
+    try {
+      const res = await call(`/brains/${brainId}`);
+      brain = res.brain; role = res.role; channels = res.channels || {};
+    } catch (e) {
+      app.innerHTML = `<div class="center"><h2>We couldn't open this dashboard</h2>
+        <p class="muted" style="margin-top:0.75rem">The link may be incomplete — open it again from your email, or contact thebrandfactorynola@gmail.com.</p></div>`;
+      return;
+    }
+    $("biz").textContent = brain.business_name;
+    document.title = `${brain.business_name} — BFN Ops`;
+    app.innerHTML = `
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-v="today">Today</button>
+        <button class="tab" data-v="inbox">Inbox <span class="dot" id="needs-dot" style="display:none"></span></button>
+        <button class="tab" data-v="brain">Business info</button>
+        <button class="tab" data-v="install">Install</button>
+      </div>
+      <div class="view active" id="v-today"></div>
+      <div class="view" id="v-inbox"></div>
+      <div class="view" id="v-brain"></div>
+      <div class="view" id="v-install"></div>`;
+    app.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => showTab(t.dataset.v)));
+    renderBrain(); renderInstall();
+    await Promise.all([renderToday(), loadContacts()]);
+  }
+
+  function showTab(v) {
+    app.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.v === v));
+    app.querySelectorAll(".view").forEach((el) => el.classList.toggle("active", el.id === "v-" + v));
+    if (v === "inbox") renderInbox();
+  }
+
+  // ---------- Today ----------
+  function setupItems() {
+    const priced = (brain.services || []).some((s) => s.name && s.price);
+    return [
+      [priced, "Add your services and prices", "brain"],
+      [!!brain.hours, "Add your hours", "brain"],
+      [!!brain.booking_url, "Add your booking link", "brain"],
+      [!!brain.review_url, "Add your Google review link", "brain"],
+      [!!brain.owner_phone, "Add your cell for \"needs you\" alerts", "brain"],
+    ];
+  }
+
+  async function renderToday() {
+    const el = $("v-today");
+    const items = setupItems();
+    const ready = items.every((i) => i[0]);
+    const live = brain.status === "live";
+    let banner = "";
+    if (brain.status === "canceled") {
+      banner = `<div class="banner warn"><div><b>This subscription is canceled.</b><div class="muted">Nothing is being sent. Email thebrandfactorynola@gmail.com to restart.</div></div></div>`;
+    } else if (!live) {
+      banner = `<div class="banner warn"><div><b>${brain.status === "paused" ? "Paused" : "Not live yet"}</b>
+        <div class="muted">${brain.status === "paused" ? "No reminders or follow-ups are going out." : "Finish the setup below, then flip it live. Your website chat already works while you test."}</div></div>
+        <button class="btn" id="go-live" ${ready ? "" : "disabled title='Finish the setup steps first'"}>Go live</button></div>`;
+    } else {
+      banner = `<div class="banner ok"><div><b>Live.</b> <span class="muted">Replies, reminders, and review requests are running.</span>
+        ${channels.sms ? "" : `<div class="muted" style="margin-top:0.3rem">Heads up: your text line is still being activated by BFN — texts will start going out as soon as it's on.</div>`}</div>
+        <button class="btn ghost small" id="pause">Pause</button></div>`;
+    }
+
+    el.innerHTML = `${banner}
+      ${!ready && brain.status !== "canceled" ? `<div class="card"><h2 style="font-size:1.1rem;margin-bottom:0.75rem">Setup — about 10 minutes</h2><div class="checklist">
+        ${items.map(([done, text, tab]) => `<div class="check ${done ? "done" : ""}"><i>${done ? "✓" : ""}</i>${esc(text)}${done ? "" : `<a data-tab="${tab}">Add →</a>`}</div>`).join("")}
+        <div class="check"><i></i>Put the chat on your website or Instagram bio<a data-tab="install">How →</a></div>
+      </div></div>` : ""}
+      <h3>Last 30 days</h3>
+      <div id="stats-box">${statsHtml(null)}</div>
+      <h3>Needs you</h3><div id="needs-list" class="list"></div>`;
+    el.querySelectorAll("[data-tab]").forEach((a) => a.addEventListener("click", () => showTab(a.dataset.tab)));
+    const golive = $("go-live");
+    if (golive) golive.addEventListener("click", () => setStatus("live"));
+    const pause = $("pause");
+    if (pause) pause.addEventListener("click", () => { if (confirm("Pause all reminders and follow-ups?")) setStatus("paused"); });
+    renderNeeds();
+    try {
+      const s = await call(`/brains/${brainId}/summary?days=30`);
+      const box = $("stats-box");
+      if (box) box.innerHTML = statsHtml(s);
+    } catch {}
+  }
+
+  function statsHtml(s) {
+    const secs = s?.median_response_seconds;
+    const speed = secs == null ? "—" : secs < 60 ? `${Math.max(1, Math.round(secs))}s` : `${Math.round(secs / 60)}m`;
+    return `<div class="stats">
+        <div class="stat"><b>${s?.conversations ?? "—"}</b><span>website conversations</span></div>
+        <div class="stat"><b>${s?.leads_captured ?? "—"}</b><span>leads captured (number or email)</span></div>
+        <div class="stat"><b>${s?.after_hours_messages ?? "—"}</b><span>messages after hours, answered</span></div>
+        <div class="stat"><b>${speed}</b><span>typical reply time</span></div>
+        <div class="stat"><b>${s?.booked ?? "—"}</b><span>booked / customers</span></div>
+        <div class="stat"><b>${s?.reminders_sent ?? "—"}</b><span>reminders sent</span></div>
+        <div class="stat"><b>${s?.review_requests_sent ?? "—"}</b><span>review requests sent</span></div>
+        <div class="stat"><b>${s?.followups_sent ?? "—"}</b><span>follow-ups sent</span></div>
+      </div>
+      ${s?.failed_sends ? `<p class="muted" style="margin-top:0.6rem;color:#fca5a5">${s.failed_sends} message(s) failed to send — check the Inbox.</p>` : ""}`;
+  }
+
+  async function setStatus(status) {
+    try {
+      brain = (await call(`/brains/${brainId}`, { method: "PATCH", body: { status } })).brain;
+      toast(status === "live" ? "You're live!" : "Paused.");
+      renderToday();
+    } catch (e) { toast(e.message, true); }
+  }
+
+  function renderNeeds() {
+    const el = $("needs-list");
+    const needs = contacts.filter((c) => c.needs_owner);
+    const dot = $("needs-dot");
+    if (dot) { dot.textContent = needs.length; dot.style.display = needs.length ? "inline-block" : "none"; }
+    if (!el) return;
+    el.innerHTML = needs.length ? needs.map(contactButton).join("") : `<p class="muted">Nothing waiting on you. 🎉</p>`;
+    el.querySelectorAll(".ci").forEach((b) => b.addEventListener("click", () => { selected = b.dataset.id; showTab("inbox"); }));
+  }
+
+  // ---------- Inbox ----------
+  async function loadContacts() {
+    try { contacts = (await call(`/brains/${brainId}/contacts`)).contacts; } catch (e) { toast(e.message, true); }
+    // Anonymous visitors who never left a way to reach them only matter if they need the owner.
+    renderNeeds();
+  }
+
+  function contactButton(c) {
+    const who = c.name || c.phone || c.email || "Website visitor";
+    const pill = c.needs_owner ? `<span class="pill needs">needs you</span>` : `<span class="pill ${esc(c.status)}">${esc(c.status.replace(/_/g, " "))}</span>`;
+    const sub = [c.phone, c.appointment_at && `📅 ${fmt(c.appointment_at)}`, c.source === "widget" ? "website chat" : null].filter(Boolean).join(" · ");
+    return `<button class="ci ${selected === c.id ? "sel" : ""}" data-id="${esc(c.id)}"><div class="n"><span>${esc(who)}</span>${pill}</div><div class="s">${esc(sub || fmt(c.updated_at))}</div></button>`;
+  }
+
+  function renderInbox() {
+    const el = $("v-inbox");
+    el.innerHTML = `<div class="row" style="justify-content:space-between;margin-bottom:1rem">
+        <div><h2>Inbox</h2><p class="muted">Everyone who's chatted, booked, or been added by you.</p></div>
+        <button class="btn" id="add-btn">+ Add customer</button></div>
+      <form class="card" id="add-form" style="display:none;margin-bottom:1rem"><div class="grid2">
+        <div class="fg"><label>Name</label><input name="name"></div>
+        <div class="fg"><label>Cell</label><input name="phone" type="tel" placeholder="(504) 555-0100"></div>
+        <div class="fg"><label>Email <span class="opt">(if no cell)</span></label><input name="email" type="email"></div>
+        <div class="fg"><label>Appointment <span class="opt">(optional — schedules reminders + review ask)</span></label><input name="appointment_at" type="datetime-local"></div>
+      </div><p class="hint" style="margin:-0.4rem 0 0.9rem">Only add customers who've agreed to hear from you by text (e.g. they gave you their number to book).</p>
+      <div class="row"><button class="btn">Save</button><button class="btn ghost" type="button" id="add-cancel">Cancel</button></div></form>
+      <div class="inbox"><div class="list" id="clist"></div><div id="cdetail" class="card"><p class="muted">Pick a conversation.</p></div></div>`;
+    const list = $("clist");
+    const visible = contacts.filter((c) => c.needs_owner || c.name || c.phone || c.email || c.source !== "widget" || c.last_inbound_at);
+    list.innerHTML = visible.length ? visible.map(contactButton).join("") : `<p class="muted">No conversations yet. Once the chat is on your site, every inquiry shows up here.</p>`;
+    list.querySelectorAll(".ci").forEach((b) => b.addEventListener("click", () => { selected = b.dataset.id; renderInbox(); }));
+    $("add-btn").addEventListener("click", () => { $("add-form").style.display = "block"; });
+    $("add-cancel").addEventListener("click", () => { $("add-form").style.display = "none"; });
+    $("add-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(e.target));
+      const body = {};
+      ["name", "phone", "email"].forEach((k) => { if (d[k].trim()) body[k] = d[k].trim(); });
+      if (d.appointment_at) body.appointment_at = new Date(d.appointment_at).toISOString();
+      try {
+        const r = await call(`/brains/${brainId}/contacts`, { method: "POST", body });
+        toast(r.scheduled.length ? `Saved — ${r.scheduled.length} message(s) scheduled.` : "Saved.");
+        selected = r.contact.id;
+        await loadContacts(); renderInbox();
+      } catch (ex) { toast(ex.message, true); }
+    });
+    if (selected) renderDetail();
+  }
+
+  async function renderDetail() {
+    const el = $("cdetail");
+    const c = contacts.find((x) => x.id === selected);
+    if (!c) return;
+    let data = { messages: [], jobs: [] };
+    try { data = await call(`/brains/${brainId}/contacts/${c.id}/messages`); } catch (e) { toast(e.message, true); }
+    const upcoming = data.jobs.filter((j) => j.status === "scheduled");
+    const past = data.jobs.filter((j) => j.status !== "scheduled").slice(-6);
+    el.innerHTML = `
+      <div class="row" style="justify-content:space-between">
+        <div><b style="font-size:1.05rem">${esc(c.name || "Website visitor")}</b>
+        <div class="muted">${esc([c.phone, c.email].filter(Boolean).join(" · ") || "No contact info yet")}</div></div>
+        ${c.needs_owner ? `<button class="btn small" id="handled">Mark handled</button>` : ""}
+      </div>
+      <div class="thread">${data.messages.map((m) => `<div class="msg ${m.direction}">${esc(m.body)}<small>${m.direction === "in" ? "Them" : m.agent === "lead" ? "Auto-reply" : JOB_LABEL[{ reminder: "booking_reminder", reputation: "review_request", followup: "lead_followup" }[m.agent]] || "You"} · ${m.channel} · ${fmt(m.created_at)}</small></div>`).join("") || `<p class="muted">No messages yet.</p>`}</div>
+      <div class="grid2">
+        <div class="fg"><label>Appointment</label><input type="datetime-local" id="appt"></div>
+        <div class="fg"><label>Status</label><select id="cstatus">${["new", "engaged", "booked", "customer", "lost", "do_not_contact"].map((s) => `<option value="${s}" ${c.status === s ? "selected" : ""}>${s.replace(/_/g, " ")}</option>`).join("")}</select></div>
+      </div>
+      <div class="row" style="margin-bottom:1rem">
+        <button class="btn small" id="save-c">Save</button>
+        ${c.status !== "do_not_contact" ? `<button class="btn ghost small" id="visited">They came in → ask for review</button>` : ""}
+      </div>
+      ${upcoming.length ? `<b style="font-size:0.85rem">Scheduled</b><div class="jobs">${upcoming.map((j) => `<div><span>${JOB_LABEL[j.kind]} · ${fmt(j.send_at)}</span><span class="muted">${esc(j.last_error || "")}</span></div>`).join("")}</div>` : ""}
+      ${past.length ? `<b style="font-size:0.85rem;display:block;margin-top:0.75rem">History</b><div class="jobs">${past.map((j) => `<div><span>${JOB_LABEL[j.kind]} · ${j.status}${j.sent_at ? " " + fmt(j.sent_at) : ""}</span><span class="muted">${esc(j.status === "canceled" || j.status === "failed" ? j.last_error || "" : "")}</span></div>`).join("")}</div>` : ""}`;
+    if (c.appointment_at) {
+      const d = new Date(c.appointment_at);
+      $("appt").value = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    }
+    const h = $("handled");
+    if (h) h.addEventListener("click", () => patchContact({ needs_owner: false }, "Marked handled."));
+    $("save-c").addEventListener("click", () => {
+      const body = { status: $("cstatus").value };
+      const appt = $("appt").value;
+      if (appt && (!c.appointment_at || new Date(appt).getTime() !== new Date(c.appointment_at).getTime())) body.appointment_at = new Date(appt).toISOString();
+      patchContact(body, "Saved.");
+    });
+    const v = $("visited");
+    if (v) v.addEventListener("click", async () => {
+      try {
+        const r = await call(`/brains/${brainId}/contacts/${c.id}/visit`, { method: "POST" });
+        toast(r.scheduled.length ? `Review request scheduled for ${fmt(r.scheduled[0].send_at)}.` : "Marked as customer (review requests are off).");
+        await loadContacts(); renderInbox();
+      } catch (e) { toast(e.message, true); }
+    });
+  }
+
+  async function patchContact(body, msg) {
+    try {
+      const r = await call(`/brains/${brainId}/contacts/${selected}`, { method: "PATCH", body });
+      toast(r.scheduled?.length ? `${msg} ${r.scheduled.length} message(s) scheduled.` : msg);
+      await loadContacts(); renderInbox();
+    } catch (e) { toast(e.message, true); }
+  }
+
+  // ---------- Business info (the Brain) ----------
+  function serviceRow(s = {}) {
+    return `<div class="r"><input data-k="name" placeholder="Service" value="${esc(s.name)}"><input data-k="price" placeholder="Price (e.g. $35)" value="${esc(s.price)}"><input data-k="duration" placeholder="Time (e.g. 45 min)" value="${esc(s.duration)}"><button type="button" class="x" title="Remove">×</button></div>`;
+  }
+  function faqRow(f = {}) {
+    return `<div class="r"><input data-k="q" placeholder="Question" value="${esc(f.q)}"><textarea data-k="a" rows="1" placeholder="Your answer (leave blank and the chat will send it to you)">${esc(f.a)}</textarea><button type="button" class="x" title="Remove">×</button></div>`;
+  }
+
+  function renderBrain() {
+    const b = brain;
+    const el = $("v-brain");
+    el.innerHTML = `<h2>Business info</h2>
+      <p class="muted" style="margin-bottom:1.25rem">Everything the chat, reminders, and follow-ups know about you. The chat only answers from what's here — if something's missing, it asks the customer for their number and sends the question to you instead of guessing.</p>
+      <form id="brain-form">
+      <div class="card"><div class="grid2">
+        <div class="fg"><label>Business name</label><input name="business_name" value="${esc(b.business_name)}"></div>
+        <div class="fg"><label>What you do</label><input name="business_type" value="${esc(b.business_type)}"></div>
+        <div class="fg"><label>Hours</label><input name="hours" value="${esc(b.hours)}" placeholder="Tue–Sat 9am–7pm, closed Sun–Mon"></div>
+        <div class="fg"><label>Area / address</label><input name="service_area" value="${esc(b.service_area)}" placeholder="2200 Magazine St, New Orleans"></div>
+      </div></div>
+      <h3>Services & prices</h3>
+      <div class="card"><div class="rows services" id="services">${(b.services || []).map(serviceRow).join("")}</div>
+        <button type="button" class="btn ghost small" id="add-service">+ Add service</button>
+        <p class="hint">Leave a price blank and the chat won't quote one — it'll send price questions to you.</p></div>
+      <h3>Common questions</h3>
+      <div class="card"><div class="rows faqs" id="faqs">${(b.faqs || []).map(faqRow).join("")}</div>
+        <button type="button" class="btn ghost small" id="add-faq">+ Add question</button></div>
+      <h3>Links</h3>
+      <div class="card"><div class="grid2">
+        <div class="fg"><label>Booking link</label><input name="booking_url" value="${esc(b.booking_url)}" placeholder="booksy.com/yourshop"><p class="hint">Booksy, Square, Vagaro, GlossGenius, Calendly… whatever you use.</p></div>
+        <div class="fg"><label>Google review link</label><input name="review_url" value="${esc(b.review_url)}" placeholder="g.page/r/…/review"><p class="hint">Google Business Profile → "Ask for reviews" → copy link.</p></div>
+        <div class="fg"><label>Website <span class="opt">(optional)</span></label><input name="website_url" value="${esc(b.website_url)}"></div>
+      </div></div>
+      <h3>Policies & voice</h3>
+      <div class="card">
+        <div class="fg"><label>Policies <span class="opt">(cancellations, deposits, late arrivals, parking…)</span></label><textarea name="policies" rows="3">${esc(b.policies)}</textarea></div>
+        <div class="fg"><label>How should replies sound?</label><input name="tone" value="${esc(b.tone)}"></div>
+      </div>
+      <h3>You</h3>
+      <div class="card"><div class="grid2">
+        <div class="fg"><label>Your name</label><input name="owner_name" value="${esc(b.owner_name)}"></div>
+        <div class="fg"><label>Your cell <span class="opt">(for "needs you" texts)</span></label><input name="owner_phone" type="tel" value="${esc(b.owner_phone)}"></div>
+        <div class="fg"><label>Your email</label><input name="owner_email" type="email" value="${esc(b.owner_email)}"></div>
+      </div></div>
+      <h3>What runs automatically</h3>
+      <div>${AUTOMATIONS.map(([k, t, d]) => `<label class="auto"><input type="checkbox" name="automations" value="${k}" ${(b.automations || []).includes(k) ? "checked" : ""}><div><b>${t}</b><span>${d}</span></div></label>`).join("")}</div>
+      <div class="savebar"><button class="btn" id="save-brain">Save changes</button><span class="muted" id="save-note"></span></div>
+      </form>`;
+    const wireRows = (container) => container.querySelectorAll(".x").forEach((x) => (x.onclick = () => x.closest(".r").remove()));
+    wireRows($("services")); wireRows($("faqs"));
+    $("add-service").onclick = () => { $("services").insertAdjacentHTML("beforeend", serviceRow()); wireRows($("services")); };
+    $("add-faq").onclick = () => { $("faqs").insertAdjacentHTML("beforeend", faqRow()); wireRows($("faqs")); };
+    $("brain-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const rows = (id, keys) => [...$(id).querySelectorAll(".r")].map((r) => Object.fromEntries(keys.map((k) => [k, r.querySelector(`[data-k="${k}"]`).value.trim()])));
+      const body = {};
+      ["business_name", "business_type", "hours", "service_area", "booking_url", "review_url", "website_url", "policies", "tone", "owner_name", "owner_phone", "owner_email"]
+        .forEach((k) => { body[k] = f[k].value.trim(); });
+      body.services = rows("services", ["name", "price", "duration"]).filter((s) => s.name).map((s) => ({ ...s, description: "" }));
+      body.faqs = rows("faqs", ["q", "a"]).filter((q) => q.q);
+      body.automations = [...f.querySelectorAll('input[name="automations"]:checked')].map((i) => i.value);
+      const btn = $("save-brain");
+      btn.disabled = true;
+      try {
+        brain = (await call(`/brains/${brainId}`, { method: "PATCH", body })).brain;
+        $("biz").textContent = brain.business_name;
+        toast("Saved. The chat uses this right away.");
+        renderToday(); renderInstall();
+      } catch (ex) { toast(ex.message, true); }
+      btn.disabled = false;
+    });
+  }
+
+  // ---------- Install ----------
+  function renderInstall() {
+    const origin = location.origin;
+    const snippet = `<script src="${origin}/widget.js" data-bfn-key="${brain.widget_key}" async><\/script>`;
+    const chatLink = `${origin}/chat?key=${encodeURIComponent(brain.widget_key)}`;
+    $("v-install").innerHTML = `<h2>Put it where customers find you</h2>
+      <p class="muted" style="margin-bottom:1.25rem">Pick whichever fits — or both.</p>
+      <div class="card" style="margin-bottom:1rem"><b>No website? Use your chat link</b>
+        <p class="muted" style="margin:0.4rem 0 0.75rem">Put this in your Instagram / TikTok bio, Google profile, or text it to people. It opens a chat page for your business.</p>
+        <pre class="code" id="chat-link">${esc(chatLink)}</pre>
+        <div class="row" style="margin-top:0.6rem"><button class="btn small" data-copy="chat-link">Copy link</button><a class="btn ghost small" href="${esc(chatLink)}" target="_blank" rel="noopener">Try it</a></div></div>
+      <div class="card"><b>Have a website? Add the chat bubble</b>
+        <p class="muted" style="margin:0.4rem 0 0.75rem">Paste this before <code>&lt;/body&gt;</code> — or in Wix (Settings → Custom code), Squarespace (Settings → Code injection → Footer), Shopify (theme.liquid). Stuck? Send us your login and we'll do it.</p>
+        <pre class="code" id="snippet">${esc(snippet)}</pre>
+        <div class="row" style="margin-top:0.6rem"><button class="btn small" data-copy="snippet">Copy code</button></div></div>`;
+    $("v-install").querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", async () => {
+      const text = $(b.dataset.copy).textContent;
+      try { await navigator.clipboard.writeText(text); toast("Copied."); } catch { toast("Select it and copy manually.", true); }
+    }));
+  }
+
+  start();
+})();
+</script>
+</body>
+</html>

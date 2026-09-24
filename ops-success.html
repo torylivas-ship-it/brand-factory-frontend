@@ -28,6 +28,7 @@
     }
     h1 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; margin-bottom: 0.85rem; }
     p { color: #b3ab9c; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.5rem; }
+    a.setup { display: inline-block; margin: 1.25rem 0 0.75rem; background: var(--brass); color: #0c0a10; font-weight: 700; padding: 0.85rem 1.5rem; border-radius: 4px; text-decoration: none; }
     a.home { display: inline-block; margin-top: 1.5rem; color: var(--brass); font-size: 0.9rem; font-weight: 600; text-decoration: none; }
   </style>
 </head>
@@ -35,9 +36,37 @@
   <div class="card">
     <div class="check">✓</div>
     <h1>You're all set.</h1>
-    <p>Payment's confirmed — we'll reach out within a business day to finish setting up your automations.</p>
-    <p style="color:var(--muted); font-size:0.85rem;">Questions in the meantime? thebrandfactorynola@gmail.com</p>
+    <p id="status-line">Payment's confirmed — getting your dashboard ready…</p>
+    <a class="setup" id="setup-btn" style="display:none">Set up BFN Ops →</a>
+    <p id="setup-note" style="display:none; color:var(--muted); font-size:0.82rem;">Takes about 10 minutes: add your prices, hours, and booking link, then flip it live. Bookmark the next page — it's your private dashboard link.</p>
+    <p style="color:var(--muted); font-size:0.85rem;">Rather have us do it with you? Reply to your receipt or email thebrandfactorynola@gmail.com.</p>
     <a class="home" href="/">← Back to Brand Factory NOLA</a>
   </div>
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+  (async () => {
+    const id = new URLSearchParams(location.search).get("ops_order_id");
+    const line = document.getElementById("status-line");
+    if (!id) { line.textContent = "Payment's confirmed — check your email for your setup link."; return; }
+    // The Stripe webhook provisions the dashboard a moment after checkout —
+    // poll briefly rather than assuming it's already there.
+    for (let i = 0; i < 12; i++) {
+      try {
+        const res = await BFN.getOpsOrder(id);
+        if (res.workframe) {
+          const btn = document.getElementById("setup-btn");
+          btn.href = `/workframe?brain=${encodeURIComponent(res.workframe.brain_id)}#t=${encodeURIComponent(res.workframe.manage_token)}`;
+          btn.style.display = "inline-block";
+          document.getElementById("setup-note").style.display = "block";
+          line.textContent = "Payment's confirmed. Your BFN Ops dashboard is ready.";
+          return;
+        }
+      } catch {}
+      await new Promise((r) => setTimeout(r, 2500));
+    }
+    line.textContent = "Payment's confirmed — your setup link is on its way to your email. If it doesn't arrive within the hour, email us and we'll send it right over.";
+  })();
+</script>
 </body>
 </html>
