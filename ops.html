@@ -51,6 +51,22 @@
     .price-banner .value { font-family: 'Fraunces', serif; font-size: 1.55rem; font-weight: 700; color: var(--brass); }
     .price-banner .note { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
 
+    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 2.5rem; }
+    @media (max-width: 640px) { .plans { grid-template-columns: 1fr; } }
+    .plan { position: relative; text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem 1.1rem 1rem; cursor: pointer; color: var(--text); font-family: inherit; transition: border-color 0.2s, background 0.2s; }
+    .plan:hover:not(:disabled) { border-color: rgba(201,162,74,0.5); }
+    .plan[aria-checked="true"] { border-color: var(--brass); background: var(--brass-soft); }
+    .plan:disabled { opacity: 0.45; cursor: not-allowed; }
+    .plan .p-name { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass); }
+    .plan .p-price { font-family: 'Fraunces', serif; font-size: 1.7rem; font-weight: 700; margin: 0.35rem 0 0.1rem; }
+    .plan .p-price small { font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 500; color: var(--muted); }
+    .plan .p-setup { font-size: 0.8rem; color: var(--muted); }
+    .plan .p-texts { font-size: 0.82rem; margin-top: 0.6rem; }
+    .plan .p-blurb { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.45; }
+    .plan .p-badge { position: absolute; top: -0.6rem; right: 0.8rem; background: var(--brass); color: #0c0a10; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 3px; }
+    .plan .p-badge.out { background: #3a3340; color: var(--muted); }
+    .admin-note { text-align: center; font-size: 0.85rem; color: var(--good); margin: -1.5rem 0 2rem; }
+
     h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.4rem; }
     .form-subtitle { color: #b3ab9c; margin-bottom: 2rem; font-size: 0.95rem; }
 
@@ -134,16 +150,10 @@
     </div>
   </div>
 
-  <div class="price-banner" id="price-banner">
-    <div>
-      <div class="label">BFN Ops</div>
-      <div class="note" id="price-note">Set up once, runs every month</div>
-    </div>
-    <div style="text-align:right;">
-      <div class="value" id="price-value">$49 + $29/mo</div>
-      <div class="note" id="price-subnote">first month's fee starts in 30 days</div>
-    </div>
-  </div>
+  <h2 style="text-align:center; margin-bottom:0.3rem;">Pick your plan</h2>
+  <p class="form-subtitle" style="text-align:center; margin-bottom:1.25rem;">Every plan includes instant replies, follow-ups, booking reminders, and review requests. No contracts — cancel anytime.</p>
+  <div class="plans" id="plans" role="radiogroup" aria-label="BFN Ops plan"></div>
+  <p class="admin-note" id="admin-note" style="display:none"></p>
 
   <hr class="divider" />
 
@@ -215,7 +225,7 @@
       <button type="submit" class="btn-submit" id="submit-btn">
         <span id="btn-text">Continue to Checkout →</span>
       </button>
-      <p class="secure-note" id="secure-note">🔒 Secure checkout powered by Stripe · $49 charged today, $29/mo starts after 30 days · Cancel anytime</p>
+      <p class="secure-note" id="secure-note">🔒 Secure checkout powered by Stripe · setup fee charged today, monthly starts after 30 days · Cancel anytime</p>
       <div class="error-msg" id="error-msg"></div>
     </div>
 
@@ -225,19 +235,68 @@
 <script src="supabase.min.js"></script>
 <script src="api.js"></script>
 <script>
+  // Fallback if /ops/plans can't be reached — same numbers as services/ops_plans.py.
+  const FALLBACK_PLANS = [
+    { key: "founding", label: "Founding", setup_usd: 49, monthly_usd: 29, text_cap: 500, blurb: "First 10 clients only. Price locked for 12 months.", available: true },
+    { key: "standard", label: "Standard", setup_usd: 99, monthly_usd: 89, text_cap: 1000, blurb: "Everything in BFN Ops for a busy single location.", available: true },
+    { key: "pro", label: "Pro", setup_usd: 199, monthly_usd: 149, text_cap: 2500, blurb: "We set it all up for you and tune it every month.", available: true },
+  ];
+  let plans = FALLBACK_PLANS;
+  let selectedPlan = null;
+  let isAdmin = false;
+
+  function renderPlans() {
+    const box = document.getElementById("plans");
+    box.innerHTML = plans.map((p) => {
+      let badge = "";
+      if (p.key === "founding") {
+        badge = p.available
+          ? `<span class="p-badge">${p.spots_left != null ? `${p.spots_left} of ${p.spots_total} spots left` : "Limited"}</span>`
+          : `<span class="p-badge out">All spots taken</span>`;
+      } else if (p.key === "pro") {
+        badge = `<span class="p-badge">Done for you</span>`;
+      }
+      const disabled = !p.available && !isAdmin;
+      return `<button type="button" class="plan" role="radio" data-plan="${p.key}" aria-checked="${selectedPlan === p.key}" ${disabled ? "disabled" : ""}>
+        ${badge}
+        <div class="p-name">${p.label}</div>
+        <div class="p-price">$${p.monthly_usd}<small>/mo</small></div>
+        <div class="p-setup">+ $${p.setup_usd} one-time setup</div>
+        <div class="p-texts">Up to ${p.text_cap.toLocaleString()} texts/mo</div>
+        <div class="p-blurb">${p.blurb}</div>
+      </button>`;
+    }).join("");
+    box.querySelectorAll(".plan").forEach((b) => b.addEventListener("click", () => selectPlan(b.dataset.plan)));
+  }
+
+  function selectPlan(key) {
+    selectedPlan = key;
+    renderPlans();
+    const p = plans.find((x) => x.key === key);
+    document.getElementById("secure-note").textContent = isAdmin
+      ? "You're signed in as admin — this order is free for your account only."
+      : `🔒 Secure checkout powered by Stripe · ${p.label}: $${p.setup_usd} charged today, $${p.monthly_usd}/mo starts after 30 days · Cancel anytime`;
+  }
+
   (async () => {
-    const user = await BFN.getCurrentUser();
-    if (!user) return;
     try {
-      const me = await BFN.getMe();
-      if (me.is_admin) {
-        document.getElementById("price-value").textContent = "Free";
-        document.getElementById("price-note").textContent = "Signed in as admin";
-        document.getElementById("price-subnote").textContent = "for your account only";
-        document.getElementById("secure-note").textContent =
-          "You're signed in as admin — this order is free for your account only.";
+      const res = await fetch(`${BFN.apiUrl}/ops/plans`);
+      if (res.ok) plans = (await res.json()).plans;
+    } catch {}
+    const wanted = new URLSearchParams(location.search).get("plan");
+    const firstOpen = (plans.find((p) => p.key === wanted && p.available) || plans.find((p) => p.available) || plans[1]).key;
+    try {
+      if (await BFN.getCurrentUser()) {
+        const me = await BFN.getMe();
+        if (me.is_admin) {
+          isAdmin = true;
+          const note = document.getElementById("admin-note");
+          note.textContent = "Signed in as admin — any plan is free for your account only.";
+          note.style.display = "block";
+        }
       }
     } catch {}
+    selectPlan(firstOpen);
   })();
 
   document.getElementById("ops-form").addEventListener("submit", async (e) => {
@@ -278,6 +337,7 @@
         booking_system: form.booking_system.value.trim() || null,
         automations,
         notes: form.notes.value.trim() || null,
+        plan: selectedPlan || "founding",
       });
 
       if (result.free) {
