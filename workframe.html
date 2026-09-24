@@ -284,7 +284,24 @@
         <div class="stat"><b>${s?.review_requests_sent ?? "—"}</b><span>review requests sent</span></div>
         <div class="stat"><b>${s?.followups_sent ?? "—"}</b><span>follow-ups sent</span></div>
       </div>
-      ${s?.failed_sends ? `<p class="muted" style="margin-top:0.6rem;color:#fca5a5">${s.failed_sends} message(s) failed to send — check the Inbox.</p>` : ""}`;
+      ${s?.failed_sends ? `<p class="muted" style="margin-top:0.6rem;color:#fca5a5">${s.failed_sends} message(s) failed to send — check the Inbox.</p>` : ""}
+      ${s ? textUsageHtml(s) : ""}`;
+  }
+
+  function textUsageHtml(s) {
+    const used = s.texts_used_this_month ?? 0, cap = s.text_cap || 500;
+    const pct = Math.min(100, Math.round((100 * used) / cap));
+    const plan = (s.plan || "founding").replace(/^./, (c) => c.toUpperCase());
+    const warn = pct >= 100
+      ? `You've hit this month's limit — new texts pause until the 1st. Email thebrandfactorynola@gmail.com to move up a plan.`
+      : pct >= 80 ? `You're close to this month's limit. Texts pause at ${cap.toLocaleString()} until the 1st.` : "";
+    return `<div class="card" style="margin-top:0.75rem;padding:0.9rem 1.1rem">
+        <div class="row" style="justify-content:space-between"><b style="font-size:0.9rem">Texts this month</b>
+        <span class="muted">${used.toLocaleString()} of ${cap.toLocaleString()} · ${esc(plan)} plan</span></div>
+        <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:0.55rem;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${pct >= 100 ? "var(--error)" : pct >= 80 ? "var(--warn)" : "var(--brass)"}"></div></div>
+        ${warn ? `<p class="muted" style="margin-top:0.5rem;${pct >= 100 ? "color:#fca5a5" : ""}">${warn}</p>` : ""}
+      </div>`;
   }
 
   async function setStatus(status) {
