@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Website Check — The Brand Factory NOLA</title>
+  <meta name="description" content="Free 60-second check of your business website: see exactly where customers are slipping through the cracks — and how to fix it." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brass: #c9a24a; --brass-soft: rgba(201,162,74,0.12); --brass-bright: #e2c37c;
+      --bg: #0c0a10; --card: #1a151f; --border: rgba(255,255,255,0.1);
+      --text: #f3ead6; --muted: #9c9184; --error: #ef4444; --good: #6fcfa8; --warn: #e8a15a;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); }
+    @media (max-width: 500px) { header { padding: 1rem; } }
+    .logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); white-space: nowrap; }
+    .logo span { color: var(--brass); }
+    header nav a { font-size: 0.85rem; color: var(--muted); font-weight: 600; text-decoration: none; margin-left: 1.1rem; }
+    .page { max-width: 720px; margin: 0 auto; padding: 3.5rem 1rem 5rem; }
+    .eyebrow { display: block; width: max-content; margin: 0 auto 1.25rem; font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass); border: 1.5px solid var(--brass); border-radius: 2px; padding: 0.28rem 0.85rem; }
+    .hero { text-align: center; margin-bottom: 2.5rem; }
+    h1 { font-family: 'Fraunces', serif; font-size: clamp(1.7rem, 5vw, 2.3rem); font-weight: 600; line-height: 1.2; margin-bottom: 0.85rem; }
+    .sub { color: #b3ab9c; font-size: 1.02rem; max-width: 50ch; margin: 0 auto; line-height: 1.55; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; }
+    @media (max-width: 500px) { .card { padding: 1.25rem; } }
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.45rem; }
+    label .opt { color: var(--muted); font-weight: 400; }
+    input { width: 100%; padding: 0.75rem 1rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px; font-size: 0.95rem; font-family: inherit; }
+    input:focus { outline: none; border-color: var(--brass); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+    .btn { display: inline-block; width: 100%; padding: 1rem; background: var(--brass); color: #0c0a10; font-weight: 700; font-size: 1rem; border: none; border-radius: 3px; cursor: pointer; text-align: center; text-decoration: none; }
+    .btn:hover:not(:disabled) { background: var(--brass-bright); }
+    .btn:disabled { opacity: 0.6; cursor: wait; }
+    .note { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 0.75rem; }
+    .error-msg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; border-radius: 4px; padding: 0.75rem 1rem; font-size: 0.88rem; margin-top: 1rem; display: none; }
+    .error-msg.show { display: block; }
+
+    #result { display: none; }
+    .score-row { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.75rem; }
+    @media (max-width: 500px) { .score-row { flex-direction: column; text-align: center; } }
+    .ring { --p: 0; --c: var(--brass); width: 120px; height: 120px; flex-shrink: 0; border-radius: 50%;
+      background: conic-gradient(var(--c) calc(var(--p) * 1%), rgba(255,255,255,0.08) 0); display: grid; place-items: center; }
+    .ring::before { content: ""; grid-area: 1/1; width: 96px; height: 96px; border-radius: 50%; background: var(--card); }
+    .ring span { grid-area: 1/1; font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; z-index: 1; }
+    .ring small { font-size: 0.8rem; color: var(--muted); font-family: 'Inter', sans-serif; font-weight: 500; }
+    .score-row h2 { font-family: 'Fraunces', serif; font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin-bottom: 0.4rem; }
+    .score-row p { color: #b3ab9c; font-size: 0.93rem; line-height: 1.55; }
+    .site { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; word-break: break-all; }
+    .opps { display: flex; flex-direction: column; gap: 0.75rem; }
+    .opp { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; }
+    .opp-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.35rem; }
+    .opp-title { font-weight: 700; font-size: 0.97rem; }
+    .badge { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 3px; padding: 0.2rem 0.5rem; white-space: nowrap; }
+    .badge.high { background: rgba(239,68,68,0.14); color: #fca5a5; }
+    .badge.medium { background: rgba(232,161,90,0.14); color: var(--warn); }
+    .badge.low { background: rgba(255,255,255,0.07); color: var(--muted); }
+    .opp p { font-size: 0.87rem; color: #b3ab9c; line-height: 1.5; }
+    .opp .fix { margin-top: 0.45rem; color: var(--text); }
+    .opp .by { margin-top: 0.5rem; font-size: 0.75rem; color: var(--brass); font-weight: 600; }
+    .cta { margin-top: 2rem; background: var(--brass-soft); border: 1px solid rgba(201,162,74,0.3); border-radius: 10px; padding: 1.5rem; text-align: center; }
+    .cta h3 { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .cta p { color: #b3ab9c; font-size: 0.92rem; margin-bottom: 1.1rem; line-height: 1.5; }
+    .share { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+    .share input { font-size: 0.8rem; color: var(--muted); }
+    .share button { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0 1rem; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+    .again { display: block; text-align: center; margin-top: 1.25rem; color: var(--muted); font-size: 0.85rem; }
+    .scanning { display: none; text-align: center; padding: 2rem 0 0.5rem; color: var(--muted); font-size: 0.9rem; }
+    .scanning.show { display: block; }
+    .dots::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+    @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Brand Factory <span>NOLA</span></a>
+  <nav><a href="/#pricing">Content Packs</a><a href="/ops">BFN Ops</a></nav>
+</header>
+
+<div class="page">
+  <div id="intro">
+    <div class="hero">
+      <span class="eyebrow">Free Website Check</span>
+      <h1>Where are customers slipping through the cracks?</h1>
+      <p class="sub">Drop in your website (or your Instagram if that's your main page). In about a minute you'll see exactly what's costing you bookings — and how to fix each one.</p>
+    </div>
+
+    <form class="card" id="audit-form" novalidate>
+      <div class="form-group">
+        <label for="website_url">Your website</label>
+        <input id="website_url" name="website_url" placeholder="yourbusiness.com" autocomplete="url" required />
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label for="business_name">Business name <span class="opt">(optional)</span></label>
+          <input id="business_name" name="business_name" placeholder="e.g. Magnolia Cuts" />
+        </div>
+        <div class="form-group">
+          <label for="business_type">What you do <span class="opt">(optional)</span></label>
+          <input id="business_type" name="business_type" placeholder="e.g. barbershop" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Your email <span class="opt">(optional — so we can follow up about your results)</span></label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <button class="btn" type="submit" id="go">Check my site →</button>
+      <p class="note">Free. No account. We only look at your public website.</p>
+      <div class="scanning" id="scanning">Checking your site<span class="dots"></span></div>
+      <div class="error-msg" id="error-msg"></div>
+    </form>
+  </div>
+
+  <div id="result">
+    <div class="card">
+      <div class="score-row">
+        <div class="ring" id="ring"><span id="score">0<small>/100</small></span></div>
+        <div>
+          <h2 id="headline"></h2>
+          <p id="summary"></p>
+          <div class="site" id="site"></div>
+        </div>
+      </div>
+      <div class="opps" id="opps"></div>
+
+      <div class="cta">
+        <h3>Want these fixed for you?</h3>
+        <p id="cta-text">BFN Ops answers your inquiries instantly, follows up with people who didn't book, sends booking reminders, and asks every customer for a review — automatically.</p>
+        <a class="btn" id="cta-btn" href="/ops?from=audit">Get BFN Ops — $49 setup + $29/mo →</a>
+        <p style="margin:0.9rem 0 0; font-size:0.85rem;">Don't own the shop — rent a chair or work for yourself? <a href="/#who" style="color:var(--brass); font-weight:600;">A Content Pack is the better fit →</a></p>
+      </div>
+
+      <div class="share">
+        <input id="share-url" readonly aria-label="Link to this report" />
+        <button id="copy" type="button">Copy link</button>
+      </div>
+    </div>
+    <a class="again" href="/audit">Check another site</a>
+  </div>
+</div>
+
+<script src="supabase.min.js"></script>
+<script src="api.js"></script>
+<script>
+  // Plain-English names for what fixes each gap — BFN's customer-facing copy.
+  const FIXED_BY = {
+    "Lead Agent": "Fixed by BFN Ops · Instant Reply",
+    "Sales / Follow-up Agent": "Fixed by BFN Ops · Auto Follow-up",
+    "Reputation Agent": "Fixed by BFN Ops · Review Booster",
+    "CEO Agent": "Fixed by BFN Ops · Monthly Results",
+    "Content Agent": "Fixed by a BFN Content Pack",
+    "Website fix": "Website fix — we can help",
+  };
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function show(audit) {
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    const score = audit.score ?? 0;
+    const ring = document.getElementById("ring");
+    ring.style.setProperty("--p", score);
+    ring.style.setProperty("--c", score >= 70 ? "var(--good)" : score >= 45 ? "var(--brass)" : "var(--error)");
+    document.getElementById("score").innerHTML = `${score}<small>/100</small>`;
+    const report = audit.report || {};
+    document.getElementById("headline").textContent = report.headline || "Your results";
+    document.getElementById("summary").textContent = report.summary || "";
+    const signals = audit.signals || {};
+    document.getElementById("site").textContent = (signals.final_url || audit.website_url || "") +
+      (signals.limited ? " · we could only read part of this page" : "");
+
+    const opps = report.opportunities || [];
+    document.getElementById("opps").innerHTML = opps.length ? opps.map((o) => `
+      <div class="opp">
+        <div class="opp-top"><div class="opp-title">${esc(o.title)}</div><span class="badge ${esc(o.impact)}">${esc(o.impact)} impact</span></div>
+        <p>${esc(o.why)}</p>
+        <p class="fix">→ ${esc(o.fix)}</p>
+        <div class="by">${esc(FIXED_BY[o.workframe] || "")}</div>
+      </div>`).join("") : `<div class="opp"><p>Nice — we didn't find any big gaps. Want a second set of eyes anyway? Email thebrandfactorynola@gmail.com.</p></div>`;
+
+    const opsFixes = opps.filter((o) => (FIXED_BY[o.workframe] || "").startsWith("Fixed by BFN Ops")).length;
+    if (opsFixes) {
+      document.getElementById("cta-text").textContent =
+        `${opsFixes} of the ${opps.length} gaps above are exactly what BFN Ops handles — instant replies, follow-ups, reminders, and review requests, running on their own.`;
+    }
+    const id = audit.audit_id || audit.id;
+    document.getElementById("cta-btn").href = `/ops?from=audit&audit=${encodeURIComponent(id)}`;
+    const url = `${location.origin}/audit?id=${encodeURIComponent(id)}`;
+    document.getElementById("share-url").value = url;
+    history.replaceState(null, "", `/audit?id=${encodeURIComponent(id)}`);
+    window.scrollTo({ top: 0 });
+  }
+
+  document.getElementById("copy").addEventListener("click", async () => {
+    const input = document.getElementById("share-url");
+    try { await navigator.clipboard.writeText(input.value); } catch { input.select(); document.execCommand("copy"); }
+    document.getElementById("copy").textContent = "Copied!";
+  });
+
+  document.getElementById("audit-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const err = document.getElementById("error-msg");
+    const btn = document.getElementById("go");
+    err.classList.remove("show");
+    if (!f.website_url.value.trim()) {
+      err.textContent = "Enter your website address.";
+      err.classList.add("show");
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Checking…";
+    document.getElementById("scanning").classList.add("show");
+    try {
+      const audit = await BFN.runAudit({
+        website_url: f.website_url.value.trim(),
+        business_name: f.business_name.value.trim() || null,
+        business_type: f.business_type.value.trim() || null,
+        city: "New Orleans",
+        email: f.email.value.trim() || null,
+      });
+      show(audit);
+    } catch (ex) {
+      err.textContent = ex.message || "Something went wrong — try again.";
+      err.classList.add("show");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Check my site →";
+      document.getElementById("scanning").classList.remove("show");
+    }
+  });
+
+  const existing = new URLSearchParams(location.search).get("id");
+  if (existing) {
+    BFN.getAudit(existing).then(show).catch(() => {});
+  } else {
+    const prefill = new URLSearchParams(location.search).get("site");
+    if (prefill) document.getElementById("website_url").value = prefill;
+  }
+</script>
+</body>
+</html>

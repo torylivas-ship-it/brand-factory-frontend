@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Brand Factory NOLA — Social Media Packs for Local Businesses</title>
-  <meta name="description" content="Feed us your business. The line outputs a month of strategy, content calendar, captions, and hashtags — agency-grade, one-time payment, delivered in minutes." />
+  <title>The Brand Factory NOLA — Social Media Packs for Local Businesses &amp; Independent Pros</title>
+  <meta name="description" content="Feed us your business — or your personal brand. The line outputs a month of strategy, content calendar, captions, and hashtags — agency-grade, one-time payment, delivered in minutes." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -211,6 +211,23 @@
       font-size: clamp(1.7rem, 4vw, 2.5rem); margin-bottom: 0.9rem; letter-spacing: 0;
     }
     .section-head p { color: var(--chalk-dim); max-width: 480px; margin: 0 auto; }
+
+    /* The nav has no room for a third link on phones (pushed it to 497px at 390 wide). */
+    @media (max-width: 640px) { .nav-audit { display: none; } }
+
+    /* Who it's for — Content Packs (independents) vs BFN Ops (shop owners) */
+    .fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 960px; margin: 0 auto; }
+    @media (max-width: 760px) { .fit-grid { grid-template-columns: 1fr; } }
+    .fit-card { background: var(--steel-900); border: 1px solid var(--line-strong); border-radius: 6px; padding: 1.8rem 1.6rem; display: flex; flex-direction: column; }
+    .fit-card.primary { border-color: var(--caution); }
+    .fit-kicker { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--caution); margin-bottom: 0.6rem; }
+    .fit-card h3 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 1.7rem; text-transform: uppercase; line-height: 1.05; margin-bottom: 0.7rem; }
+    .fit-card p { color: var(--chalk-dim); font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+    .fit-who { list-style: none; margin: 0 0 1.4rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .fit-who li { font-size: 0.8rem; border: 1px solid var(--line-strong); border-radius: 999px; padding: 0.25rem 0.7rem; color: var(--chalk); }
+    .fit-card .fit-price { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--chalk-dim); margin-bottom: 1rem; margin-top: auto; }
+    .fit-card a.fit-cta { display: inline-block; text-align: center; font-weight: 700; text-decoration: none; padding: 0.85rem 1rem; border-radius: 3px; background: var(--caution); color: var(--caution-ink); }
+    .fit-card a.fit-cta.ghost { background: transparent; color: var(--chalk); border: 1px solid var(--line-strong); }
 
     /* PROCESS — belt with tilted stations */
     .process { padding: 6.5rem 0; }
@@ -439,6 +456,7 @@
     <div class="nav-word">Brand Factory <span>NOLA</span></div>
   </div>
   <div class="nav-actions">
+    <a href="/audit" class="nav-auth-link nav-audit">Free Website Check</a>
     <a href="/auth" id="nav-auth-link" class="nav-auth-link">Sign In</a>
     <a href="#pricing" class="btn-sm">Get Your Pack →</a>
   </div>
@@ -453,7 +471,7 @@
     <div class="hero-head-col">
       <h1>We manufacture <em>momentum.</em></h1>
       <div class="hero-sub">
-        <p class="lede">Feed us your business. The line outputs a full month of strategy, content calendar, captions, and hashtags — built like an agency retainer, priced like a single part.</p>
+        <p class="lede">Feed us your business — or your personal brand. The line outputs a full month of strategy, content calendar, captions, and hashtags — built like an agency retainer, priced like a single part.</p>
         <div class="hero-cta">
           <a href="#pricing" class="btn-primary">See The Spec Sheet →</a>
           <a href="#how-it-works" class="btn-secondary">How It Works</a>
@@ -554,6 +572,40 @@
         <span class="tag agency">Part 06 — Agency</span>
         <h4>Custom Website</h4>
         <p>A fully coded one-page HTML website built for your business.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR — two products, two kinds of client -->
+<section id="who" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">Pick Your Line</span>
+      <h2>Building your name, or running a shop?</h2>
+      <p>Two products, built for two different kinds of hustle.</p>
+    </div>
+    <div class="fit-grid">
+      <div class="fit-card primary">
+        <div class="fit-kicker">// Content Packs</div>
+        <h3>For independent pros &amp; personal brands</h3>
+        <p>You don't need to own the shop. If your name is the brand — you rent a chair, work out of a suite, or take clients on your own — a pack gives you a month of posts written in your voice, built to fill your book and grow a following that goes wherever you go.</p>
+        <ul class="fit-who">
+          <li>Independent barbers</li><li>Chair &amp; booth renters</li><li>Stylists &amp; braiders</li>
+          <li>Lash &amp; nail techs</li><li>MUAs</li><li>Trainers</li><li>Creators</li>
+        </ul>
+        <div class="fit-price">$99–$199 · one-time · ready in minutes</div>
+        <a class="fit-cta" href="#pricing">See Content Packs →</a>
+      </div>
+      <div class="fit-card">
+        <div class="fit-kicker">// BFN Ops</div>
+        <h3>For shop &amp; business owners</h3>
+        <p>You run the place. BFN Ops answers questions from your website or Instagram bio instantly — even at 2am — follows up with people who didn't book, reminds customers before appointments, and asks every one of them for a review.</p>
+        <ul class="fit-who">
+          <li>Barbershops</li><li>Salons</li><li>Restaurants</li><li>Detailers</li><li>Local shops</li>
+        </ul>
+        <div class="fit-price">$49 setup + $29/mo · cancel anytime</div>
+        <a class="fit-cta ghost" href="/ops">See BFN Ops →</a>
       </div>
     </div>
   </div>
@@ -697,7 +749,11 @@
         <p>We specialize in NOLA and the Gulf Coast, but any local business can use it. Just enter your city and your pack is tailored to your market.</p>
       </details>
       <details>
-        <summary><span class="q-num">Q06</span><span class="q-text">What's the website in the Agency pack?</span></summary>
+        <summary><span class="q-num">Q06</span><span class="q-text">I rent a chair / don't own the shop. Is this for me?</span></summary>
+        <p>Yes — that's exactly who Content Packs are built for. Tell us what you do (e.g. "independent barber, I rent a chair") and your pack is written in your own voice, about your work and your book, not the shop's. Your following stays yours wherever you go.</p>
+      </details>
+      <details>
+        <summary><span class="q-num">Q07</span><span class="q-text">What's the website in the Agency pack?</span></summary>
         <p>A fully coded single-page HTML website — header, hero, services, contact form, and footer — styled with your business colors and info. Download it and host it anywhere.</p>
       </details>
     </div>

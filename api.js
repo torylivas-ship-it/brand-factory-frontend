@@ -10,7 +10,9 @@ async function apiFetch(path, options = {}) {
   if (session?.access_token) {
     headers["Authorization"] = `Bearer ${session.access_token}`;
   }
-  const res = await fetch(`${API_URL}${path}`, { headers, ...options });
+  // headers last: `{ headers, ...options }` let options.headers replace the
+  // merged set, silently dropping Authorization/Content-Type.
+  const res = await fetch(`${API_URL}${path}`, { ...options, headers });
   if (!res.ok) {
     let msg = `Error ${res.status}`;
     try { const b = await res.json(); msg = b.detail || b.message || msg; } catch {}
@@ -119,12 +121,31 @@ async function createEmployee(email, referral_code) {
   });
 }
 
+async function runAudit(data) {
+  return apiFetch("/wf/public/audit", { method: "POST", body: JSON.stringify(data) });
+}
+
+async function getAudit(auditId) {
+  return apiFetch(`/wf/public/audit/${auditId}`);
+}
+
+// Workframe dashboard calls. `manageToken` is the owner's private link token
+// (no account needed); signed-in owners/admins are authorized by their
+// Supabase session instead, which apiFetch attaches automatically.
+async function wf(path, { manageToken, method = "GET", body } = {}) {
+  const options = { method };
+  if (manageToken) options.headers = { "X-Manage-Token": manageToken };
+  if (body !== undefined) options.body = JSON.stringify(body);
+  return apiFetch(`/wf${path}`, options);
+}
+
 captureReferralCodeFromUrl();
 
 window.BFN = {
   createOrder, getOrder, getMyOrders, signUp, signIn, signOut, getCurrentUser, getMe,
   getOAuthLoginUrl, getOAuthStatus, revokeOAuthToken,
   getAdminStats, getAdminUsers, getAdminReferrals, createEmployee,
-  createOpsOrder, getOpsOrder,
+  createOpsOrder, getOpsOrder, runAudit, getAudit, wf,
+  apiUrl: API_URL,
   supabase: sb,
 };

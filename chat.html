@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Chat</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #141217; font-family: system-ui, -apple-system, sans-serif; }
+    .missing { color: #bbb; text-align: center; padding: 4rem 1.5rem; }
+  </style>
+</head>
+<body>
+<noscript><p class="missing">Turn on JavaScript to chat.</p></noscript>
+<script>
+  // Hosted chat page for businesses without a website — the link goes in
+  // their Instagram/TikTok bio. Loads the same widget in full-page mode.
+  (function () {
+    var key = new URLSearchParams(location.search).get("key");
+    if (!key || !/^wk_[A-Za-z0-9_-]+$/.test(key)) {
+      document.body.insertAdjacentHTML("beforeend", "<p class='missing'>This chat link is incomplete.</p>");
+      return;
+    }
+    var s = document.createElement("script");
+    s.src = "/widget.js";
+    s.setAttribute("data-bfn-key", key);
+    s.setAttribute("data-fullpage", "1");
+    document.body.appendChild(s);
+    setTimeout(function () {
+      if (!document.getElementById("bfn-widget")) {
+        document.body.insertAdjacentHTML("beforeend", "<p class='missing'>This chat isn't available right now.</p>");
+      }
+    }, 6000);
+  })();
+</script>
+</body>
+</html>
